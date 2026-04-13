@@ -1,68 +1,302 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canu Ultra Loco</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  color:white;
+  overflow:hidden;
+  position:relative;
 }
 
-body {
-    /* Tu fondo de graffiti */
-    background: url('1000309575.jpg') no-repeat center center fixed;
-    background-size: cover;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* 🌌 FONDO INDEPENDIENTE */
+body::before{
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  background: linear-gradient(
+      rgba(0,0,0,0.6),
+      rgba(0,0,0,0.8)
+    ),
+    url('https://i.ibb.co/4ny4T5Qg/1774621658204-2.jpg');
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  z-index:-1;
+
+  animation: distortBg 20s ease-in-out infinite;
 }
 
-.quiz-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+/* 🎨 DISTORSIÓN SOLO DEL FONDO */
+@keyframes distortBg{
+  0%{
+    transform: scale(1) skew(0deg,0deg);
+    filter: blur(0px) hue-rotate(0deg);
+  }
+
+  25%{
+    transform: scale(1.05) skew(1deg,-1deg);
+    filter: blur(1px) hue-rotate(15deg);
+  }
+
+  50%{
+    transform: scale(1.1) skew(-1deg,1deg);
+    filter: blur(2px) hue-rotate(30deg);
+  }
+
+  75%{
+    transform: scale(1.05) skew(1deg,1deg);
+    filter: blur(1px) hue-rotate(15deg);
+  }
+
+  100%{
+    transform: scale(1) skew(0deg,0deg);
+    filter: blur(0px) hue-rotate(0deg);
+  }
 }
 
-.glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+/* ⚡ PANTALLAS */
+.screen{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 }
 
-h1 {
-    color: white;
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+.hidden{display:none;}
+
+/* 🌈 LOGO */
+.logo{
+  font-size:90px;
+  font-family:'Montserrat',sans-serif;
+  margin-bottom:30px;
+
+  background:linear-gradient(90deg,#00ff88,#00ccff,#ff00cc,#00ff88);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  animation:colorFlow 5s linear infinite, glitch 2s infinite;
+  text-shadow:0 0 20px #00ff88;
 }
 
-.options-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+@keyframes colorFlow{
+  0%{background-position:0%}
+  100%{background-position:300%}
 }
 
-.btn {
-    background-color: white;
-    color: #333;
-    border: none;
-    padding: 15px 20px;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+@keyframes glitch{
+  0%,100%{transform:translate(0)}
+  20%{transform:translate(-2px,2px)}
+  40%{transform:translate(2px,-2px)}
+  60%{transform:translate(-2px,1px)}
+  80%{transform:translate(2px,-1px)}
 }
 
-.btn:active {
-    transform: scale(0.95);
-    background-color: #f0f0f0;
+/* 💳 CARD */
+.card{
+  background:rgba(0,0,0,0.5);
+  padding:25px;
+  border-radius:15px;
+  width:90%;
+  max-width:400px;
+  text-align:center;
+  backdrop-filter:blur(10px);
 }
+
+/* 🔘 BOTONES */
+button{
+  width:100%;
+  margin:10px 0;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:scale(1.07);
+  box-shadow:0 0 15px #00ff88;
+}
+
+.start-btn{
+  background:linear-gradient(90deg,#00ff88,#00ccff);
+  color:black;
+  font-weight:bold;
+}
+
+/* 💥 EFECTOS RESPUESTA */
+.correct{
+  background:#00ff88 !important;
+  animation:boom 0.3s;
+}
+
+.wrong{
+  background:#ff0033 !important;
+  animation:shake 0.3s;
+}
+
+@keyframes boom{
+  50%{transform:scale(1.2);}
+}
+
+@keyframes shake{
+  25%{transform:translateX(-5px);}
+  50%{transform:translateX(5px);}
+}
+
+/* texto cachipum */
+#rpsResult{
+  margin:10px 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div class="screen" id="menu">
+  <div class="logo">CANU</div>
+
+  <button class="start-btn" onclick="iniciar()">¿CuantoSabesDelK!!!? 🧠</button>
+  <button class="start-btn" onclick="irRPS()">JuegaCachipum ⚔️</button>
+</div>
+
+<!-- QUIZ -->
+<div class="screen hidden" id="quiz">
+  <div class="card" id="quizBox"></div>
+</div>
+
+<!-- RESULTADO -->
+<div class="screen hidden" id="resultado">
+  <div class="card">
+    <h2 id="final"></h2>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+
+<!-- CACHIPUM -->
+<div class="screen hidden" id="rps">
+  <div class="card">
+    <h2>Cachipum</h2>
+    <p id="rpsResult">Elige tu jugada</p>
+
+    <button onclick="jugar('piedra')">🪨 Piedra</button>
+    <button onclick="jugar('papel')">📄 Papel</button>
+    <button onclick="jugar('tijera')">✂️ Tijera</button>
+
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+
+<script>
+// 🔊 SONIDOS
+const click=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3");
+const win=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3");
+const lose=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3");
+
+// 🧠 QUIZ
+const preguntas=[
+ {texto:"¿Donde nací?",opciones:["Valparaiso, Chile","Trondheim, Noruega","Noje"],correcta:2},
+
+ {texto:"Llegando a Chile... A que cerro llegué?",opciones:["Baron","Lecheros","Carcel"],correcta:2},
+
+ {texto:"Cuantos hijos tengo actualmente (2026)",opciones:["4","2","3"],correcta:2}
+];
+
+let i=0,puntos=0;
+
+function iniciar(){
+ click.play();
+ cambiar("menu","quiz");
+ mostrar();
+}
+
+function mostrar(){
+ let p=preguntas[i];
+ let html=`<h2>${p.texto}</h2>`;
+
+ p.opciones.forEach((op,idx)=>{
+  html+=`<button onclick="responder(this,${idx===p.correcta})">${op}</button>`;
+ });
+
+ quizBox.innerHTML=html;
+}
+
+function responder(btn,ok){
+ document.querySelectorAll("#quizBox button").forEach(b=>b.disabled=true);
+
+ if(ok){
+  btn.classList.add("correct");
+  puntos++;
+  win.play();
+ }else{
+  btn.classList.add("wrong");
+  lose.play();
+ }
+
+ setTimeout(()=>{
+  i++;
+  i<preguntas.length?mostrar():fin();
+ },800);
+}
+
+function fin(){
+ cambiar("quiz","resultado");
+ final.innerText=`Resultado: ${puntos}/${preguntas.length}`;
+}
+
+// 🎮 CACHIPUM
+function jugar(p){
+ click.play();
+ let ops=["piedra","papel","tijera"];
+ let cpu=ops[Math.floor(Math.random()*3)];
+
+ let r="";
+ if(p===cpu) r="Empate 😐";
+ else if(
+  (p==="piedra"&&cpu==="tijera")||
+  (p==="papel"&&cpu==="piedra")||
+  (p==="tijera"&&cpu==="papel")
+ ){r="Ganaste 🔥";win.play();}
+ else{r="Perdiste 💀";lose.play();}
+
+ rpsResult.innerText=`Tú: ${p} | CPU: ${cpu} → ${r}`;
+}
+
+function irRPS(){cambiar("menu","rps");}
+
+// 🔄 NAV
+function volver(){
+ i=0;puntos=0;
+ cambiar("quiz","menu");
+ cambiar("resultado","menu");
+ cambiar("rps","menu");
+}
+
+function cambiar(a,b){
+ document.getElementById(a).classList.add("hidden");
+ document.getElementById(b).classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
