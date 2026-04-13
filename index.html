@@ -16,7 +16,7 @@ body{
   position:relative;
 }
 
-/* 🌌 FONDO INDEPENDIENTE */
+/* 🌌 FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -24,51 +24,20 @@ body::before{
   left:0;
   width:100%;
   height:100%;
-
-  background: linear-gradient(
-      rgba(0,0,0,0.6),
-      rgba(0,0,0,0.8)
-    ),
-    url('https://i.ibb.co/4ny4T5Qg/1774621658204-2.jpg');
-
+  background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.8)),
+  url('https://i.ibb.co/4ny4T5Qg/1774621658204-2.jpg');
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
-
   z-index:-1;
-
   animation: distortBg 20s ease-in-out infinite;
 }
 
-/* 🎨 DISTORSIÓN SOLO DEL FONDO */
 @keyframes distortBg{
-  0%{
-    transform: scale(1) skew(0deg,0deg);
-    filter: blur(0px) hue-rotate(0deg);
-  }
-
-  25%{
-    transform: scale(1.05) skew(1deg,-1deg);
-    filter: blur(1px) hue-rotate(15deg);
-  }
-
-  50%{
-    transform: scale(1.1) skew(-1deg,1deg);
-    filter: blur(2px) hue-rotate(30deg);
-  }
-
-  75%{
-    transform: scale(1.05) skew(1deg,1deg);
-    filter: blur(1px) hue-rotate(15deg);
-  }
-
-  100%{
-    transform: scale(1) skew(0deg,0deg);
-    filter: blur(0px) hue-rotate(0deg);
-  }
+  0%{transform: scale(1);}
+  50%{transform: scale(1.1);}
+  100%{transform: scale(1);}
 }
 
-/* ⚡ PANTALLAS */
 .screen{
   position:absolute;
   width:100%;
@@ -81,19 +50,15 @@ body::before{
 
 .hidden{display:none;}
 
-/* 🌈 LOGO */
 .logo{
   font-size:90px;
   font-family:'Montserrat',sans-serif;
   margin-bottom:30px;
-
   background:linear-gradient(90deg,#00ff88,#00ccff,#ff00cc,#00ff88);
   background-size:300%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-
-  animation:colorFlow 5s linear infinite, glitch 2s infinite;
-  text-shadow:0 0 20px #00ff88;
+  animation:colorFlow 5s linear infinite;
 }
 
 @keyframes colorFlow{
@@ -101,15 +66,6 @@ body::before{
   100%{background-position:300%}
 }
 
-@keyframes glitch{
-  0%,100%{transform:translate(0)}
-  20%{transform:translate(-2px,2px)}
-  40%{transform:translate(2px,-2px)}
-  60%{transform:translate(-2px,1px)}
-  80%{transform:translate(2px,-1px)}
-}
-
-/* 💳 CARD */
 .card{
   background:rgba(0,0,0,0.5);
   padding:25px;
@@ -120,7 +76,6 @@ body::before{
   backdrop-filter:blur(10px);
 }
 
-/* 🔘 BOTONES */
 button{
   width:100%;
   margin:10px 0;
@@ -129,43 +84,12 @@ button{
   border-radius:10px;
   font-size:16px;
   cursor:pointer;
-  transition:0.2s;
-}
-
-button:hover{
-  transform:scale(1.07);
-  box-shadow:0 0 15px #00ff88;
 }
 
 .start-btn{
   background:linear-gradient(90deg,#00ff88,#00ccff);
   color:black;
   font-weight:bold;
-}
-
-/* 💥 EFECTOS RESPUESTA */
-.correct{
-  background:#00ff88 !important;
-  animation:boom 0.3s;
-}
-
-.wrong{
-  background:#ff0033 !important;
-  animation:shake 0.3s;
-}
-
-@keyframes boom{
-  50%{transform:scale(1.2);}
-}
-
-@keyframes shake{
-  25%{transform:translateX(-5px);}
-  50%{transform:translateX(5px);}
-}
-
-/* texto cachipum */
-#rpsResult{
-  margin:10px 0;
 }
 </style>
 </head>
@@ -175,9 +99,9 @@ button:hover{
 <!-- MENU -->
 <div class="screen" id="menu">
   <div class="logo">CANU</div>
-
   <button class="start-btn" onclick="iniciar()">¿CuantoSabesDelK!!!? 🧠</button>
   <button class="start-btn" onclick="irRPS()">JuegaCachipum ⚔️</button>
+  <button class="start-btn" onclick="irPalabra()">Palabra Secreta 🔤</button>
 </div>
 
 <!-- QUIZ -->
@@ -198,100 +122,115 @@ button:hover{
   <div class="card">
     <h2>Cachipum</h2>
     <p id="rpsResult">Elige tu jugada</p>
-
     <button onclick="jugar('piedra')">🪨 Piedra</button>
     <button onclick="jugar('papel')">📄 Papel</button>
     <button onclick="jugar('tijera')">✂️ Tijera</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+
+<!-- PALABRA SECRETA -->
+<div class="screen hidden" id="palabra">
+  <div class="card">
+    <h2>Palabra Secreta</h2>
+
+    <button class="start-btn" onclick="modoAhorcado()">Modo Ahorcado</button>
+    <button class="start-btn" onclick="modoContexto()">Modo Contexto</button>
+
+    <div id="ahorcado">
+      <p id="palabraTexto"></p>
+      <input id="letra" maxlength="1" placeholder="Letra">
+      <button class="start-btn" onclick="intentarLetra()">Probar</button>
+      <p id="estadoA"></p>
+    </div>
+
+    <div id="contexto" style="display:none;">
+      <input id="intento" placeholder="Escribe palabra">
+      <button class="start-btn" onclick="intentarPalabra()">Intentar</button>
+      <p id="pistas"></p>
+    </div>
 
     <button class="start-btn" onclick="volver()">Volver</button>
   </div>
 </div>
 
 <script>
-// 🔊 SONIDOS
-const click=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3");
-const win=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3");
-const lose=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3");
-
-// 🧠 QUIZ
+// QUIZ
 const preguntas=[
- {texto:"¿Donde nací?",opciones:["Valparaiso, Chile","Trondheim, Noruega","Noje"],correcta:2},
-
- {texto:"Llegando a Chile... A que cerro llegué?",opciones:["Baron","Lecheros","Carcel"],correcta:2},
-
- {texto:"Cuantos hijos tengo actualmente (2026)",opciones:["4","2","3"],correcta:2}
+ {texto:"¿Donde nací?",opciones:["Valparaiso","Noruega","Noje"],correcta:1},
 ];
-
 let i=0,puntos=0;
 
-function iniciar(){
- click.play();
- cambiar("menu","quiz");
- mostrar();
-}
-
+function iniciar(){cambiar("menu","quiz");mostrar();}
 function mostrar(){
  let p=preguntas[i];
- let html=`<h2>${p.texto}</h2>`;
-
- p.opciones.forEach((op,idx)=>{
-  html+=`<button onclick="responder(this,${idx===p.correcta})">${op}</button>`;
- });
-
- quizBox.innerHTML=html;
+ quizBox.innerHTML=`<h2>${p.texto}</h2>`+
+ p.opciones.map((op,idx)=>`<button onclick="responder(${idx===p.correcta})">${op}</button>`).join("");
 }
-
-function responder(btn,ok){
- document.querySelectorAll("#quizBox button").forEach(b=>b.disabled=true);
-
- if(ok){
-  btn.classList.add("correct");
-  puntos++;
-  win.play();
- }else{
-  btn.classList.add("wrong");
-  lose.play();
- }
-
- setTimeout(()=>{
-  i++;
-  i<preguntas.length?mostrar():fin();
- },800);
+function responder(ok){
+ if(ok)puntos++;
+ i<preguntas.length-1?(i++,mostrar()):fin();
 }
+function fin(){cambiar("quiz","resultado");final.innerText="Resultado "+puntos;}
 
-function fin(){
- cambiar("quiz","resultado");
- final.innerText=`Resultado: ${puntos}/${preguntas.length}`;
-}
-
-// 🎮 CACHIPUM
+// CACHIPUM
 function jugar(p){
- click.play();
  let ops=["piedra","papel","tijera"];
  let cpu=ops[Math.floor(Math.random()*3)];
-
- let r="";
- if(p===cpu) r="Empate 😐";
- else if(
-  (p==="piedra"&&cpu==="tijera")||
-  (p==="papel"&&cpu==="piedra")||
-  (p==="tijera"&&cpu==="papel")
- ){r="Ganaste 🔥";win.play();}
- else{r="Perdiste 💀";lose.play();}
-
- rpsResult.innerText=`Tú: ${p} | CPU: ${cpu} → ${r}`;
+ rpsResult.innerText=`${p} vs ${cpu}`;
 }
-
 function irRPS(){cambiar("menu","rps");}
 
-// 🔄 NAV
+// PALABRA
+function irPalabra(){cambiar("menu","palabra");}
+
+const palabras=["gato","perro","casa"];
+let palabraSecreta="",progreso=[],intentos;
+
+function modoAhorcado(){
+ document.getElementById("ahorcado").style.display="block";
+ document.getElementById("contexto").style.display="none";
+ palabraSecreta=palabras[Math.floor(Math.random()*3)];
+ progreso=Array(palabraSecreta.length).fill("_");
+ intentos=6;
+ actualizar();
+}
+function actualizar(){
+ palabraTexto.innerText=progreso.join(" ");
+ estadoA.innerText="Intentos: "+intentos;
+}
+function intentarLetra(){
+ let l=letra.value; letra.value="";
+ let ok=false;
+ for(let i=0;i<palabraSecreta.length;i++){
+  if(palabraSecreta[i]==l){progreso[i]=l;ok=true;}
+ }
+ if(!ok)intentos--;
+ if(intentos<=0){alert("Perdiste");modoAhorcado();}
+ if(!progreso.includes("_")){alert("Ganaste");modoAhorcado();}
+ actualizar();
+}
+
+let palabraC="";
+function modoContexto(){
+ ahorcado.style.display="none";
+ contexto.style.display="block";
+ palabraC=palabras[Math.floor(Math.random()*3)];
+ pistas.innerText="";
+}
+function intentarPalabra(){
+ let i=intento.value; intento.value="";
+ if(i===palabraC){alert("Ganaste");modoContexto();}
+ else pistas.innerText+=i+" ❌\n";
+}
+
+// NAV
 function volver(){
- i=0;puntos=0;
  cambiar("quiz","menu");
  cambiar("resultado","menu");
  cambiar("rps","menu");
+ cambiar("palabra","menu");
 }
-
 function cambiar(a,b){
  document.getElementById(a).classList.add("hidden");
  document.getElementById(b).classList.remove("hidden");
