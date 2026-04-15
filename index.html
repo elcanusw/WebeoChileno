@@ -959,7 +959,117 @@ function cambiar(a,b){
   document.getElementById(a).classList.add("hidden");
   document.getElementById(b).classList.remove("hidden");
 }
+// ================= CONNECT 4 =================
+let c4Board, c4Player, c4GameOver;
+const ROWS=6, COLS=7;
 
+function irConnect4(){
+  cambiar("menu","connect4Screen");
+  initC4();
+}
+
+function initC4(){
+  c4Board = Array.from({length:ROWS},()=>Array(COLS).fill(0));
+  c4GameOver=false;
+  c4Player=1;
+
+  const boardDiv = document.getElementById("connect4Board");
+  boardDiv.innerHTML="";
+
+  document.getElementById("c4Status").innerText="Tu turno";
+
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS;c++){
+      let slot=document.createElement("div");
+      slot.className="slot";
+      slot.onclick=()=>dropC4(c);
+      boardDiv.appendChild(slot);
+    }
+  }
+}
+
+function dropC4(col){
+  if(c4GameOver || c4Player!==1) return;
+
+  for(let r=ROWS-1;r>=0;r--){
+    if(c4Board[r][col]===0){
+      c4Board[r][col]=1;
+      renderC4();
+
+      if(checkC4Win(r,col)){
+        c4GameOver=true;
+        document.getElementById("c4Status").innerText="Ganaste 🔥";
+        return;
+      }
+
+      c4Player=2;
+      document.getElementById("c4Status").innerText="IA...";
+      setTimeout(aiC4,300);
+      return;
+    }
+  }
+}
+
+function aiC4(){
+  let col=Math.floor(Math.random()*COLS);
+  dropC4AI(col);
+}
+
+function dropC4AI(col){
+  for(let r=ROWS-1;r>=0;r--){
+    if(c4Board[r][col]===0){
+      c4Board[r][col]=2;
+      renderC4();
+
+      if(checkC4Win(r,col)){
+        c4GameOver=true;
+        document.getElementById("c4Status").innerText="IA gana 💀";
+        return;
+      }
+
+      c4Player=1;
+      document.getElementById("c4Status").innerText="Tu turno";
+      return;
+    }
+  }
+  aiC4();
+}
+
+function renderC4(){
+  let slots=document.querySelectorAll("#connect4Board .slot");
+
+  slots.forEach((slot,i)=>{
+    let r=Math.floor(i/COLS);
+    let c=i%COLS;
+    slot.innerHTML="";
+
+    if(c4Board[r][c]===1){
+      slot.innerHTML='<div class="p1"><img src="logo.png"></div>';
+    }
+    if(c4Board[r][c]===2){
+      slot.innerHTML='<div class="p2"><img src="logo.png"></div>';
+    }
+  });
+}
+
+function checkC4Win(r,c){
+  let p=c4Board[r][c];
+
+  function count(dr,dc){
+    let i=r+dr,j=c+dc,n=0;
+    while(i>=0&&i<ROWS&&j>=0&&j<COLS&&c4Board[i][j]===p){
+      n++; i+=dr; j+=dc;
+    }
+    return n;
+  }
+
+  return (
+    count(0,1)+count(0,-1)>=3 ||
+    count(1,0)+count(-1,0)>=3 ||
+    count(1,1)+count(-1,-1)>=3 ||
+    count(1,-1)+count(-1,1)>=3
+  );
+}
 </script>
 
 </body>
