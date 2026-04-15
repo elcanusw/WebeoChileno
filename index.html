@@ -175,8 +175,7 @@ function renderC4(){
 
       if(c4board[r][c]){
         let img = document.createElement("img");
-        img.src = "logo.png";
-        img.style.width = "38px";
+img.src = c4board[r][c] === "🔴" ? "logo.png" : "logo2.png";        img.style.width = "38px";
         img.style.height = "38px";
         img.style.borderRadius = "50%";
         cell.appendChild(img);
