@@ -124,6 +124,24 @@ button:hover{
   <button class="start-btn" onclick="irRPS()">⚔️ Cachipum</button>
   <button class="start-btn" onclick="irPalabra()">🔤 Palabra</button>
   <button class="start-btn" onclick="irTresEnRaya()">❌⭕ Tres en Raya</button>
+  <button class="start-btn" onclick="irConnect4()">🔴 4 en Línea</button>
+</div>
+  <div class="screen hidden" id="connect4">
+  <div class="card">
+    <h2>🔴 4 en Línea PRO</h2>
+    <p id="c4status">Tu turno (🔴)</p>
+
+    <div id="c4board" style="
+      display:grid;
+      grid-template-columns:repeat(7, 45px);
+      gap:5px;
+      justify-content:center;
+      margin:20px auto;
+    "></div>
+
+    <button class="start-btn" onclick="resetC4()">🔄 Reiniciar</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
 </div>
 <div class="screen hidden" id="runner">
   <div class="card">
@@ -938,7 +956,141 @@ function cambiar(a,b){
   document.getElementById(a).classList.add("hidden");
   document.getElementById(b).classList.remove("hidden");
 }
+// ===================== 4 EN LÍNEA =====================
+let c4board = [];
+let c4player = "🔴";
+let c4gameOver = false;
 
+function irConnect4(){
+  cambiar("menu","connect4");
+  initC4();
+}
+
+function initC4(){
+  c4board = Array(6).fill(null).map(()=>Array(7).fill(null));
+  c4player = "🔴";
+  c4gameOver = false;
+  renderC4();
+  document.getElementById("c4status").innerText = "Tu turno (🔴)";
+}
+
+function renderC4(){
+  let boardDiv = document.getElementById("c4board");
+  boardDiv.innerHTML = "";
+
+  for(let r=0;r<6;r++){
+    for(let c=0;c<7;c++){
+      let cell = document.createElement("div");
+      cell.style.width = "45px";
+      cell.style.height = "45px";
+      cell.style.borderRadius = "50%";
+      cell.style.background = "#222";
+      cell.style.display = "flex";
+      cell.style.alignItems = "center";
+      cell.style.justifyContent = "center";
+      cell.style.cursor = "pointer";
+      cell.style.fontSize = "22px";
+
+      if(c4board[r][c]){
+        cell.textContent = c4board[r][c];
+      }
+
+      cell.onclick = () => dropC4(c);
+      boardDiv.appendChild(cell);
+    }
+  }
+}
+
+function dropC4(col){
+  if(c4gameOver) return;
+
+  for(let r=5;r>=0;r--){
+    if(!c4board[r][col]){
+      c4board[r][col] = c4player;
+      break;
+    }
+  }
+
+  renderC4();
+
+  if(checkC4(c4player)){
+    document.getElementById("c4status").innerText = c4player + " ganó 🔥";
+    c4gameOver = true;
+    return;
+  }
+
+  if(c4board.flat().every(x=>x)){
+    document.getElementById("c4status").innerText = "Empate 😐";
+    c4gameOver = true;
+    return;
+  }
+
+  c4player = (c4player === "🔴") ? "🟡" : "🔴";
+
+  if(c4player === "🟡"){
+    document.getElementById("c4status").innerText = "CPU pensando...";
+    setTimeout(cpuC4, 400);
+  } else {
+    document.getElementById("c4status").innerText = "Tu turno (🔴)";
+  }
+}
+
+function cpuC4(){
+  if(c4gameOver) return;
+
+  let valid = [];
+  for(let c=0;c<7;c++){
+    if(!c4board[0][c]) valid.push(c);
+  }
+
+  let col = valid[Math.floor(Math.random()*valid.length)];
+  dropC4(col);
+}
+
+function checkC4(p){
+  // horizontal, vertical, diagonal
+  for(let r=0;r<6;r++){
+    for(let c=0;c<7;c++){
+
+      if(
+        c<=3 &&
+        p===c4board[r][c] &&
+        p===c4board[r][c+1] &&
+        p===c4board[r][c+2] &&
+        p===c4board[r][c+3]
+      ) return true;
+
+      if(
+        r<=2 &&
+        p===c4board[r][c] &&
+        p===c4board[r+1][c] &&
+        p===c4board[r+2][c] &&
+        p===c4board[r+3][c]
+      ) return true;
+
+      if(
+        r<=2 && c<=3 &&
+        p===c4board[r][c] &&
+        p===c4board[r+1][c+1] &&
+        p===c4board[r+2][c+2] &&
+        p===c4board[r+3][c+3]
+      ) return true;
+
+      if(
+        r>=3 && c<=3 &&
+        p===c4board[r][c] &&
+        p===c4board[r-1][c+1] &&
+        p===c4board[r-2][c+2] &&
+        p===c4board[r-3][c+3]
+      ) return true;
+    }
+  }
+  return false;
+}
+
+function resetC4(){
+  initC4();
+}
 </script>
 
 </body>
