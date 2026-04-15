@@ -89,6 +89,7 @@ button:hover{
   font-weight:bold;
 }
 
+/* 🔥 ESTILO PARA TRES EN RAYA (mismo diseño neón) */
 .ttt-cell{
   background:rgba(255,255,255,0.1);
   color:white;
@@ -112,18 +113,98 @@ button:hover{
 
 <body>
 
+<!-- MENU -->
 <div class="screen" id="menu">
   <div class="logo">CANU</div>
+  <button class="start-btn" onclick="irRunner()">🏃 Runner</button>
+  <button class="start-btn" onclick="irBreakout()">🧱 Breakout</button>
+  <button class="start-btn" onclick="irAim()">🎯 Aim Trainer</button>
+  <button class="start-btn" onclick="irReflex()">⚡ Reflex</button>
   <button class="start-btn" onclick="iniciar()">🧠 Quiz</button>
   <button class="start-btn" onclick="irRPS()">⚔️ Cachipum</button>
   <button class="start-btn" onclick="irPalabra()">🔤 Palabra</button>
   <button class="start-btn" onclick="irTresEnRaya()">❌⭕ Tres en Raya</button>
 </div>
+<div class="screen hidden" id="runner">
+  <div class="card">
+    <h2>🏃 Endless Runner</h2>
+    <p id="runnerScore">Puntaje: 0</p>
 
+    <canvas id="runnerCanvas" width="400" height="400"></canvas>
+
+    <p style="font-size:13px;opacity:0.7;">
+      Salta con ↑ o tocando la pantalla
+    </p>
+
+    <button class="start-btn" onclick="reiniciarRunner()">🔄 Reiniciar</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+<div class="screen hidden" id="breakout">
+  <div class="card">
+    <h2>🧱 Breakout</h2>
+    <p id="breakScore">Puntaje: 0</p>
+
+    <canvas id="breakCanvas" width="400" height="400"></canvas>
+
+    <p style="font-size:13px;opacity:0.7;">
+      Mueve con ← → | Rompe todos los bloques
+    </p>
+
+    <button class="start-btn" onclick="reiniciarBreak()">🔄 Reiniciar</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+<div class="screen hidden" id="aim">
+  <div class="card" style="position:relative; height:500px; overflow:hidden;">
+    <h2>🎯 Aim Trainer</h2>
+
+    <p id="aimInfo">Haz click en los objetivos</p>
+    <p id="aimStats">Puntos: 0 | Fallos: 0 | Combo: 0</p>
+
+    <!-- objetivo -->
+    <div id="aimTarget" style="
+      position:absolute;
+      width:70px;
+      height:70px;
+      border-radius:50%;
+      background:#ff00cc;
+      display:none;
+      cursor:pointer;
+      box-shadow:0 0 20px rgba(255,0,204,0.8);
+    "></div>
+
+    <button class="start-btn" onclick="iniciarAim()">▶️ Empezar</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+<div class="screen hidden" id="reflex">
+  <div class="card" style="position:relative; height:500px; overflow:hidden;">
+    <h2>⚡ Reflex</h2>
+    <p id="reflexInfo">Toca el botón lo más rápido posible</p>
+    <p id="reflexScore">Puntos: 0</p>
+
+    <!-- botón que aparece random -->
+    <button id="reflexBtn" style="
+      position:absolute;
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      font-size:20px;
+      display:none;
+    ">🔥</button>
+
+    <button class="start-btn" onclick="iniciarReflex()">▶️ Empezar</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
 <div class="screen hidden" id="quiz">
   <div class="card" id="quizBox"></div>
 </div>
 
+<!-- RESULTADO -->
 <div class="screen hidden" id="resultado">
   <div class="card">
     <h2 id="final"></h2>
@@ -131,6 +212,7 @@ button:hover{
   </div>
 </div>
 
+<!-- CACHIPUM -->
 <div class="screen hidden" id="rps">
   <div class="card">
     <h2>Cachipum</h2>
@@ -142,6 +224,7 @@ button:hover{
   </div>
 </div>
 
+<!-- PALABRA -->
 <div class="screen hidden" id="palabra">
   <div class="card">
     <h2>Palabra Secreta</h2>
@@ -154,10 +237,12 @@ button:hover{
   </div>
 </div>
 
+<!-- TRES EN RAYA -->
 <div class="screen hidden" id="tresEnRaya">
   <div class="card">
     <h2>❌⭕ Tres en Raya</h2>
     <p id="tttResult">Tu turno (❌)</p>
+    
     <div id="board" style="display: grid; grid-template-columns: repeat(3, 80px); gap: 8px; justify-content: center; margin: 20px auto;">
       <div class="ttt-cell" data-index="0" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="1" onclick="hacerMovimiento(this)"></div>
@@ -169,13 +254,500 @@ button:hover{
       <div class="ttt-cell" data-index="7" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="8" onclick="hacerMovimiento(this)"></div>
     </div>
+
     <button class="start-btn" onclick="reiniciarTTT()">🔄 Reiniciar partida</button>
     <button class="start-btn" onclick="volver()">Volver al menú</button>
   </div>
 </div>
 
 <script>
-// QUIZ (Actualizado con colores)
+  // ====================== RUNNER ======================
+let rCanvas, rCtx;
+let player, gravity, obstacles, rScore, rSpeed;
+let runnerInterval;
+let isJumping = false;
+
+// iniciar
+function irRunner(){
+  cambiar("menu","runner");
+  iniciarRunner();
+}
+
+function iniciarRunner(){
+  rCanvas = document.getElementById("runnerCanvas");
+  rCtx = rCanvas.getContext("2d");
+
+  player = {x:50, y:300, w:20, h:20, vy:0};
+  gravity = 0.8;
+  obstacles = [];
+  rScore = 0;
+  rSpeed = 4;
+
+  document.getElementById("runnerScore").innerText = "Puntaje: 0";
+
+  if(runnerInterval) clearInterval(runnerInterval);
+  runnerInterval = setInterval(loopRunner, 16);
+}
+
+// loop
+function loopRunner(){
+  updateRunner();
+  drawRunner();
+}
+
+// lógica
+function updateRunner(){
+  // gravedad
+  player.vy += gravity;
+  player.y += player.vy;
+
+  // suelo
+  if(player.y > 300){
+    player.y = 300;
+    player.vy = 0;
+    isJumping = false;
+  }
+
+  // generar obstáculos
+  if(Math.random() < 0.02){
+    obstacles.push({
+      x:400,
+      y:300,
+      w:20,
+      h:20
+    });
+  }
+
+  // mover obstáculos
+  obstacles.forEach(o => o.x -= rSpeed);
+
+  // colisión
+  obstacles.forEach(o => {
+    if(
+      player.x < o.x + o.w &&
+      player.x + player.w > o.x &&
+      player.y < o.y + o.h &&
+      player.y + player.h > o.y
+    ){
+      clearInterval(runnerInterval);
+      alert("💀 GAME OVER\nPuntaje: " + rScore);
+    }
+  });
+
+  // limpiar obstáculos
+  obstacles = obstacles.filter(o => o.x > -20);
+
+  // score
+  rScore++;
+  document.getElementById("runnerScore").innerText = "Puntaje: " + rScore;
+
+  // dificultad progresiva
+  if(rScore % 200 === 0){
+    rSpeed += 0.5;
+  }
+}
+
+// dibujar
+function drawRunner(){
+  rCtx.fillStyle = "#111";
+  rCtx.fillRect(0,0,400,400);
+
+  // suelo
+  rCtx.fillStyle = "#333";
+  rCtx.fillRect(0,320,400,5);
+
+  // jugador
+  rCtx.fillStyle = "#00ff88";
+  rCtx.fillRect(player.x, player.y, player.w, player.h);
+
+  // obstáculos
+  rCtx.fillStyle = "#ff00cc";
+  obstacles.forEach(o => {
+    rCtx.fillRect(o.x, o.y, o.w, o.h);
+  });
+}
+
+// salto
+function saltar(){
+  if(!isJumping){
+    player.vy = -12;
+    isJumping = true;
+  }
+}
+
+// teclado
+document.addEventListener("keydown", e => {
+  if(document.getElementById("runner").classList.contains("hidden")) return;
+  if(e.key === "ArrowUp") saltar();
+});
+
+// celular (tocar pantalla)
+document.getElementById("runnerCanvas").addEventListener("touchstart", () => {
+  saltar();
+});
+
+// reiniciar
+function reiniciarRunner(){
+  iniciarRunner();
+}
+  // ====================== BREAKOUT ======================
+let breakCanvas, breakCtx;
+let ballX, ballY, ballDX, ballDY;
+let paddleX;
+let rightPressed = false;
+let leftPressed = false;
+let bricks = [];
+let rows = 5;
+let cols = 7;
+let brickW = 50;
+let brickH = 15;
+let scoreBreak = 0;
+let breakInterval;
+
+function irBreakout(){
+  cambiar("menu","breakout");
+  iniciarBreak();
+}
+
+function iniciarBreak(){
+  breakCanvas = document.getElementById("breakCanvas");
+  breakCtx = breakCanvas.getContext("2d");
+
+  ballX = 200;
+  ballY = 300;
+  ballDX = 3;
+  ballDY = -3;
+
+  paddleX = 150;
+  scoreBreak = 0;
+
+  document.getElementById("breakScore").innerText = "Puntaje: 0";
+
+  // crear bloques
+  bricks = [];
+  for(let r=0; r<rows; r++){
+    bricks[r] = [];
+    for(let c=0; c<cols; c++){
+      bricks[r][c] = {x: c*(brickW+5)+20, y: r*(brickH+5)+30, alive:true};
+    }
+  }
+
+  if(breakInterval) clearInterval(breakInterval);
+  breakInterval = setInterval(loopBreak, 16);
+}
+
+function loopBreak(){
+  drawBreak();
+  updateBreak();
+}
+
+function drawBreak(){
+  breakCtx.fillStyle = "#111";
+  breakCtx.fillRect(0,0,400,400);
+
+  // pelota
+  breakCtx.fillStyle = "#00ff88";
+  breakCtx.beginPath();
+  breakCtx.arc(ballX, ballY, 8, 0, Math.PI*2);
+  breakCtx.fill();
+
+  // paddle
+  breakCtx.fillRect(paddleX, 370, 80, 10);
+
+  // bloques
+  breakCtx.fillStyle = "#ff00cc";
+  bricks.forEach(row => {
+    row.forEach(b => {
+      if(b.alive){
+        breakCtx.fillRect(b.x, b.y, brickW, brickH);
+      }
+    });
+  });
+}
+
+function updateBreak(){
+  ballX += ballDX;
+  ballY += ballDY;
+
+  // paredes
+  if(ballX < 8 || ballX > 392) ballDX *= -1;
+  if(ballY < 8) ballDY *= -1;
+
+  // suelo = perder
+  if(ballY > 400){
+    clearInterval(breakInterval);
+    alert("💀 Perdiste");
+    return;
+  }
+
+  // paddle colisión
+  if(
+    ballY > 360 &&
+    ballX > paddleX &&
+    ballX < paddleX + 80
+  ){
+    ballDY *= -1;
+  }
+
+  // bloques
+  bricks.forEach(row => {
+    row.forEach(b => {
+      if(b.alive){
+        if(
+          ballX > b.x &&
+          ballX < b.x + brickW &&
+          ballY > b.y &&
+          ballY < b.y + brickH
+        ){
+          ballDY *= -1;
+          b.alive = false;
+          scoreBreak++;
+
+          document.getElementById("breakScore").innerText =
+            "Puntaje: " + scoreBreak;
+        }
+      }
+    });
+  });
+
+  // ganar
+  if(scoreBreak === rows * cols){
+    clearInterval(breakInterval);
+    alert("🔥 GANASTE 🔥");
+  }
+
+  // mover paddle
+  if(rightPressed && paddleX < 320) paddleX += 6;
+  if(leftPressed && paddleX > 0) paddleX -= 6;
+}
+
+function reiniciarBreak(){
+  iniciarBreak();
+}
+
+// controles
+document.addEventListener("keydown", e=>{
+  if(document.getElementById("breakout").classList.contains("hidden")) return;
+
+  if(e.key === "ArrowRight") rightPressed = true;
+  if(e.key === "ArrowLeft") leftPressed = true;
+});
+
+document.addEventListener("keyup", e=>{
+  if(e.key === "ArrowRight") rightPressed = false;
+  if(e.key === "ArrowLeft") leftPressed = false;
+});
+// ================= CONTROLES TÁCTILES BREAKOUT =================
+let touchActive = false;
+
+document.getElementById("breakCanvas").addEventListener("touchstart", e => {
+  touchActive = true;
+});
+
+document.getElementById("breakCanvas").addEventListener("touchmove", e => {
+  if(!touchActive) return;
+
+  let rect = breakCanvas.getBoundingClientRect();
+  let touchX = e.touches[0].clientX - rect.left;
+
+  // centrar paddle con el dedo
+  paddleX = touchX - 40;
+
+  // límites
+  if(paddleX < 0) paddleX = 0;
+  if(paddleX > 320) paddleX = 320;
+});
+
+document.getElementById("breakCanvas").addEventListener("touchend", () => {
+  touchActive = false;
+});
+  // ====================== AIM TRAINER ======================
+let aimScore = 0;
+let aimMiss = 0;
+let aimCombo = 0;
+let aimActive = false;
+let aimTimeout;
+let aimSpeed = 1200;
+
+function irAim(){
+  cambiar("menu","aim");
+  resetAim();
+}
+
+function resetAim(){
+  aimScore = 0;
+  aimMiss = 0;
+  aimCombo = 0;
+  aimSpeed = 1200;
+  aimActive = false;
+
+  document.getElementById("aimStats").innerText =
+    "Puntos: 0 | Fallos: 0 | Combo: 0";
+
+  document.getElementById("aimInfo").innerText =
+    "Haz click en los objetivos";
+
+  document.getElementById("aimTarget").style.display = "none";
+}
+
+function iniciarAim(){
+  resetAim();
+  siguienteAim();
+}
+
+function siguienteAim(){
+  let delay = Math.random() * 800 + 300;
+
+  aimTimeout = setTimeout(() => {
+    spawnTarget();
+  }, delay);
+}
+
+function spawnTarget(){
+  let target = document.getElementById("aimTarget");
+  let card = target.parentElement;
+
+  let size = Math.max(30, 70 - aimCombo * 2); // más combo = más difícil
+
+  target.style.width = size + "px";
+  target.style.height = size + "px";
+
+  let maxX = card.clientWidth - size;
+  let maxY = card.clientHeight - 150;
+
+  target.style.left = (Math.random() * maxX) + "px";
+  target.style.top = (Math.random() * maxY) + "px";
+
+  target.style.display = "block";
+  aimActive = true;
+
+  // si no haces click → fallo
+  aimTimeout = setTimeout(() => {
+    if(aimActive){
+      falloAim();
+    }
+  }, aimSpeed);
+}
+
+function falloAim(){
+  aimMiss++;
+  aimCombo = 0;
+  aimActive = false;
+
+  document.getElementById("aimTarget").style.display = "none";
+  actualizarStats();
+
+  siguienteAim();
+}
+
+// CLICK EN TARGET
+document.getElementById("aimTarget").onclick = function(){
+  if(!aimActive) return;
+
+  aimActive = false;
+
+  aimCombo++;
+  aimScore += 10 + aimCombo;
+
+  // acelerar dificultad
+  aimSpeed = Math.max(400, aimSpeed - 20);
+
+  actualizarStats();
+
+  this.style.display = "none";
+
+  siguienteAim();
+};
+
+// CLICK FUERA = fallo
+document.getElementById("aim").onclick = function(e){
+  if(e.target.id === "aimTarget") return;
+  if(!aimActive) return;
+
+  falloAim();
+};
+
+function actualizarStats(){
+  document.getElementById("aimStats").innerText =
+    `Puntos: ${aimScore} | Fallos: ${aimMiss} | Combo: ${aimCombo}`;
+}
+// ====================== REFLEX ======================
+let reflexTimeout;
+let reflexStartTime;
+let reflexScore = 0;
+let reflexActive = false;
+
+function irReflex(){
+  cambiar("menu","reflex");
+  resetReflex();
+}
+
+function resetReflex(){
+  reflexScore = 0;
+  reflexActive = false;
+  document.getElementById("reflexScore").innerText = "Puntos: 0";
+  document.getElementById("reflexInfo").innerText = "Toca el botón lo más rápido posible";
+  document.getElementById("reflexBtn").style.display = "none";
+}
+
+function iniciarReflex(){
+  resetReflex();
+  siguienteReflex();
+}
+
+function siguienteReflex(){
+  reflexActive = false;
+  document.getElementById("reflexInfo").innerText = "Espera...";
+
+  let delay = Math.random() * 2000 + 800;
+
+  reflexTimeout = setTimeout(() => {
+    mostrarBotonReflex();
+  }, delay);
+}
+
+function mostrarBotonReflex(){
+  let btn = document.getElementById("reflexBtn");
+  let card = btn.parentElement;
+
+  // posición random dentro del card
+  let maxX = card.clientWidth - 100;
+  let maxY = card.clientHeight - 150;
+
+  let x = Math.random() * maxX;
+  let y = Math.random() * maxY;
+
+  btn.style.left = x + "px";
+  btn.style.top = y + "px";
+  btn.style.display = "block";
+
+  reflexStartTime = Date.now();
+  reflexActive = true;
+}
+
+document.getElementById("reflexBtn").onclick = function(){
+  if(!reflexActive){
+    // clic antes de tiempo
+    document.getElementById("reflexInfo").innerText = "¡Muy pronto! 😅";
+    clearTimeout(reflexTimeout);
+    siguienteReflex();
+    return;
+  }
+
+  let reaction = Date.now() - reflexStartTime;
+
+  // sistema de puntos (más rápido = más puntos)
+  let puntosGanados = Math.max(1, Math.floor(300 - reaction / 2));
+  reflexScore += puntosGanados;
+
+  document.getElementById("reflexScore").innerText = "Puntos: " + reflexScore;
+  document.getElementById("reflexInfo").innerText = "⏱️ " + reaction + " ms";
+
+  this.style.display = "none";
+
+  siguienteReflex();
+};
+// QUIZ (actualizado con tus preguntas personales 2026)
 const preguntas = [
   {texto:"¿Dónde nací?", opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"], correcta:1},
   {texto:"Llegando a Chile... ¿A qué cerro llegué?", opciones:["Barón","Lecheros","Cárcel"], correcta:1},
@@ -184,152 +756,190 @@ const preguntas = [
 
 let i = 0;
 let puntos = 0;
-let bloqueado = false; // Para evitar múltiples clics mientras se ve el color
 
 function iniciar(){
-  i = 0; puntos = 0; bloqueado = false;
+  i = 0;
+  puntos = 0;
   cambiar("menu","quiz");
   mostrar();
 }
 
 function mostrar(){
-  bloqueado = false;
   let p = preguntas[i];
   quizBox.innerHTML = `
     <h2>${p.texto}</h2>
-    <div id="opcionesBox">
-      ${p.opciones.map((op, idx) => `
-        <button class="quiz-opt" onclick="responder(this, ${idx === p.correcta})">${op}</button>
-      `).join("")}
-    </div>
+    ${p.opciones.map((op, idx) => `
+<button onclick="responder(${idx === p.correcta})">${op}</button>
+    `).join("")}
   `;
 }
 
-function responder(boton, ok){
-  if(bloqueado) return;
-  bloqueado = true;
-
-  // Pintar el botón presionado
-  if(ok){
-    puntos++;
-    boton.style.background = "#00ff88"; // Verde
-    boton.style.color = "black";
-  } else {
-    boton.style.background = "#ff4444"; // Rojo
-    boton.style.color = "white";
-    
-    // Opcional: Mostrar cuál era la correcta pintándola en verde suave
-    const botones = document.querySelectorAll(".quiz-opt");
-    let p = preguntas[i];
-    botones[p.correcta].style.border = "2px solid #00ff88";
-  }
-
-  // Esperar un momento para que el usuario vea el color
-  setTimeout(() => {
-    if(i < preguntas.length - 1){
-      i++;
-      mostrar();
-    } else {
-      fin();
-    }
-  }, 1000); // 1 segundo de pausa
+function responder(ok){
+  if(ok) puntos++;
+  i < preguntas.length - 1 ? (i++, mostrar()) : fin();
 }
 
 function fin(){
   cambiar("quiz","resultado");
-  final.innerText = `Puntaje: ${puntos} / ${preguntas.length}`;
+  final.innerText = `Puntaje: ${puntos}/${preguntas.length}`;
 }
 
-
-// CACHIPUM (sin cambios)
+// CACHIPUM
 function jugar(p){
-  let ops=["piedra","papel","tijera"];
-  let cpu=ops[Math.floor(Math.random()*3)];
-  let res="Empate";
-  if(p!==cpu){
-    if((p==="piedra"&&cpu==="tijera")||(p==="papel"&&cpu==="piedra")||(p==="tijera"&&cpu==="papel")){
-      res="Ganaste 😎";
+  let ops = ["piedra","papel","tijera"];
+  let cpu = ops[Math.floor(Math.random()*3)];
+  let res = "Empate";
+
+  if(p !== cpu){
+    if(
+      (p==="piedra" && cpu==="tijera") ||
+      (p==="papel" && cpu==="piedra") ||
+      (p==="tijera" && cpu==="papel")
+    ){
+      res = "Ganaste 😎";
     }else{
-      res="Perdiste 💀";
+      res = "Perdiste 💀";
     }
   }
-  rpsResult.innerText=`${p} vs ${cpu} → ${res}`;
+  rpsResult.innerText = `${p} vs ${cpu} → ${res}`;
 }
+
 function irRPS(){cambiar("menu","rps");}
 
-// PALABRA (sin cambios)
-const palabras=["gato","perro","casa","codigo","juego"];
-let palabraSecreta="",progreso=[],intentos;
+// PALABRA
+const palabras = ["gato","perro","casa","codigo","juego"];
+let palabraSecreta = "", progreso = [], intentos;
+
 function irPalabra(){cambiar("menu","palabra");}
+
 function modoAhorcado(){
-  palabraSecreta=palabras[Math.floor(Math.random()*palabras.length)];
-  progreso=Array(palabraSecreta.length).fill("_");
-  intentos=6;
-  actualizar();
-}
-function actualizar(){
-  palabraTexto.innerText=progreso.join(" ");
-  estadoA.innerText="Intentos: "+intentos;
-}
-function intentarLetra(){
-  let l=letra.value.toLowerCase(); letra.value="";
-  if(!l) return;
-  let ok=false;
-  for(let i=0;i<palabraSecreta.length;i++){
-    if(palabraSecreta[i]===l){ progreso[i]=l; ok=true; }
-  }
-  if(!ok) intentos--;
-  if(intentos<=0){ alert("Perdiste 😭 → "+palabraSecreta); modoAhorcado(); }
-  if(!progreso.includes("_")){ alert("Ganaste 🔥"); modoAhorcado(); }
+  palabraSecreta = palabras[Math.floor(Math.random()*palabras.length)];
+  progreso = Array(palabraSecreta.length).fill("_");
+  intentos = 6;
   actualizar();
 }
 
-// TRES EN RAYA (sin cambios)
+function actualizar(){
+  palabraTexto.innerText = progreso.join(" ");
+  estadoA.innerText = "Intentos: " + intentos;
+}
+
+function intentarLetra(){
+  let l = letra.value.toLowerCase();
+  letra.value = "";
+  if(!l) return;
+
+  let ok = false;
+  for(let i = 0; i < palabraSecreta.length; i++){
+    if(palabraSecreta[i] === l){
+      progreso[i] = l;
+      ok = true;
+    }
+  }
+
+  if(!ok) intentos--;
+
+  if(intentos <= 0){
+    alert("Perdiste 😭 → " + palabraSecreta);
+    modoAhorcado();
+  }
+
+  if(!progreso.includes("_")){
+    alert("Ganaste 🔥");
+    modoAhorcado();
+  }
+
+  actualizar();
+}
+
+// TRES EN RAYA
 let board = Array(9).fill(null);
 let gameOver = false;
-function irTresEnRaya(){ cambiar("menu","tresEnRaya"); reiniciarTTT(); }
+
+function irTresEnRaya(){
+  cambiar("menu","tresEnRaya");
+  reiniciarTTT();
+}
+
 function reiniciarTTT(){
   board = Array(9).fill(null);
   gameOver = false;
-  document.querySelectorAll(".ttt-cell").forEach(c => c.textContent = "");
+  document.querySelectorAll(".ttt-cell").forEach(cell => cell.textContent = "");
   tttResult.innerText = "Tu turno (❌)";
 }
+
 function hacerMovimiento(cell){
   if(gameOver) return;
   let idx = parseInt(cell.dataset.index);
   if(board[idx]) return;
-  board[idx] = "❌"; cell.textContent = "❌";
-  if(checkWin("❌")){ tttResult.innerText = "¡GANASTE! 🎉"; gameOver = true; return; }
-  if(board.every(c => c)){ tttResult.innerText = "Empate 😐"; gameOver = true; return; }
+
+  board[idx] = "❌";
+  cell.textContent = "❌";
+
+  if(checkWin("❌")){
+    tttResult.innerText = "¡GANASTE! 🎉";
+    gameOver = true;
+    return;
+  }
+
+  if(board.every(c => c)){
+    tttResult.innerText = "Empate 😐";
+    gameOver = true;
+    return;
+  }
+
   tttResult.innerText = "Turno de CPU (⭕)";
   setTimeout(cpuMove, 600);
 }
+
 function cpuMove(){
   if(gameOver) return;
   let empty = [];
-  for(let i=0;i<9;i++) if(!board[i]) empty.push(i);
-  if(empty.length===0) return;
-  let randomIdx = empty[Math.floor(Math.random()*empty.length)];
+  for(let i = 0; i < 9; i++){
+    if(!board[i]) empty.push(i);
+  }
+  if(empty.length === 0) return;
+
+  let randomIdx = empty[Math.floor(Math.random() * empty.length)];
   board[randomIdx] = "⭕";
   document.querySelectorAll(".ttt-cell")[randomIdx].textContent = "⭕";
-  if(checkWin("⭕")){ tttResult.innerText = "CPU ganó 💀"; gameOver = true; return; }
-  if(board.every(c => c)){ tttResult.innerText = "Empate 😐"; gameOver = true; return; }
+
+  if(checkWin("⭕")){
+    tttResult.innerText = "CPU ganó 💀";
+    gameOver = true;
+    return;
+  }
+
+  if(board.every(c => c)){
+    tttResult.innerText = "Empate 😐";
+    gameOver = true;
+    return;
+  }
+
   tttResult.innerText = "Tu turno (❌)";
 }
+
 function checkWin(player){
-  const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  const wins = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
   return wins.some(combo => combo.every(i => board[i] === player));
 }
 
 // NAV
 function volver(){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
   document.getElementById("menu").classList.remove("hidden");
 }
+
 function cambiar(a,b){
   document.getElementById(a).classList.add("hidden");
   document.getElementById(b).classList.remove("hidden");
 }
+
 </script>
+
 </body>
 </html>
