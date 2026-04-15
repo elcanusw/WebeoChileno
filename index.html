@@ -124,6 +124,7 @@ button:hover{
   <button class="start-btn" onclick="irRPS()">⚔️ Cachipum</button>
   <button class="start-btn" onclick="irPalabra()">🔤 Palabra</button>
   <button class="start-btn" onclick="irTresEnRaya()">❌⭕ Tres en Raya</button>
+  <button class="start-btn" onclick="irConnect4()">🔴 4 en Línea</button>
 </div>
 <div class="screen hidden" id="runner">
   <div class="card">
@@ -258,6 +259,26 @@ button:hover{
     <button class="start-btn" onclick="reiniciarTTT()">🔄 Reiniciar partida</button>
     <button class="start-btn" onclick="volver()">Volver al menú</button>
   </div>
+  </div>  <!-- ← termina Tres en Raya -->
+
+<!-- 🔴 PEGA ESTO JUSTO AQUÍ -->
+<div class="screen hidden" id="connect4Screen">
+  <div class="card">
+    <h2>🔴 4 en Línea</h2>
+    <p id="c4Status">Tu turno</p>
+
+    <div id="connect4Board" style="
+      display:grid;
+      grid-template-columns:repeat(7,60px);
+      gap:6px;
+      justify-content:center;
+      margin:20px auto;
+    "></div>
+
+    <button class="start-btn" onclick="initC4()">🔄 Reiniciar</button>
+    <button class="start-btn" onclick="volver()">Volver</button>
+  </div>
+</div>
 </div>
 
 <script>
