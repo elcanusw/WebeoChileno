@@ -417,6 +417,49 @@ function reiniciarTTT(){
   board = Array(9).fill(null);
   document.querySelectorAll(".ttt-cell").forEach(c=>c.innerText="");
 }
+  // ====================== QUIZ ======================
+const preguntas = [
+  {texto:"¿Dónde nací?", opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"], correcta:1},
+  {texto:"Llegando a Chile... ¿A qué cerro llegué?", opciones:["Barón","Lecheros","Cárcel"], correcta:1},
+  {texto:"¿Cuántos hijos tengo actualmente (2026)?", opciones:["4","2","3"], correcta:2}
+];
+
+let iQuiz = 0;
+let puntosQuiz = 0;
+
+function iniciar(){
+  iQuiz = 0;
+  puntosQuiz = 0;
+  cambiar("menu","quiz");
+  mostrarQuiz();
+}
+
+function mostrarQuiz(){
+  let p = preguntas[iQuiz];
+
+  quizBox.innerHTML = `
+    <h2>${p.texto}</h2>
+    ${p.opciones.map((op, i) => 
+      `<button onclick="responder(${i === p.correcta})">${op}</button>`
+    ).join("")}
+  `;
+}
+
+function responder(correcta){
+  if(correcta) puntosQuiz++;
+
+  if(iQuiz < preguntas.length - 1){
+    iQuiz++;
+    mostrarQuiz();
+  }else{
+    finQuiz();
+  }
+}
+
+function finQuiz(){
+  cambiar("quiz","resultado");
+  final.innerText = `Puntaje: ${puntosQuiz}/${preguntas.length}`;
+}
 </script>
 
 </body>
