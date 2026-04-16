@@ -576,6 +576,51 @@ function checkWin(p){
   const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   return w.some(c=>c.every(i=>board[i]===p));
 }
+  /* ================= NAV (ARREGLA TODO) ================= */
+function ocultarTodo(){
+  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+}
+
+function irInicio(){
+  ocultarTodo();
+  document.getElementById("menu").classList.remove("hidden");
+}
+
+function irJuegos(){
+  irInicio();
+}
+
+function irEncuestas(){
+  ocultarTodo();
+  document.getElementById("quiz").classList.remove("hidden");
+}
+
+function irContacto(){
+  ocultarTodo();
+  document.getElementById("contacto").classList.remove("hidden");
+}
+
+function irAportar(){
+  ocultarTodo();
+  document.getElementById("aportar").classList.remove("hidden");
+}
+
+function cambiar(a,b){
+  document.getElementById(a).classList.add("hidden");
+  document.getElementById(b).classList.remove("hidden");
+}
+
+function volver(){
+  irInicio();
+}
+
+/* FIX TOUCH RUNNER */
+setTimeout(()=>{
+  let canvas = document.getElementById("runnerCanvas");
+  if(canvas){
+    canvas.addEventListener("touchstart", saltar);
+  }
+},100);
 </script>
 
 </body>
