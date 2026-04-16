@@ -287,8 +287,136 @@ function irAportar(){ ocultarTodo(); aportar.classList.remove("hidden"); }
 function cambiar(a,b){ document.getElementById(a).classList.add("hidden"); document.getElementById(b).classList.remove("hidden"); }
 function volver(){ irInicio(); }
 
-/* ================= TU JS ORIGINAL ================= */
-/* (exactamente el que ya tenías, sin cambios) */
+// ====================== RUNNER ======================
+let rCanvas, rCtx, player, gravity, obstacles, rScore, rSpeed, runnerInterval, isJumping=false;
+
+function irRunner(){ cambiar("menu","runner"); iniciarRunner(); }
+
+function iniciarRunner(){
+  rCanvas = document.getElementById("runnerCanvas");
+  rCtx = rCanvas.getContext("2d");
+
+  player = {x:50, y:300, w:20, h:20, vy:0};
+  gravity = 0.8;
+  obstacles = [];
+  rScore = 0;
+  rSpeed = 4;
+
+  document.getElementById("runnerScore").innerText = "Puntaje: 0";
+
+  clearInterval(runnerInterval);
+  runnerInterval = setInterval(loopRunner, 16);
+}
+
+function loopRunner(){ updateRunner(); drawRunner(); }
+
+function updateRunner(){
+  player.vy += gravity;
+  player.y += player.vy;
+
+  if(player.y > 300){
+    player.y = 300;
+    player.vy = 0;
+    isJumping = false;
+  }
+
+  if(Math.random() < 0.02){
+    obstacles.push({x:400, y:300, w:20, h:20});
+  }
+
+  obstacles.forEach(o => o.x -= rSpeed);
+
+  obstacles.forEach(o => {
+    if(player.x < o.x + o.w &&
+       player.x + player.w > o.x &&
+       player.y < o.y + o.h &&
+       player.y + player.h > o.y){
+      clearInterval(runnerInterval);
+      alert("GAME OVER");
+    }
+  });
+
+  obstacles = obstacles.filter(o => o.x > -20);
+
+  rScore++;
+  document.getElementById("runnerScore").innerText = "Puntaje: " + rScore;
+}
+
+function drawRunner(){
+  rCtx.fillStyle="#111"; rCtx.fillRect(0,0,400,400);
+  rCtx.fillStyle="#00ff88"; rCtx.fillRect(player.x,player.y,20,20);
+  rCtx.fillStyle="#ff00cc"; obstacles.forEach(o=>rCtx.fillRect(o.x,o.y,o.w,o.h));
+}
+
+document.addEventListener("keydown", e=>{
+  if(e.key==="ArrowUp" && !document.getElementById("runner").classList.contains("hidden")){
+    if(!isJumping){ player.vy=-12; isJumping=true; }
+  }
+});
+
+// ====================== BREAKOUT ======================
+let breakCanvas, breakCtx, ballX, ballY, ballDX, ballDY, paddleX, breakInterval;
+
+function irBreakout(){ cambiar("menu","breakout"); iniciarBreak(); }
+
+function iniciarBreak(){
+  breakCanvas = document.getElementById("breakCanvas");
+  breakCtx = breakCanvas.getContext("2d");
+
+  ballX=200; ballY=300; ballDX=3; ballDY=-3; paddleX=150;
+
+  clearInterval(breakInterval);
+  breakInterval = setInterval(loopBreak,16);
+}
+
+function loopBreak(){
+  breakCtx.fillStyle="#111"; breakCtx.fillRect(0,0,400,400);
+
+  ballX+=ballDX; ballY+=ballDY;
+
+  if(ballX<0||ballX>400) ballDX*=-1;
+  if(ballY<0) ballDY*=-1;
+
+  if(ballY>400){ clearInterval(breakInterval); alert("Perdiste"); }
+
+  breakCtx.beginPath();
+  breakCtx.arc(ballX,ballY,8,0,Math.PI*2);
+  breakCtx.fill();
+
+  breakCtx.fillRect(paddleX,370,80,10);
+}
+
+// ====================== AIM ======================
+function irAim(){ cambiar("menu","aim"); }
+
+// ====================== REFLEX ======================
+function irReflex(){ cambiar("menu","reflex"); }
+
+// ====================== QUIZ ======================
+function iniciar(){ cambiar("menu","quiz"); }
+
+// ====================== RPS ======================
+function irRPS(){ cambiar("menu","rps"); }
+
+// ====================== PALABRA ======================
+function irPalabra(){ cambiar("menu","palabra"); }
+
+// ====================== TRES EN RAYA ======================
+let board = Array(9).fill(null);
+
+function irTresEnRaya(){ cambiar("menu","tresEnRaya"); }
+
+function hacerMovimiento(cell){
+  let i = cell.dataset.index;
+  if(board[i]) return;
+  board[i] = "X";
+  cell.innerText = "X";
+}
+
+function reiniciarTTT(){
+  board = Array(9).fill(null);
+  document.querySelectorAll(".ttt-cell").forEach(c=>c.innerText="");
+}
 </script>
 
 </body>
