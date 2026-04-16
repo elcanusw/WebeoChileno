@@ -275,22 +275,16 @@ button:hover{ transform:scale(1.05); }
 </div>
 
 <script>
-/* NAV */
-function ocultarTodo(){
-  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+/* ====================== RUNNER ====================== */
+let rCanvas, rCtx;
+let player, gravity, obstacles, rScore, rSpeed;
+let runnerInterval;
+let isJumping = false;
+
+function irRunner(){
+  cambiar("menu","runner");
+  iniciarRunner();
 }
-function irInicio(){ ocultarTodo(); menu.classList.remove("hidden"); }
-function irJuegos(){ irInicio(); }
-function irEncuestas(){ ocultarTodo(); quiz.classList.remove("hidden"); }
-function irContacto(){ ocultarTodo(); contacto.classList.remove("hidden"); }
-function irAportar(){ ocultarTodo(); aportar.classList.remove("hidden"); }
-function cambiar(a,b){ document.getElementById(a).classList.add("hidden"); document.getElementById(b).classList.remove("hidden"); }
-function volver(){ irInicio(); }
-
-// ====================== RUNNER ======================
-let rCanvas, rCtx, player, gravity, obstacles, rScore, rSpeed, runnerInterval, isJumping=false;
-
-function irRunner(){ cambiar("menu","runner"); iniciarRunner(); }
 
 function iniciarRunner(){
   rCanvas = document.getElementById("runnerCanvas");
@@ -304,11 +298,14 @@ function iniciarRunner(){
 
   document.getElementById("runnerScore").innerText = "Puntaje: 0";
 
-  clearInterval(runnerInterval);
+  if(runnerInterval) clearInterval(runnerInterval);
   runnerInterval = setInterval(loopRunner, 16);
 }
 
-function loopRunner(){ updateRunner(); drawRunner(); }
+function loopRunner(){
+  updateRunner();
+  drawRunner();
+}
 
 function updateRunner(){
   player.vy += gravity;
@@ -321,7 +318,7 @@ function updateRunner(){
   }
 
   if(Math.random() < 0.02){
-    obstacles.push({x:400, y:300, w:20, h:20});
+    obstacles.push({x:400,y:300,w:20,h:20});
   }
 
   obstacles.forEach(o => o.x -= rSpeed);
@@ -332,7 +329,7 @@ function updateRunner(){
        player.y < o.y + o.h &&
        player.y + player.h > o.y){
       clearInterval(runnerInterval);
-      alert("GAME OVER");
+      alert("💀 GAME OVER\nPuntaje: " + rScore);
     }
   });
 
@@ -340,22 +337,49 @@ function updateRunner(){
 
   rScore++;
   document.getElementById("runnerScore").innerText = "Puntaje: " + rScore;
+
+  if(rScore % 200 === 0) rSpeed += 0.5;
 }
 
 function drawRunner(){
-  rCtx.fillStyle="#111"; rCtx.fillRect(0,0,400,400);
-  rCtx.fillStyle="#00ff88"; rCtx.fillRect(player.x,player.y,20,20);
-  rCtx.fillStyle="#ff00cc"; obstacles.forEach(o=>rCtx.fillRect(o.x,o.y,o.w,o.h));
+  rCtx.fillStyle = "#111";
+  rCtx.fillRect(0,0,400,400);
+
+  rCtx.fillStyle = "#333";
+  rCtx.fillRect(0,320,400,5);
+
+  rCtx.fillStyle = "#00ff88";
+  rCtx.fillRect(player.x,player.y,player.w,player.h);
+
+  rCtx.fillStyle = "#ff00cc";
+  obstacles.forEach(o => rCtx.fillRect(o.x,o.y,o.w,o.h));
+}
+
+function saltar(){
+  if(!isJumping){
+    player.vy = -12;
+    isJumping = true;
+  }
 }
 
 document.addEventListener("keydown", e=>{
-  if(e.key==="ArrowUp" && !document.getElementById("runner").classList.contains("hidden")){
-    if(!isJumping){ player.vy=-12; isJumping=true; }
+  if(!document.getElementById("runner").classList.contains("hidden") && e.key==="ArrowUp"){
+    saltar();
   }
 });
 
-// ====================== BREAKOUT ======================
-let breakCanvas, breakCtx, ballX, ballY, ballDX, ballDY, paddleX, breakInterval;
+document.getElementById("runnerCanvas").addEventListener("touchstart", saltar);
+
+function reiniciarRunner(){ iniciarRunner(); }
+
+/* ====================== BREAKOUT ====================== */
+let breakCanvas, breakCtx;
+let ballX, ballY, ballDX, ballDY;
+let paddleX;
+let rightPressed=false, leftPressed=false;
+let bricks=[], rows=5, cols=7;
+let brickW=50, brickH=15;
+let scoreBreak=0, breakInterval;
 
 function irBreakout(){ cambiar("menu","breakout"); iniciarBreak(); }
 
@@ -363,102 +387,194 @@ function iniciarBreak(){
   breakCanvas = document.getElementById("breakCanvas");
   breakCtx = breakCanvas.getContext("2d");
 
-  ballX=200; ballY=300; ballDX=3; ballDY=-3; paddleX=150;
+  ballX=200; ballY=300; ballDX=3; ballDY=-3;
+  paddleX=150; scoreBreak=0;
+
+  document.getElementById("breakScore").innerText="Puntaje: 0";
+
+  bricks=[];
+  for(let r=0;r<rows;r++){
+    bricks[r]=[];
+    for(let c=0;c<cols;c++){
+      bricks[r][c]={x:c*(brickW+5)+20,y:r*(brickH+5)+30,alive:true};
+    }
+  }
 
   clearInterval(breakInterval);
-  breakInterval = setInterval(loopBreak,16);
+  breakInterval=setInterval(loopBreak,16);
 }
 
-function loopBreak(){
-  breakCtx.fillStyle="#111"; breakCtx.fillRect(0,0,400,400);
+function loopBreak(){ drawBreak(); updateBreak(); }
 
-  ballX+=ballDX; ballY+=ballDY;
+function drawBreak(){
+  breakCtx.fillStyle="#111";
+  breakCtx.fillRect(0,0,400,400);
 
-  if(ballX<0||ballX>400) ballDX*=-1;
-  if(ballY<0) ballDY*=-1;
-
-  if(ballY>400){ clearInterval(breakInterval); alert("Perdiste"); }
-
+  breakCtx.fillStyle="#00ff88";
   breakCtx.beginPath();
   breakCtx.arc(ballX,ballY,8,0,Math.PI*2);
   breakCtx.fill();
 
   breakCtx.fillRect(paddleX,370,80,10);
+
+  breakCtx.fillStyle="#ff00cc";
+  bricks.forEach(row=>{
+    row.forEach(b=>{
+      if(b.alive) breakCtx.fillRect(b.x,b.y,brickW,brickH);
+    });
+  });
 }
 
-// ====================== AIM ======================
+function updateBreak(){
+  ballX+=ballDX; ballY+=ballDY;
+
+  if(ballX<8||ballX>392) ballDX*=-1;
+  if(ballY<8) ballDY*=-1;
+
+  if(ballY>400){ clearInterval(breakInterval); alert("💀 Perdiste"); }
+
+  if(ballY>360 && ballX>paddleX && ballX<paddleX+80) ballDY*=-1;
+
+  bricks.forEach(row=>{
+    row.forEach(b=>{
+      if(b.alive && ballX>b.x && ballX<b.x+brickW && ballY>b.y && ballY<b.y+brickH){
+        ballDY*=-1; b.alive=false; scoreBreak++;
+        document.getElementById("breakScore").innerText="Puntaje: "+scoreBreak;
+      }
+    });
+  });
+
+  if(scoreBreak===rows*cols){ clearInterval(breakInterval); alert("🔥 GANASTE 🔥"); }
+
+  if(rightPressed && paddleX<320) paddleX+=6;
+  if(leftPressed && paddleX>0) paddleX-=6;
+}
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight") rightPressed=true;
+  if(e.key==="ArrowLeft") leftPressed=true;
+});
+
+document.addEventListener("keyup",e=>{
+  if(e.key==="ArrowRight") rightPressed=false;
+  if(e.key==="ArrowLeft") leftPressed=false;
+});
+
+function reiniciarBreak(){ iniciarBreak(); }
+
+/* ====================== AIM ====================== */
 function irAim(){ cambiar("menu","aim"); }
 
-// ====================== REFLEX ======================
+/* ====================== REFLEX ====================== */
 function irReflex(){ cambiar("menu","reflex"); }
 
-// ====================== QUIZ ======================
-function iniciar(){ cambiar("menu","quiz"); }
-
-// ====================== RPS ======================
-function irRPS(){ cambiar("menu","rps"); }
-
-// ====================== PALABRA ======================
-function irPalabra(){ cambiar("menu","palabra"); }
-
-// ====================== TRES EN RAYA ======================
-let board = Array(9).fill(null);
-
-function irTresEnRaya(){ cambiar("menu","tresEnRaya"); }
-
-function hacerMovimiento(cell){
-  let i = cell.dataset.index;
-  if(board[i]) return;
-  board[i] = "X";
-  cell.innerText = "X";
-}
-
-function reiniciarTTT(){
-  board = Array(9).fill(null);
-  document.querySelectorAll(".ttt-cell").forEach(c=>c.innerText="");
-}
-  // ====================== QUIZ ======================
-const preguntas = [
-  {texto:"¿Dónde nací?", opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"], correcta:1},
-  {texto:"Llegando a Chile... ¿A qué cerro llegué?", opciones:["Barón","Lecheros","Cárcel"], correcta:1},
-  {texto:"¿Cuántos hijos tengo actualmente (2026)?", opciones:["4","2","3"], correcta:2}
+/* ====================== QUIZ ====================== */
+const preguntas=[
+  {texto:"¿Dónde nací?",opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"],correcta:1},
+  {texto:"Llegando a Chile... ¿A qué cerro llegué?",opciones:["Barón","Lecheros","Cárcel"],correcta:1},
+  {texto:"¿Cuántos hijos tengo actualmente (2026)?",opciones:["4","2","3"],correcta:2}
 ];
 
-let iQuiz = 0;
-let puntosQuiz = 0;
+let iQuiz=0,puntosQuiz=0;
 
 function iniciar(){
-  iQuiz = 0;
-  puntosQuiz = 0;
+  iQuiz=0;puntosQuiz=0;
   cambiar("menu","quiz");
   mostrarQuiz();
 }
 
 function mostrarQuiz(){
-  let p = preguntas[iQuiz];
-
-  quizBox.innerHTML = `
-    <h2>${p.texto}</h2>
-    ${p.opciones.map((op, i) => 
-      `<button onclick="responder(${i === p.correcta})">${op}</button>`
-    ).join("")}
-  `;
+  let p=preguntas[iQuiz];
+  quizBox.innerHTML=`<h2>${p.texto}</h2>
+  ${p.opciones.map((op,i)=>`<button onclick="responder(${i===p.correcta})">${op}</button>`).join("")}`;
 }
 
-function responder(correcta){
-  if(correcta) puntosQuiz++;
-
-  if(iQuiz < preguntas.length - 1){
-    iQuiz++;
-    mostrarQuiz();
-  }else{
-    finQuiz();
-  }
+function responder(ok){
+  if(ok) puntosQuiz++;
+  iQuiz<preguntas.length-1 ? (iQuiz++,mostrarQuiz()) : finQuiz();
 }
 
 function finQuiz(){
   cambiar("quiz","resultado");
-  final.innerText = `Puntaje: ${puntosQuiz}/${preguntas.length}`;
+  final.innerText=`Puntaje: ${puntosQuiz}/${preguntas.length}`;
+}
+
+/* ====================== RPS ====================== */
+function irRPS(){ cambiar("menu","rps"); }
+
+function jugar(p){
+  let ops=["piedra","papel","tijera"];
+  let cpu=ops[Math.floor(Math.random()*3)];
+  let res="Empate";
+  if(p!==cpu){
+    if((p==="piedra"&&cpu==="tijera")||(p==="papel"&&cpu==="piedra")||(p==="tijera"&&cpu==="papel")) res="Ganaste 😎";
+    else res="Perdiste 💀";
+  }
+  rpsResult.innerText=`${p} vs ${cpu} → ${res}`;
+}
+
+/* ====================== PALABRA ====================== */
+const palabras=["gato","perro","casa","codigo","juego"];
+let palabraSecreta="",progreso=[],intentos;
+
+function irPalabra(){ cambiar("menu","palabra"); }
+
+function modoAhorcado(){
+  palabraSecreta=palabras[Math.floor(Math.random()*palabras.length)];
+  progreso=Array(palabraSecreta.length).fill("_");
+  intentos=6; actualizarPalabra();
+}
+
+function actualizarPalabra(){
+  palabraTexto.innerText=progreso.join(" ");
+  estadoA.innerText="Intentos: "+intentos;
+}
+
+function intentarLetra(){
+  let l=letra.value.toLowerCase(); letra.value="";
+  if(!l) return;
+  let ok=false;
+  for(let i=0;i<palabraSecreta.length;i++){
+    if(palabraSecreta[i]===l){ progreso[i]=l; ok=true; }
+  }
+  if(!ok) intentos--;
+  if(intentos<=0){ alert("Perdiste 😭 → "+palabraSecreta); modoAhorcado(); }
+  if(!progreso.includes("_")){ alert("Ganaste 🔥"); modoAhorcado(); }
+  actualizarPalabra();
+}
+
+/* ====================== TRES EN RAYA ====================== */
+let board=Array(9).fill(null),gameOver=false;
+
+function irTresEnRaya(){ cambiar("menu","tresEnRaya"); reiniciarTTT(); }
+
+function reiniciarTTT(){
+  board=Array(9).fill(null); gameOver=false;
+  document.querySelectorAll(".ttt-cell").forEach(c=>c.textContent="");
+}
+
+function hacerMovimiento(cell){
+  if(gameOver) return;
+  let i=cell.dataset.index;
+  if(board[i]) return;
+
+  board[i]="❌"; cell.textContent="❌";
+
+  if(checkWin("❌")){ tttResult.innerText="GANASTE"; gameOver=true; return; }
+
+  let empty=board.map((v,i)=>v?null:i).filter(v=>v!==null);
+  if(empty.length===0){ tttResult.innerText="Empate"; gameOver=true; return; }
+
+  let r=empty[Math.floor(Math.random()*empty.length)];
+  board[r]="⭕";
+  document.querySelectorAll(".ttt-cell")[r].textContent="⭕";
+
+  if(checkWin("⭕")){ tttResult.innerText="CPU ganó"; gameOver=true; }
+}
+
+function checkWin(p){
+  const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return w.some(c=>c.every(i=>board[i]===p));
 }
 </script>
 
