@@ -12,7 +12,6 @@ body {
   font-family: 'Poppins', sans-serif;
   color: white;
   background-color: #111;
-  /* Habilitamos scroll general */
   overflow-y: auto; 
   overflow-x: hidden;
 }
@@ -59,14 +58,13 @@ body::before {
 
 .navbar button:hover { color: #00ff88; }
 
-/* CONTENEDOR DE PANTALLAS */
 .screen {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 100px 20px 40px 20px; /* Padding para no chocar con nav y footer */
+  padding: 100px 20px 40px 20px;
   box-sizing: border-box;
 }
 
@@ -111,7 +109,6 @@ button.start-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgb
 
 .vol-btn { background: #444 !important; color: white !important; margin-top: 20px !important; }
 
-/* JUEGOS ESPECÍFICOS */
 canvas { background: #000; border-radius: 10px; max-width: 100%; height: auto; }
 .ttt-cell {
   background: rgba(255,255,255,0.1);
@@ -124,7 +121,6 @@ canvas { background: #000; border-radius: 10px; max-width: 100%; height: auto; }
   aspect-ratio: 1/1;
 }
 
-/* INPUTS */
 input, textarea {
   width: 100%;
   padding: 12px;
@@ -173,7 +169,6 @@ input, textarea {
     <h2>Endless Runner</h2>
     <p id="runnerScore">Puntaje: 0</p>
     <canvas id="runnerCanvas" width="400" height="400"></canvas>
-    <p><small>Toca la pantalla o usa Flecha Arriba para saltar</small></p>
     <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
   </div>
 </div>
@@ -229,9 +224,8 @@ input, textarea {
 </div>
 
 <div class="screen hidden" id="encuestas">
-  <div class="card" id="quizBox">
-    </div>
-  <button class="start-btn vol-btn" style="max-width:450px" onclick="volver()">VOLVER</button>
+  <div class="card" id="quizBox"></div>
+  <button class="start-btn vol-btn" onclick="volver()">VOLVER</button>
 </div>
 
 <div class="screen hidden" id="contacto">
@@ -247,15 +241,12 @@ input, textarea {
 <div class="screen hidden" id="aportar">
   <div class="card">
     <h2>💰 Apoya el Proyecto</h2>
-    <p>Si te gusta mi trabajo como diseñador o mis juegos, puedes invitarme un café.</p>
     <button class="start-btn">Donar por Flow / PayPal</button>
   </div>
 </div>
 
 <script>
-/* VARIABLES GLOBALES JUEGOS */
 let currentInterval = null;
-let currentScreen = 'inicio';
 
 function ocultarTodas() {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -273,7 +264,7 @@ function irJuego(id) {
   ocultarTodas();
   document.getElementById(id).classList.remove('hidden');
   if(id === 'runner') iniciarRunner();
-  if(id === 'breakout') iniciarBreakout();
+  if(id === 'breakout') loopBreakout();
   if(id === 'palabra') modoAhorcado();
   if(id === 'tresEnRaya') reiniciarTTT();
 }
@@ -288,7 +279,6 @@ function iniciarRunner() {
     if(py > 300) { py = 300; vy = 0; }
     if(Math.random() < 0.02) obs.push({x:400, y:300, w:20, h:20});
     obs.forEach(o => o.x -= 5);
-    // Colisión
     obs.forEach(o => {
       if(50 < o.x + 20 && 70 > o.x && py < o.y + 20 && py + 20 > o.y) {
         clearInterval(currentInterval); alert("Perdiste! Score: " + score); irJuego('runner');
@@ -297,7 +287,6 @@ function iniciarRunner() {
     obs = obs.filter(o => o.x > -20);
     score++;
     document.getElementById("runnerScore").innerText = "Puntaje: " + score;
-    // Dibujar
     ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
     ctx.fillStyle = "#00ff88"; ctx.fillRect(50, py, 20, 20);
     ctx.fillStyle = "#ff00cc"; obs.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
@@ -315,166 +304,86 @@ function loopBreakout() {
   let bricks = []; 
   for(let r=0; r<3; r++) for(let col=0; col<6; col++) bricks.push({x: col*65+10, y: r*25+30, v:true});
   
-  gameInterval = setInterval(() => {
+  currentInterval = setInterval(() => {
     x+=dx; y+=dy; 
     if(x<10 || x>390) dx*=-1; 
     if(y<10) dy*=-1;
-    
-    // Colisión con la barra
-    if(y>365 && x>px && x<px+80) {
-      dy = -Math.abs(dy); // Siempre rebota hacia arriba
-    }
-    
-    if(y>400) { clearInterval(gameInterval); alert("¡Casi! Inténtalo de nuevo."); volver(); }
-    
+    if(y>365 && x>px && x<px+80) { dy = -Math.abs(dy); }
+    if(y>400) { clearInterval(currentInterval); alert("¡Casi!"); volver(); }
     bricks.forEach(b => { 
       if(b.v && x>b.x && x<b.x+60 && y>b.y && y<b.y+20) { b.v=false; dy*=-1; score++; }
     });
-
     ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
-    ctx.fillStyle="#00ff88"; ctx.fillRect(px,370,80,10); // Paddle
+    ctx.fillStyle="#00ff88"; ctx.fillRect(px,370,80,10);
     ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(x,y,8,0,7); ctx.fill();
     ctx.fillStyle="#ff00cc"; bricks.forEach(b=>{ if(b.v) ctx.fillRect(b.x,b.y,60,20); });
-    
     document.getElementById("breakScore").innerText = "Puntaje: " + score;
-    if(score === 18) { clearInterval(gameInterval); alert("¡Ganaste, Canu!"); volver(); }
+    if(score === 18) { clearInterval(currentInterval); alert("¡Ganaste!"); volver(); }
   }, 20);
 
-  // CONTROL DE LA BARRA (MOUSE Y TOUCH)
   const moverBarra = (e) => {
     let rect = c.getBoundingClientRect();
-    let root = document.documentElement;
-    let mouseX = (e.clientX || e.touches[0].clientX) - rect.left - root.scrollLeft;
-    px = mouseX - 40; // Centrar la barra en el dedo/puntero
-    if(px < 0) px = 0;
-    if(px > 320) px = 320;
+    let mouseX = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - rect.left;
+    px = mouseX - 40;
+    if(px < 0) px = 0; if(px > 320) px = 320;
   };
-
   c.onmousemove = moverBarra;
   c.ontouchmove = (e) => { e.preventDefault(); moverBarra(e); };
 }
 
 /* --- LOGICA QUIZ --- */
-/* --- LÓGICA QUIZ (TUS PREGUNTAS ORIGINALES) --- */
 const preguntas = [
-  {
-    q: "¿Dónde nací?", 
-    a: ["Valparaíso, Chile", "Trondheim, Noruega", "Noje"], 
-    c: 1
-  },
-  {
-    q: "Llegando a Chile... ¿A qué cerro llegué?", 
-    a: ["Barón", "Lecheros", "Cárcel"], 
-    c: 1
-  },
-  {
-    q: "¿Cuántos hijos tengo actualmente (2026)?", 
-    a: ["4", "2", "3"], 
-    c: 2
-  }
+   { q: "¿Como me llamo?", a: ["Cristian", "Christiàn", "Christian"], c: 2 },
+  { q: "¿Dónde nací?", a: ["Valparaíso, Chile", "Trondheim, Noruega", "Noje"], c: 1 },
+  { q: "Llegando a Chile... ¿A qué cerro llegué?", a: ["Barón", "Lecheros", "Cárcel"], c: 1 },
+  { q: "¿Cuántos hijos tengo actualmente (2026)?", a: ["4", "2", "3"], c: 2 }
 ];
 
 function iniciarQuiz() {
   let i = 0, score = 0;
-  
   const show = () => {
     const quizContainer = document.getElementById("quizBox");
-    
     if(i >= preguntas.length) { 
-      quizContainer.innerHTML = `
-        <h2>¡Quiz Terminado!</h2>
-        <p style="font-size: 24px;">Puntaje: ${score} / ${preguntas.length}</p>
-        <button class="start-btn" onclick="iniciarQuiz()">Reintentar</button>
-      `;
+      quizContainer.innerHTML = `<h2>¡Fin! Score: ${score}/${preguntas.length}</h2><button class="start-btn" onclick="iniciarQuiz()">Reintentar</button>`;
       return;
     }
-    
     let p = preguntas[i];
-    
-    // Generamos el HTML: Título + Botones de opciones
-    quizContainer.innerHTML = `
-      <h3>${p.q}</h3>
-      <div id="optionsBox">
-        ${p.a.map((opt, idx) => `
-          <button class="start-btn" onclick="checkQ(${idx}, ${p.c})">
-            ${opt}
-          </button>
-        `).join("")}
-      </div>
-    `;
+    quizContainer.innerHTML = `<h3>${p.q}</h3>` + p.a.map((opt, idx) => `<button class="start-btn" onclick="checkQ(${idx}, ${p.c})">${opt}</button>`).join("");
   };
-
-  // Función global para chequear la respuesta
-  window.checkQ = (idx, correcta) => { 
-    if(idx === correcta) {
-      score++;
-    }
-    i++; 
-    show(); 
-  };
-
+  window.checkQ = (idx, correcta) => { if(idx === correcta) score++; i++; show(); };
   show();
 }
 
 /* --- CACHIPUM --- */
 window.jugarRPS = (p) => {
-  const opciones = ["piedra", "papel", "tijera"];
-  const cpu = opciones[Math.floor(Math.random()*3)];
-  let res = (p === cpu) ? "Empate" : 
-            (p==="piedra" && cpu==="tijera" || p==="papel" && cpu==="piedra" || p==="tijera" && cpu==="papel") ? "Ganaste!" : "Perdiste";
+  const opciones = ["piedra", "papel", "tijera"], cpu = opciones[Math.floor(Math.random()*3)];
+  let res = (p === cpu) ? "Empate" : (p==="piedra" && cpu==="tijera" || p==="papel" && cpu==="piedra" || p==="tijera" && cpu==="papel") ? "Ganaste!" : "Perdiste";
   document.getElementById("rpsResult").innerText = `Tú: ${p} | CPU: ${cpu} -> ${res}`;
 };
 
 /* --- TRES EN RAYA --- */
-let ttt = Array(9).fill(null);
-let tttActivo = true;
-
+let ttt = Array(9).fill(null), tttActivo = true;
 function reiniciarTTT() {
-  ttt = Array(9).fill(null);
-  tttActivo = true;
+  ttt = Array(9).fill(null); tttActivo = true;
   document.getElementById("tttResult").innerText = "Tu turno (X)";
   document.querySelectorAll('.ttt-cell').forEach(c => c.innerText = "");
 }
-
 window.hacerMovimiento = (el) => {
   let i = el.dataset.index;
   if(!tttActivo || ttt[i]) return;
-
-  // Jugador
-  ttt[i] = "X"; 
-  el.innerText = "X";
-  
-  if(checkWin("X")) {
-    document.getElementById("tttResult").innerText = "¡GANASTE!";
-    tttActivo = false;
-    setTimeout(() => { alert("¡Buena, ganaste!"); reiniciarTTT(); }, 100);
-    return;
-  }
-
-  // Turno CPU
+  ttt[i] = "X"; el.innerText = "X";
+  if(checkWin("X")) { document.getElementById("tttResult").innerText = "¡GANASTE!"; tttActivo = false; return; }
   let empty = ttt.map((v,idx) => v === null ? idx : null).filter(v => v !== null);
   if(empty.length > 0) {
     let r = empty[Math.floor(Math.random()*empty.length)];
-    ttt[r] = "O";
-    document.querySelector(`[data-index='${r}']`).innerText = "O";
-    
-    if(checkWin("O")) {
-      document.getElementById("tttResult").innerText = "Ganó la CPU";
-      tttActivo = false;
-      setTimeout(() => { alert("Perdiste contra la máquina..."); reiniciarTTT(); }, 100);
-    }
-  } else {
-    document.getElementById("tttResult").innerText = "¡Empate!";
-    tttActivo = false;
-  }
+    ttt[r] = "O"; document.querySelector(`[data-index='${r}']`).innerText = "O";
+    if(checkWin("O")) { document.getElementById("tttResult").innerText = "Ganó la CPU"; tttActivo = false; }
+  } else { document.getElementById("tttResult").innerText = "Empate"; tttActivo = false; }
 };
-
 function checkWin(p) {
   const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   return win.some(comb => comb.every(idx => ttt[idx] === p));
 }
-  }
-};
 
 /* --- PALABRA --- */
 let pal = "WANDERERS", prog = [];
@@ -484,11 +393,12 @@ function modoAhorcado() {
 }
 window.intentarLetra = () => {
   let l = document.getElementById("letraInput").value.toUpperCase();
+  if(!l) return;
   for(let i=0; i<pal.length; i++) if(pal[i] === l) prog[i] = l;
   document.getElementById("palabraTexto").innerText = prog.join(" ");
   document.getElementById("letraInput").value = "";
+  if(!prog.includes("_")) alert("¡Ganaste!");
 };
-
 </script>
 </body>
 </html>
