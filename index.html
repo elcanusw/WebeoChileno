@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WebeoChileno</title>
-
+<title> -WebeoChileno- </title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
 
@@ -341,25 +340,64 @@ function iniciarBreakout() {
 }
 
 /* --- LOGICA QUIZ --- */
+/* --- LÓGICA QUIZ (TUS PREGUNTAS ORIGINALES) --- */
 const preguntas = [
-  {q: "¿En qué año se fundó Santiago Wanderers?", a: ["1892", "1902", "1920"], c: 0},
-  {q: "¿Cuál es el color principal del decano?", a: ["Azul", "Verde", "Rojo"], c: 1}
-  {q:"¿Dónde nací?", opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"], correcta:1},
-  {q:"Llegando a Chile... ¿A qué cerro llegué?", opciones:["Barón","Lecheros","Cárcel"], correcta:1},
-  {q:"¿Cuántos hijos tengo actualmente (2026)?", opciones:["4","2","3"], correcta:2}
+  {
+    q: "¿Dónde nací?", 
+    a: ["Valparaíso, Chile", "Trondheim, Noruega", "Noje"], 
+    c: 1
+  },
+  {
+    q: "Llegando a Chile... ¿A qué cerro llegué?", 
+    a: ["Barón", "Lecheros", "Cárcel"], 
+    c: 1
+  },
+  {
+    q: "¿Cuántos hijos tengo actualmente (2026)?", 
+    a: ["4", "2", "3"], 
+    c: 2
+  }
 ];
+
 function iniciarQuiz() {
   let i = 0, score = 0;
+  
   const show = () => {
+    const quizContainer = document.getElementById("quizBox");
+    
     if(i >= preguntas.length) { 
-      document.getElementById("quizBox").innerHTML = `<h2>Fin! Puntaje: ${score}</h2>`;
+      quizContainer.innerHTML = `
+        <h2>¡Quiz Terminado!</h2>
+        <p style="font-size: 24px;">Puntaje: ${score} / ${preguntas.length}</p>
+        <button class="start-btn" onclick="iniciarQuiz()">Reintentar</button>
+      `;
       return;
     }
+    
     let p = preguntas[i];
-    document.getElementById("quizBox").innerHTML = `<h3>${p.q}</h3>` + 
-      p.a.map((opt, idx) => `<button class="start-btn" onclick="checkQ(${idx}, ${p.c})">${opt}</button>`).join("");
+    
+    // Generamos el HTML: Título + Botones de opciones
+    quizContainer.innerHTML = `
+      <h3>${p.q}</h3>
+      <div id="optionsBox">
+        ${p.a.map((opt, idx) => `
+          <button class="start-btn" onclick="checkQ(${idx}, ${p.c})">
+            ${opt}
+          </button>
+        `).join("")}
+      </div>
+    `;
   };
-  window.checkQ = (idx, c) => { if(idx === c) score++; i++; show(); };
+
+  // Función global para chequear la respuesta
+  window.checkQ = (idx, correcta) => { 
+    if(idx === correcta) {
+      score++;
+    }
+    i++; 
+    show(); 
+  };
+
   show();
 }
 
