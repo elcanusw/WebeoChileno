@@ -137,31 +137,28 @@ button:hover{ transform:scale(1.05); }
   <button onclick="irAportar()">APORTAR</button>
 </nav>
 
-<!-- MENU -->
 <div class="screen" id="menu">
   <div class="logo">CANU</div>
   <button class="start-btn" onclick="irRunner()">🏃 Runner</button>
   <button class="start-btn" onclick="irBreakout()">🧱 Breakout</button>
-  <button class="start-btn" onclick="irAim()">🎯 Aim Trainer</button>
-  <button class="start-btn" onclick="irReflex()">⚡ Reflex</button>
+  <button class="start-btn" onclick="irAim()">🎯 Aim Trainer (Próximamente)</button>
+  <button class="start-btn" onclick="irReflex()">⚡ Reflex (Próximamente)</button>
   <button class="start-btn" onclick="iniciar()">🧠 Quiz</button>
   <button class="start-btn" onclick="irRPS()">⚔️ Cachipum</button>
   <button class="start-btn" onclick="irPalabra()">🔤 Palabra</button>
   <button class="start-btn" onclick="irTresEnRaya()">❌⭕ Tres en Raya</button>
 </div>
 
-<!-- CONTACTO -->
 <div class="screen hidden" id="contacto">
   <div class="card">
     <h2>📩 Contáctanos</h2>
-    <input placeholder="Nombre">
-    <input placeholder="Correo">
-    <textarea placeholder="Mensaje"></textarea>
+    <input placeholder="Nombre" style="width:90%; padding:8px; margin:5px;">
+    <input placeholder="Correo" style="width:90%; padding:8px; margin:5px;">
+    <textarea placeholder="Mensaje" style="width:90%; padding:8px; margin:5px;"></textarea>
     <button class="start-btn">Enviar</button>
   </div>
 </div>
 
-<!-- APORTAR -->
 <div class="screen hidden" id="aportar">
   <div class="card">
     <h2>💰 Apoyar</h2>
@@ -170,53 +167,26 @@ button:hover{ transform:scale(1.05); }
   </div>
 </div>
 
-<!-- ================= JUEGOS ================= -->
-
-<!-- RUNNER -->
 <div class="screen hidden" id="runner">
   <div class="card">
     <h2>🏃 Endless Runner</h2>
     <p id="runnerScore">Puntaje: 0</p>
-    <canvas id="runnerCanvas" width="400" height="400"></canvas>
+    <canvas id="runnerCanvas" width="400" height="400" style="max-width:100%;"></canvas>
     <button class="start-btn" onclick="reiniciarRunner()">🔄 Reiniciar</button>
     <button class="start-btn" onclick="volver()">Volver</button>
   </div>
 </div>
 
-<!-- BREAKOUT -->
 <div class="screen hidden" id="breakout">
   <div class="card">
     <h2>🧱 Breakout</h2>
     <p id="breakScore">Puntaje: 0</p>
-    <canvas id="breakCanvas" width="400" height="400"></canvas>
+    <canvas id="breakCanvas" width="400" height="400" style="max-width:100%;"></canvas>
     <button class="start-btn" onclick="reiniciarBreak()">🔄 Reiniciar</button>
     <button class="start-btn" onclick="volver()">Volver</button>
   </div>
 </div>
 
-<!-- AIM -->
-<div class="screen hidden" id="aim">
-  <div class="card" style="position:relative;height:500px;">
-    <h2>🎯 Aim Trainer</h2>
-    <p id="aimStats"></p>
-    <div id="aimTarget" style="position:absolute;width:70px;height:70px;border-radius:50%;background:#ff00cc;display:none;"></div>
-    <button class="start-btn" onclick="iniciarAim()">▶️ Empezar</button>
-    <button class="start-btn" onclick="volver()">Volver</button>
-  </div>
-</div>
-
-<!-- REFLEX -->
-<div class="screen hidden" id="reflex">
-  <div class="card" style="position:relative;height:500px;">
-    <h2>⚡ Reflex</h2>
-    <p id="reflexScore"></p>
-    <button id="reflexBtn" style="position:absolute;width:80px;height:80px;border-radius:50%;display:none;">🔥</button>
-    <button class="start-btn" onclick="iniciarReflex()">▶️ Empezar</button>
-    <button class="start-btn" onclick="volver()">Volver</button>
-  </div>
-</div>
-
-<!-- QUIZ -->
 <div class="screen hidden" id="quiz">
   <div class="card" id="quizBox"></div>
 </div>
@@ -228,7 +198,6 @@ button:hover{ transform:scale(1.05); }
   </div>
 </div>
 
-<!-- RPS -->
 <div class="screen hidden" id="rps">
   <div class="card">
     <h2>Cachipum</h2>
@@ -240,25 +209,23 @@ button:hover{ transform:scale(1.05); }
   </div>
 </div>
 
-<!-- PALABRA -->
 <div class="screen hidden" id="palabra">
   <div class="card">
     <h2>Palabra</h2>
     <button onclick="modoAhorcado()">Iniciar</button>
     <p id="palabraTexto"></p>
-    <input id="letra">
+    <input id="letra" maxlength="1" style="width:40px; text-align:center; padding:10px;">
     <button onclick="intentarLetra()">Intentar</button>
     <p id="estadoA"></p>
     <button onclick="volver()">Volver</button>
   </div>
 </div>
 
-<!-- TRES EN RAYA -->
 <div class="screen hidden" id="tresEnRaya">
   <div class="card">
     <h2>Tres en Raya</h2>
     <p id="tttResult"></p>
-    <div id="board" style="display:grid;grid-template-columns:repeat(3,80px);gap:8px;">
+    <div id="board" style="display:grid;grid-template-columns:repeat(3,80px);gap:8px; justify-content:center;">
       <div class="ttt-cell" data-index="0" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="1" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="2" onclick="hacerMovimiento(this)"></div>
@@ -269,12 +236,21 @@ button:hover{ transform:scale(1.05); }
       <div class="ttt-cell" data-index="7" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="8" onclick="hacerMovimiento(this)"></div>
     </div>
-    <button onclick="reiniciarTTT()">Reiniciar</button>
+    <button onclick="reiniciarTTT()" style="margin-top:10px;">Reiniciar</button>
     <button onclick="volver()">Volver</button>
   </div>
 </div>
 
 <script>
+/* ELEMENTOS DOM */
+const quizBox = document.getElementById("quizBox");
+const final = document.getElementById("final");
+const rpsResult = document.getElementById("rpsResult");
+const palabraTexto = document.getElementById("palabraTexto");
+const estadoA = document.getElementById("estadoA");
+const letraInput = document.getElementById("letra");
+const tttResult = document.getElementById("tttResult");
+
 /* ====================== RUNNER ====================== */
 let rCanvas, rCtx;
 let player, gravity, obstacles, rScore, rSpeed;
@@ -289,15 +265,12 @@ function irRunner(){
 function iniciarRunner(){
   rCanvas = document.getElementById("runnerCanvas");
   rCtx = rCanvas.getContext("2d");
-
   player = {x:50, y:300, w:20, h:20, vy:0};
   gravity = 0.8;
   obstacles = [];
   rScore = 0;
   rSpeed = 4;
-
   document.getElementById("runnerScore").innerText = "Puntaje: 0";
-
   if(runnerInterval) clearInterval(runnerInterval);
   runnerInterval = setInterval(loopRunner, 16);
 }
@@ -310,47 +283,35 @@ function loopRunner(){
 function updateRunner(){
   player.vy += gravity;
   player.y += player.vy;
-
   if(player.y > 300){
     player.y = 300;
     player.vy = 0;
     isJumping = false;
   }
-
   if(Math.random() < 0.02){
     obstacles.push({x:400,y:300,w:20,h:20});
   }
-
   obstacles.forEach(o => o.x -= rSpeed);
-
   obstacles.forEach(o => {
-    if(player.x < o.x + o.w &&
-       player.x + player.w > o.x &&
-       player.y < o.y + o.h &&
-       player.y + player.h > o.y){
+    if(player.x < o.x + o.w && player.x + player.w > o.x && player.y < o.y + o.h && player.y + player.h > o.y){
       clearInterval(runnerInterval);
       alert("💀 GAME OVER\nPuntaje: " + rScore);
+      reiniciarRunner();
     }
   });
-
   obstacles = obstacles.filter(o => o.x > -20);
-
   rScore++;
   document.getElementById("runnerScore").innerText = "Puntaje: " + rScore;
-
-  if(rScore % 200 === 0) rSpeed += 0.5;
+  if(rScore % 500 === 0) rSpeed += 0.5;
 }
 
 function drawRunner(){
   rCtx.fillStyle = "#111";
   rCtx.fillRect(0,0,400,400);
-
   rCtx.fillStyle = "#333";
   rCtx.fillRect(0,320,400,5);
-
   rCtx.fillStyle = "#00ff88";
   rCtx.fillRect(player.x,player.y,player.w,player.h);
-
   rCtx.fillStyle = "#ff00cc";
   obstacles.forEach(o => rCtx.fillRect(o.x,o.y,o.w,o.h));
 }
@@ -363,12 +324,10 @@ function saltar(){
 }
 
 document.addEventListener("keydown", e=>{
-  if(!document.getElementById("runner").classList.contains("hidden") && e.key==="ArrowUp"){
+  if(!document.getElementById("runner").classList.contains("hidden") && (e.key==="ArrowUp" || e.key===" ")){
     saltar();
   }
 });
-
-document.getElementById("runnerCanvas").addEventListener("touchstart", saltar);
 
 function reiniciarRunner(){ iniciarRunner(); }
 
@@ -386,12 +345,9 @@ function irBreakout(){ cambiar("menu","breakout"); iniciarBreak(); }
 function iniciarBreak(){
   breakCanvas = document.getElementById("breakCanvas");
   breakCtx = breakCanvas.getContext("2d");
-
   ballX=200; ballY=300; ballDX=3; ballDY=-3;
   paddleX=150; scoreBreak=0;
-
   document.getElementById("breakScore").innerText="Puntaje: 0";
-
   bricks=[];
   for(let r=0;r<rows;r++){
     bricks[r]=[];
@@ -399,8 +355,7 @@ function iniciarBreak(){
       bricks[r][c]={x:c*(brickW+5)+20,y:r*(brickH+5)+30,alive:true};
     }
   }
-
-  clearInterval(breakInterval);
+  if(breakInterval) clearInterval(breakInterval);
   breakInterval=setInterval(loopBreak,16);
 }
 
@@ -409,14 +364,11 @@ function loopBreak(){ drawBreak(); updateBreak(); }
 function drawBreak(){
   breakCtx.fillStyle="#111";
   breakCtx.fillRect(0,0,400,400);
-
   breakCtx.fillStyle="#00ff88";
   breakCtx.beginPath();
   breakCtx.arc(ballX,ballY,8,0,Math.PI*2);
   breakCtx.fill();
-
   breakCtx.fillRect(paddleX,370,80,10);
-
   breakCtx.fillStyle="#ff00cc";
   bricks.forEach(row=>{
     row.forEach(b=>{
@@ -427,14 +379,10 @@ function drawBreak(){
 
 function updateBreak(){
   ballX+=ballDX; ballY+=ballDY;
-
   if(ballX<8||ballX>392) ballDX*=-1;
   if(ballY<8) ballDY*=-1;
-
-  if(ballY>400){ clearInterval(breakInterval); alert("💀 Perdiste"); }
-
+  if(ballY>400){ clearInterval(breakInterval); alert("💀 Perdiste"); reiniciarBreak(); }
   if(ballY>360 && ballX>paddleX && ballX<paddleX+80) ballDY*=-1;
-
   bricks.forEach(row=>{
     row.forEach(b=>{
       if(b.alive && ballX>b.x && ballX<b.x+brickW && ballY>b.y && ballY<b.y+brickH){
@@ -443,9 +391,7 @@ function updateBreak(){
       }
     });
   });
-
-  if(scoreBreak===rows*cols){ clearInterval(breakInterval); alert("🔥 GANASTE 🔥"); }
-
+  if(scoreBreak===rows*cols){ clearInterval(breakInterval); alert("🔥 GANASTE 🔥"); reiniciarBreak(); }
   if(rightPressed && paddleX<320) paddleX+=6;
   if(leftPressed && paddleX>0) paddleX-=6;
 }
@@ -462,17 +408,11 @@ document.addEventListener("keyup",e=>{
 
 function reiniciarBreak(){ iniciarBreak(); }
 
-/* ====================== AIM ====================== */
-function irAim(){ cambiar("menu","aim"); }
-
-/* ====================== REFLEX ====================== */
-function irReflex(){ cambiar("menu","reflex"); }
-
 /* ====================== QUIZ ====================== */
 const preguntas=[
-  {texto:"¿Dónde nací?",opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"],correcta:1},
-  {texto:"Llegando a Chile... ¿A qué cerro llegué?",opciones:["Barón","Lecheros","Cárcel"],correcta:1},
-  {texto:"¿Cuántos hijos tengo actualmente (2026)?",opciones:["4","2","3"],correcta:2}
+  {texto:"¿Donde nací?",opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"],correcta:1},
+  {texto:"Llegando a Chile... ¿A que cerro llegué?",opciones:["Barón","Lecheros","Cárcel"],correcta:1},
+  {texto:"¿Cuantos hijos tengo actualmente (2026)?",opciones:["4","2","3"],correcta:2}
 ];
 
 let iQuiz=0,puntosQuiz=0;
@@ -491,7 +431,12 @@ function mostrarQuiz(){
 
 function responder(ok){
   if(ok) puntosQuiz++;
-  iQuiz<preguntas.length-1 ? (iQuiz++,mostrarQuiz()) : finQuiz();
+  if(iQuiz < preguntas.length - 1){
+    iQuiz++;
+    mostrarQuiz();
+  } else {
+    finQuiz();
+  }
 }
 
 function finQuiz(){
@@ -500,7 +445,7 @@ function finQuiz(){
 }
 
 /* ====================== RPS ====================== */
-function irRPS(){ cambiar("menu","rps"); }
+function irRPS(){ cambiar("menu","rps"); rpsResult.innerText = "¡Elige tu arma!";}
 
 function jugar(p){
   let ops=["piedra","papel","tijera"];
@@ -531,16 +476,18 @@ function actualizarPalabra(){
 }
 
 function intentarLetra(){
-  let l=letra.value.toLowerCase(); letra.value="";
+  let l=letraInput.value.toLowerCase(); letraInput.value="";
   if(!l) return;
   let ok=false;
   for(let i=0;i<palabraSecreta.length;i++){
     if(palabraSecreta[i]===l){ progreso[i]=l; ok=true; }
   }
   if(!ok) intentos--;
-  if(intentos<=0){ alert("Perdiste 😭 → "+palabraSecreta); modoAhorcado(); }
-  if(!progreso.includes("_")){ alert("Ganaste 🔥"); modoAhorcado(); }
   actualizarPalabra();
+  setTimeout(()=>{
+      if(!progreso.includes("_")){ alert("Ganaste 🔥"); modoAhorcado(); }
+      else if(intentos<=0){ alert("Perdiste 😭 → "+palabraSecreta); modoAhorcado(); }
+  },50);
 }
 
 /* ====================== TRES EN RAYA ====================== */
@@ -550,6 +497,7 @@ function irTresEnRaya(){ cambiar("menu","tresEnRaya"); reiniciarTTT(); }
 
 function reiniciarTTT(){
   board=Array(9).fill(null); gameOver=false;
+  tttResult.innerText = "";
   document.querySelectorAll(".ttt-cell").forEach(c=>c.textContent="");
 }
 
@@ -557,18 +505,13 @@ function hacerMovimiento(cell){
   if(gameOver) return;
   let i=cell.dataset.index;
   if(board[i]) return;
-
   board[i]="❌"; cell.textContent="❌";
-
   if(checkWin("❌")){ tttResult.innerText="GANASTE"; gameOver=true; return; }
-
   let empty=board.map((v,i)=>v?null:i).filter(v=>v!==null);
   if(empty.length===0){ tttResult.innerText="Empate"; gameOver=true; return; }
-
   let r=empty[Math.floor(Math.random()*empty.length)];
   board[r]="⭕";
   document.querySelectorAll(".ttt-cell")[r].textContent="⭕";
-
   if(checkWin("⭕")){ tttResult.innerText="CPU ganó"; gameOver=true; }
 }
 
@@ -576,9 +519,12 @@ function checkWin(p){
   const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   return w.some(c=>c.every(i=>board[i]===p));
 }
-  /* ================= NAV (ARREGLA TODO) ================= */
+
+/* ================= NAV ================= */
 function ocultarTodo(){
   document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+  if(runnerInterval) clearInterval(runnerInterval);
+  if(breakInterval) clearInterval(breakInterval);
 }
 
 function irInicio(){
@@ -586,41 +532,25 @@ function irInicio(){
   document.getElementById("menu").classList.remove("hidden");
 }
 
-function irJuegos(){
-  irInicio();
-}
-
-function irEncuestas(){
-  ocultarTodo();
-  document.getElementById("quiz").classList.remove("hidden");
-}
-
-function irContacto(){
-  ocultarTodo();
-  document.getElementById("contacto").classList.remove("hidden");
-}
-
-function irAportar(){
-  ocultarTodo();
-  document.getElementById("aportar").classList.remove("hidden");
-}
+function irJuegos(){ irInicio(); }
+function irEncuestas(){ ocultarTodo(); document.getElementById("quiz").classList.remove("hidden"); iniciar(); }
+function irContacto(){ ocultarTodo(); document.getElementById("contacto").classList.remove("hidden"); }
+function irAportar(){ ocultarTodo(); document.getElementById("aportar").classList.remove("hidden"); }
 
 function cambiar(a,b){
   document.getElementById(a).classList.add("hidden");
   document.getElementById(b).classList.remove("hidden");
 }
 
-function volver(){
-  irInicio();
-}
+function volver(){ irInicio(); }
 
-/* FIX TOUCH RUNNER */
-setTimeout(()=>{
-  let canvas = document.getElementById("runnerCanvas");
-  if(canvas){
-    canvas.addEventListener("touchstart", saltar);
-  }
-},100);
+/* SOPORTE TOUCH */
+window.onload = () => {
+    document.getElementById("runnerCanvas").addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        saltar();
+    });
+};
 </script>
 
 </body>
