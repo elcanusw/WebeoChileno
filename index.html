@@ -3,126 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WebeoChileno</title>
+<title>WebeoChileno | CANU</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
 
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  color:white;
-  overflow:hidden;
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  background-color: #111;
+  /* Habilitamos scroll general */
+  overflow-y: auto; 
+  overflow-x: hidden;
 }
 
-/* FONDO */
-body::before{
-  content:"";
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:
-  linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.8)),
-  url('https://i.ibb.co/4ny4T5Qg/1774621658204-2.jpg');
-  background-size:cover;
-  background-position:center;
-  z-index:-1;
-  animation:zoom 20s infinite alternate;
+/* FONDO ANIMADO */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
+              url('https://i.ibb.co/4ny4T5Qg/1774621658204-2.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  animation: zoom 20s infinite alternate;
 }
 
-@keyframes zoom{
-  from{transform:scale(1);}
-  to{transform:scale(1.15);}
-}
+@keyframes zoom { from { transform: scale(1); } to { transform: scale(1.1); } }
 
 /* NAVBAR */
-.navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:space-around;
-  background:rgba(0,0,0,0.9);
-  padding:10px 0;
-  z-index:999;
-  border-bottom:2px solid #00ff88;
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: rgba(0,0,0,0.95);
+  padding: 10px 0;
+  z-index: 1000;
+  border-bottom: 2px solid #00ff88;
 }
 
-.navbar button{
-  background:none;
-  border:none;
-  color:#aaa;
-  font-weight:bold;
-  cursor:pointer;
+.navbar button {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px 15px;
+  font-size: 14px;
 }
 
-.navbar button:hover{
-  color:#00ff88;
+.navbar button:hover { color: #00ff88; }
+
+/* CONTENEDOR DE PANTALLAS */
+.screen {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 100px 20px 40px 20px; /* Padding para no chocar con nav y footer */
+  box-sizing: border-box;
 }
 
-/* PANTALLAS */
-.screen{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  padding-top:70px;
+.hidden { display: none !important; }
+
+.logo {
+  font-size: 60px;
+  font-family: 'Montserrat';
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #00ff88, #00ccff, #ff00cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
 }
 
-.hidden{display:none;}
-
-.logo{
-  font-size:80px;
-  font-family:'Montserrat';
-  margin-bottom:30px;
-  background:linear-gradient(90deg,#00ff88,#00ccff,#ff00cc);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.card {
+  background: rgba(0,0,0,0.7);
+  padding: 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
-.card{
-  background:rgba(0,0,0,0.6);
-  padding:25px;
-  border-radius:15px;
-  width:90%;
-  max-width:400px;
-  text-align:center;
-  backdrop-filter:blur(10px);
+button.start-btn {
+  width: 100%;
+  margin: 10px 0;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: linear-gradient(90deg, #00ff88, #00ccff);
+  color: black;
+  font-weight: bold;
 }
 
-button{
-  width:100%;
-  margin:8px 0;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  font-size:15px;
-  cursor:pointer;
-  transition:0.3s;
+button.start-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,255,136,0.4); }
+
+.vol-btn { background: #444 !important; color: white !important; margin-top: 20px !important; }
+
+/* JUEGOS ESPECÍFICOS */
+canvas { background: #000; border-radius: 10px; max-width: 100%; height: auto; }
+.ttt-cell {
+  background: rgba(255,255,255,0.1);
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  aspect-ratio: 1/1;
 }
 
-button:hover{ transform:scale(1.05); }
-
-.start-btn{
-  background:linear-gradient(90deg,#00ff88,#00ccff);
-  color:black;
-  font-weight:bold;
-}
-
-.ttt-cell{
-  background:rgba(255,255,255,0.1);
-  font-size:60px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:12px;
-  cursor:pointer;
-  aspect-ratio:1/1;
+/* INPUTS */
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  box-sizing: border-box;
 }
 </style>
 </head>
@@ -137,87 +149,64 @@ button:hover{ transform:scale(1.05); }
   <button onclick="irAportar()">APORTAR</button>
 </nav>
 
-<div class="screen" id="menu">
-  <div class="logo">CANU</div>
-  <button class="start-btn" onclick="irRunner()">🏃 Runner</button>
-  <button class="start-btn" onclick="irBreakout()">🧱 Breakout</button>
-  <button class="start-btn" onclick="irAim()">🎯 Aim Trainer (Próximamente)</button>
-  <button class="start-btn" onclick="irReflex()">⚡ Reflex (Próximamente)</button>
-  <button class="start-btn" onclick="iniciar()">🧠 Quiz</button>
-  <button class="start-btn" onclick="irRPS()">⚔️ Cachipum</button>
-  <button class="start-btn" onclick="irPalabra()">🔤 Palabra</button>
-  <button class="start-btn" onclick="irTresEnRaya()">❌⭕ Tres en Raya</button>
-</div>
-
-<div class="screen hidden" id="contacto">
+<div class="screen" id="inicio">
+  <div class="logo">BIENVENIDO</div>
   <div class="card">
-    <h2>📩 Contáctanos</h2>
-    <input placeholder="Nombre" style="width:90%; padding:8px; margin:5px;">
-    <input placeholder="Correo" style="width:90%; padding:8px; margin:5px;">
-    <textarea placeholder="Mensaje" style="width:90%; padding:8px; margin:5px;"></textarea>
-    <button class="start-btn">Enviar</button>
+    <p>Hola, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
+    <p><i>"Cualquier error es parte del aprendizaje, disfruta el webeo."</i></p>
+    <button class="start-btn" onclick="irJuegos()">¡VAMOS A JUGAR!</button>
   </div>
 </div>
 
-<div class="screen hidden" id="aportar">
+<div class="screen hidden" id="menuJuegos">
+  <div class="logo">CANU GAMES</div>
   <div class="card">
-    <h2>💰 Apoyar</h2>
-    <p>Apoya el proyecto 🚀</p>
-    <button class="start-btn">Donar</button>
+    <button class="start-btn" onclick="irJuego('runner')">🏃 Runner</button>
+    <button class="start-btn" onclick="irJuego('breakout')">🧱 Breakout</button>
+    <button class="start-btn" onclick="irJuego('rps')">⚔️ Cachipum</button>
+    <button class="start-btn" onclick="irJuego('palabra')">🔤 Palabra</button>
+    <button class="start-btn" onclick="irJuego('tresEnRaya')">❌⭕ Tres en Raya</button>
   </div>
 </div>
 
 <div class="screen hidden" id="runner">
   <div class="card">
-    <h2>🏃 Endless Runner</h2>
+    <h2>Endless Runner</h2>
     <p id="runnerScore">Puntaje: 0</p>
-    <canvas id="runnerCanvas" width="400" height="400" style="max-width:100%;"></canvas>
-    <button class="start-btn" onclick="reiniciarRunner()">🔄 Reiniciar</button>
-    <button class="start-btn" onclick="volver()">Volver</button>
+    <canvas id="runnerCanvas" width="400" height="400"></canvas>
+    <p><small>Toca la pantalla o usa Flecha Arriba para saltar</small></p>
+    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
   </div>
 </div>
 
 <div class="screen hidden" id="breakout">
   <div class="card">
-    <h2>🧱 Breakout</h2>
+    <h2>Breakout</h2>
     <p id="breakScore">Puntaje: 0</p>
-    <canvas id="breakCanvas" width="400" height="400" style="max-width:100%;"></canvas>
-    <button class="start-btn" onclick="reiniciarBreak()">🔄 Reiniciar</button>
-    <button class="start-btn" onclick="volver()">Volver</button>
-  </div>
-</div>
-
-<div class="screen hidden" id="quiz">
-  <div class="card" id="quizBox"></div>
-</div>
-
-<div class="screen hidden" id="resultado">
-  <div class="card">
-    <h2 id="final"></h2>
-    <button class="start-btn" onclick="volver()">Volver</button>
+    <canvas id="breakCanvas" width="400" height="400"></canvas>
+    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
   </div>
 </div>
 
 <div class="screen hidden" id="rps">
   <div class="card">
     <h2>Cachipum</h2>
-    <p id="rpsResult"></p>
-    <button onclick="jugar('piedra')">Piedra</button>
-    <button onclick="jugar('papel')">Papel</button>
-    <button onclick="jugar('tijera')">Tijera</button>
-    <button class="start-btn" onclick="volver()">Volver</button>
+    <p id="rpsResult">¡Elige una opción!</p>
+    <button class="start-btn" onclick="jugarRPS('piedra')">Piedra</button>
+    <button class="start-btn" onclick="jugarRPS('papel')">Papel</button>
+    <button class="start-btn" onclick="jugarRPS('tijera')">Tijera</button>
+    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
   </div>
 </div>
 
 <div class="screen hidden" id="palabra">
   <div class="card">
-    <h2>Palabra</h2>
-    <button onclick="modoAhorcado()">Iniciar</button>
-    <p id="palabraTexto"></p>
-    <input id="letra" maxlength="1" style="width:40px; text-align:center; padding:10px;">
-    <button onclick="intentarLetra()">Intentar</button>
-    <p id="estadoA"></p>
-    <button onclick="volver()">Volver</button>
+    <h2>Ahorcado</h2>
+    <p id="palabraTexto">_ _ _ _</p>
+    <input id="letraInput" maxlength="1" placeholder="Letra">
+    <button class="start-btn" onclick="intentarLetra()">Intentar</button>
+    <p id="estadoA">Intentos: 6</p>
+    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
   </div>
 </div>
 
@@ -225,7 +214,7 @@ button:hover{ transform:scale(1.05); }
   <div class="card">
     <h2>Tres en Raya</h2>
     <p id="tttResult"></p>
-    <div id="board" style="display:grid;grid-template-columns:repeat(3,80px);gap:8px; justify-content:center;">
+    <div id="board" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:15px;">
       <div class="ttt-cell" data-index="0" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="1" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="2" onclick="hacerMovimiento(this)"></div>
@@ -236,322 +225,184 @@ button:hover{ transform:scale(1.05); }
       <div class="ttt-cell" data-index="7" onclick="hacerMovimiento(this)"></div>
       <div class="ttt-cell" data-index="8" onclick="hacerMovimiento(this)"></div>
     </div>
-    <button onclick="reiniciarTTT()" style="margin-top:10px;">Reiniciar</button>
-    <button onclick="volver()">Volver</button>
+    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
+  </div>
+</div>
+
+<div class="screen hidden" id="encuestas">
+  <div class="card" id="quizBox">
+    </div>
+  <button class="start-btn vol-btn" style="max-width:450px" onclick="volver()">VOLVER</button>
+</div>
+
+<div class="screen hidden" id="contacto">
+  <div class="card">
+    <h2>📩 Contáctame</h2>
+    <input type="text" placeholder="Tu Nombre">
+    <input type="email" placeholder="Tu Correo">
+    <textarea rows="4" placeholder="¿En qué puedo ayudarte?"></textarea>
+    <button class="start-btn">Enviar Mensaje</button>
+  </div>
+</div>
+
+<div class="screen hidden" id="aportar">
+  <div class="card">
+    <h2>💰 Apoya el Proyecto</h2>
+    <p>Si te gusta mi trabajo como diseñador o mis juegos, puedes invitarme un café.</p>
+    <button class="start-btn">Donar por Flow / PayPal</button>
   </div>
 </div>
 
 <script>
-/* ELEMENTOS DOM */
-const quizBox = document.getElementById("quizBox");
-const final = document.getElementById("final");
-const rpsResult = document.getElementById("rpsResult");
-const palabraTexto = document.getElementById("palabraTexto");
-const estadoA = document.getElementById("estadoA");
-const letraInput = document.getElementById("letra");
-const tttResult = document.getElementById("tttResult");
+/* VARIABLES GLOBALES JUEGOS */
+let currentInterval = null;
+let currentScreen = 'inicio';
 
-/* ====================== RUNNER ====================== */
-let rCanvas, rCtx;
-let player, gravity, obstacles, rScore, rSpeed;
-let runnerInterval;
-let isJumping = false;
-
-function irRunner(){
-  cambiar("menu","runner");
-  iniciarRunner();
+function ocultarTodas() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  if(currentInterval) clearInterval(currentInterval);
 }
 
-function iniciarRunner(){
-  rCanvas = document.getElementById("runnerCanvas");
-  rCtx = rCanvas.getContext("2d");
-  player = {x:50, y:300, w:20, h:20, vy:0};
-  gravity = 0.8;
-  obstacles = [];
-  rScore = 0;
-  rSpeed = 4;
-  document.getElementById("runnerScore").innerText = "Puntaje: 0";
-  if(runnerInterval) clearInterval(runnerInterval);
-  runnerInterval = setInterval(loopRunner, 16);
+function irInicio() { ocultarTodas(); document.getElementById('inicio').classList.remove('hidden'); }
+function irJuegos() { ocultarTodas(); document.getElementById('menuJuegos').classList.remove('hidden'); }
+function irEncuestas() { ocultarTodas(); document.getElementById('encuestas').classList.remove('hidden'); iniciarQuiz(); }
+function irContacto() { ocultarTodas(); document.getElementById('contacto').classList.remove('hidden'); }
+function irAportar() { ocultarTodas(); document.getElementById('aportar').classList.remove('hidden'); }
+function volver() { irJuegos(); }
+
+function irJuego(id) {
+  ocultarTodas();
+  document.getElementById(id).classList.remove('hidden');
+  if(id === 'runner') iniciarRunner();
+  if(id === 'breakout') iniciarBreakout();
+  if(id === 'palabra') modoAhorcado();
+  if(id === 'tresEnRaya') reiniciarTTT();
 }
 
-function loopRunner(){
-  updateRunner();
-  drawRunner();
-}
-
-function updateRunner(){
-  player.vy += gravity;
-  player.y += player.vy;
-  if(player.y > 300){
-    player.y = 300;
-    player.vy = 0;
-    isJumping = false;
-  }
-  if(Math.random() < 0.02){
-    obstacles.push({x:400,y:300,w:20,h:20});
-  }
-  obstacles.forEach(o => o.x -= rSpeed);
-  obstacles.forEach(o => {
-    if(player.x < o.x + o.w && player.x + player.w > o.x && player.y < o.y + o.h && player.y + player.h > o.y){
-      clearInterval(runnerInterval);
-      alert("💀 GAME OVER\nPuntaje: " + rScore);
-      reiniciarRunner();
-    }
-  });
-  obstacles = obstacles.filter(o => o.x > -20);
-  rScore++;
-  document.getElementById("runnerScore").innerText = "Puntaje: " + rScore;
-  if(rScore % 500 === 0) rSpeed += 0.5;
-}
-
-function drawRunner(){
-  rCtx.fillStyle = "#111";
-  rCtx.fillRect(0,0,400,400);
-  rCtx.fillStyle = "#333";
-  rCtx.fillRect(0,320,400,5);
-  rCtx.fillStyle = "#00ff88";
-  rCtx.fillRect(player.x,player.y,player.w,player.h);
-  rCtx.fillStyle = "#ff00cc";
-  obstacles.forEach(o => rCtx.fillRect(o.x,o.y,o.w,o.h));
-}
-
-function saltar(){
-  if(!isJumping){
-    player.vy = -12;
-    isJumping = true;
-  }
-}
-
-document.addEventListener("keydown", e=>{
-  if(!document.getElementById("runner").classList.contains("hidden") && (e.key==="ArrowUp" || e.key===" ")){
-    saltar();
-  }
-});
-
-function reiniciarRunner(){ iniciarRunner(); }
-
-/* ====================== BREAKOUT ====================== */
-let breakCanvas, breakCtx;
-let ballX, ballY, ballDX, ballDY;
-let paddleX;
-let rightPressed=false, leftPressed=false;
-let bricks=[], rows=5, cols=7;
-let brickW=50, brickH=15;
-let scoreBreak=0, breakInterval;
-
-function irBreakout(){ cambiar("menu","breakout"); iniciarBreak(); }
-
-function iniciarBreak(){
-  breakCanvas = document.getElementById("breakCanvas");
-  breakCtx = breakCanvas.getContext("2d");
-  ballX=200; ballY=300; ballDX=3; ballDY=-3;
-  paddleX=150; scoreBreak=0;
-  document.getElementById("breakScore").innerText="Puntaje: 0";
-  bricks=[];
-  for(let r=0;r<rows;r++){
-    bricks[r]=[];
-    for(let c=0;c<cols;c++){
-      bricks[r][c]={x:c*(brickW+5)+20,y:r*(brickH+5)+30,alive:true};
-    }
-  }
-  if(breakInterval) clearInterval(breakInterval);
-  breakInterval=setInterval(loopBreak,16);
-}
-
-function loopBreak(){ drawBreak(); updateBreak(); }
-
-function drawBreak(){
-  breakCtx.fillStyle="#111";
-  breakCtx.fillRect(0,0,400,400);
-  breakCtx.fillStyle="#00ff88";
-  breakCtx.beginPath();
-  breakCtx.arc(ballX,ballY,8,0,Math.PI*2);
-  breakCtx.fill();
-  breakCtx.fillRect(paddleX,370,80,10);
-  breakCtx.fillStyle="#ff00cc";
-  bricks.forEach(row=>{
-    row.forEach(b=>{
-      if(b.alive) breakCtx.fillRect(b.x,b.y,brickW,brickH);
-    });
-  });
-}
-
-function updateBreak(){
-  ballX+=ballDX; ballY+=ballDY;
-  if(ballX<8||ballX>392) ballDX*=-1;
-  if(ballY<8) ballDY*=-1;
-  if(ballY>400){ clearInterval(breakInterval); alert("💀 Perdiste"); reiniciarBreak(); }
-  if(ballY>360 && ballX>paddleX && ballX<paddleX+80) ballDY*=-1;
-  bricks.forEach(row=>{
-    row.forEach(b=>{
-      if(b.alive && ballX>b.x && ballX<b.x+brickW && ballY>b.y && ballY<b.y+brickH){
-        ballDY*=-1; b.alive=false; scoreBreak++;
-        document.getElementById("breakScore").innerText="Puntaje: "+scoreBreak;
+/* --- LOGICA RUNNER --- */
+function iniciarRunner() {
+  const canvas = document.getElementById("runnerCanvas");
+  const ctx = canvas.getContext("2d");
+  let py = 300, vy = 0, score = 0, obs = [];
+  currentInterval = setInterval(() => {
+    vy += 0.8; py += vy;
+    if(py > 300) { py = 300; vy = 0; }
+    if(Math.random() < 0.02) obs.push({x:400, y:300, w:20, h:20});
+    obs.forEach(o => o.x -= 5);
+    // Colisión
+    obs.forEach(o => {
+      if(50 < o.x + 20 && 70 > o.x && py < o.y + 20 && py + 20 > o.y) {
+        clearInterval(currentInterval); alert("Perdiste! Score: " + score); irJuego('runner');
       }
     });
-  });
-  if(scoreBreak===rows*cols){ clearInterval(breakInterval); alert("🔥 GANASTE 🔥"); reiniciarBreak(); }
-  if(rightPressed && paddleX<320) paddleX+=6;
-  if(leftPressed && paddleX>0) paddleX-=6;
+    obs = obs.filter(o => o.x > -20);
+    score++;
+    document.getElementById("runnerScore").innerText = "Puntaje: " + score;
+    // Dibujar
+    ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
+    ctx.fillStyle = "#00ff88"; ctx.fillRect(50, py, 20, 20);
+    ctx.fillStyle = "#ff00cc"; obs.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+  }, 20);
+
+  const saltar = () => { if(py === 300) vy = -12; };
+  canvas.onclick = saltar;
+  window.onkeydown = (e) => { if(e.key === "ArrowUp") saltar(); };
 }
 
-document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowRight") rightPressed=true;
-  if(e.key==="ArrowLeft") leftPressed=true;
-});
-
-document.addEventListener("keyup",e=>{
-  if(e.key==="ArrowRight") rightPressed=false;
-  if(e.key==="ArrowLeft") leftPressed=false;
-});
-
-function reiniciarBreak(){ iniciarBreak(); }
-
-/* ====================== QUIZ ====================== */
-const preguntas=[
-  {texto:"¿Donde nací?",opciones:["Valparaíso, Chile","Trondheim, Noruega","Noje"],correcta:1},
-  {texto:"Llegando a Chile... ¿A que cerro llegué?",opciones:["Barón","Lecheros","Cárcel"],correcta:1},
-  {texto:"¿Cuantos hijos tengo actualmente (2026)?",opciones:["4","2","3"],correcta:2}
-];
-
-let iQuiz=0,puntosQuiz=0;
-
-function iniciar(){
-  iQuiz=0;puntosQuiz=0;
-  cambiar("menu","quiz");
-  mostrarQuiz();
-}
-
-function mostrarQuiz(){
-  let p=preguntas[iQuiz];
-  quizBox.innerHTML=`<h2>${p.texto}</h2>
-  ${p.opciones.map((op,i)=>`<button onclick="responder(${i===p.correcta})">${op}</button>`).join("")}`;
-}
-
-function responder(ok){
-  if(ok) puntosQuiz++;
-  if(iQuiz < preguntas.length - 1){
-    iQuiz++;
-    mostrarQuiz();
-  } else {
-    finQuiz();
-  }
-}
-
-function finQuiz(){
-  cambiar("quiz","resultado");
-  final.innerText=`Puntaje: ${puntosQuiz}/${preguntas.length}`;
-}
-
-/* ====================== RPS ====================== */
-function irRPS(){ cambiar("menu","rps"); rpsResult.innerText = "¡Elige tu arma!";}
-
-function jugar(p){
-  let ops=["piedra","papel","tijera"];
-  let cpu=ops[Math.floor(Math.random()*3)];
-  let res="Empate";
-  if(p!==cpu){
-    if((p==="piedra"&&cpu==="tijera")||(p==="papel"&&cpu==="piedra")||(p==="tijera"&&cpu==="papel")) res="Ganaste 😎";
-    else res="Perdiste 💀";
-  }
-  rpsResult.innerText=`${p} vs ${cpu} → ${res}`;
-}
-
-/* ====================== PALABRA ====================== */
-const palabras=["gato","perro","casa","codigo","juego"];
-let palabraSecreta="",progreso=[],intentos;
-
-function irPalabra(){ cambiar("menu","palabra"); }
-
-function modoAhorcado(){
-  palabraSecreta=palabras[Math.floor(Math.random()*palabras.length)];
-  progreso=Array(palabraSecreta.length).fill("_");
-  intentos=6; actualizarPalabra();
-}
-
-function actualizarPalabra(){
-  palabraTexto.innerText=progreso.join(" ");
-  estadoA.innerText="Intentos: "+intentos;
-}
-
-function intentarLetra(){
-  let l=letraInput.value.toLowerCase(); letraInput.value="";
-  if(!l) return;
-  let ok=false;
-  for(let i=0;i<palabraSecreta.length;i++){
-    if(palabraSecreta[i]===l){ progreso[i]=l; ok=true; }
-  }
-  if(!ok) intentos--;
-  actualizarPalabra();
-  setTimeout(()=>{
-      if(!progreso.includes("_")){ alert("Ganaste 🔥"); modoAhorcado(); }
-      else if(intentos<=0){ alert("Perdiste 😭 → "+palabraSecreta); modoAhorcado(); }
-  },50);
-}
-
-/* ====================== TRES EN RAYA ====================== */
-let board=Array(9).fill(null),gameOver=false;
-
-function irTresEnRaya(){ cambiar("menu","tresEnRaya"); reiniciarTTT(); }
-
-function reiniciarTTT(){
-  board=Array(9).fill(null); gameOver=false;
-  tttResult.innerText = "";
-  document.querySelectorAll(".ttt-cell").forEach(c=>c.textContent="");
-}
-
-function hacerMovimiento(cell){
-  if(gameOver) return;
-  let i=cell.dataset.index;
-  if(board[i]) return;
-  board[i]="❌"; cell.textContent="❌";
-  if(checkWin("❌")){ tttResult.innerText="GANASTE"; gameOver=true; return; }
-  let empty=board.map((v,i)=>v?null:i).filter(v=>v!==null);
-  if(empty.length===0){ tttResult.innerText="Empate"; gameOver=true; return; }
-  let r=empty[Math.floor(Math.random()*empty.length)];
-  board[r]="⭕";
-  document.querySelectorAll(".ttt-cell")[r].textContent="⭕";
-  if(checkWin("⭕")){ tttResult.innerText="CPU ganó"; gameOver=true; }
-}
-
-function checkWin(p){
-  const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  return w.some(c=>c.every(i=>board[i]===p));
-}
-
-/* ================= NAV ================= */
-function ocultarTodo(){
-  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-  if(runnerInterval) clearInterval(runnerInterval);
-  if(breakInterval) clearInterval(breakInterval);
-}
-
-function irInicio(){
-  ocultarTodo();
-  document.getElementById("menu").classList.remove("hidden");
-}
-
-function irJuegos(){ irInicio(); }
-function irEncuestas(){ ocultarTodo(); document.getElementById("quiz").classList.remove("hidden"); iniciar(); }
-function irContacto(){ ocultarTodo(); document.getElementById("contacto").classList.remove("hidden"); }
-function irAportar(){ ocultarTodo(); document.getElementById("aportar").classList.remove("hidden"); }
-
-function cambiar(a,b){
-  document.getElementById(a).classList.add("hidden");
-  document.getElementById(b).classList.remove("hidden");
-}
-
-function volver(){ irInicio(); }
-
-/* SOPORTE TOUCH */
-window.onload = () => {
-    document.getElementById("runnerCanvas").addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        saltar();
+/* --- LOGICA BREAKOUT --- */
+function iniciarBreakout() {
+  const canvas = document.getElementById("breakCanvas");
+  const ctx = canvas.getContext("2d");
+  let bx = 200, by = 300, dx = 3, dy = -3, px = 160;
+  let bricks = [];
+  for(let r=0; r<3; r++) for(let c=0; c<6; c++) bricks.push({x: c*65+10, y: r*25+30, v:true});
+  
+  currentInterval = setInterval(() => {
+    bx += dx; by += dy;
+    if(bx<10 || bx>390) dx *= -1;
+    if(by<10) dy *= -1;
+    if(by>365 && bx>px && bx<px+80) dy *= -1;
+    if(by>400) { clearInterval(currentInterval); alert("Game Over"); irJuego('breakout'); }
+    
+    bricks.forEach(b => {
+      if(b.v && bx>b.x && bx<b.x+60 && by>b.y && by<b.y+20) { b.v = false; dy *= -1; }
     });
-};
-</script>
 
+    ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
+    ctx.fillStyle = "white"; ctx.beginPath(); ctx.arc(bx,by,8,0,7); ctx.fill();
+    ctx.fillStyle = "#00ff88"; ctx.fillRect(px, 370, 80, 10);
+    ctx.fillStyle = "#ff00cc"; bricks.forEach(b => { if(b.v) ctx.fillRect(b.x, b.y, 60, 20); });
+  }, 20);
+
+  canvas.onmousemove = (e) => {
+    let rect = canvas.getBoundingClientRect();
+    px = e.clientX - rect.left - 40;
+  };
+}
+
+/* --- LOGICA QUIZ --- */
+const preguntas = [
+  {q: "¿En qué año se fundó Santiago Wanderers?", a: ["1892", "1902", "1920"], c: 0},
+  {q: "¿Cuál es el color principal del decano?", a: ["Azul", "Verde", "Rojo"], c: 1}
+];
+function iniciarQuiz() {
+  let i = 0, score = 0;
+  const show = () => {
+    if(i >= preguntas.length) { 
+      document.getElementById("quizBox").innerHTML = `<h2>Fin! Puntaje: ${score}</h2>`;
+      return;
+    }
+    let p = preguntas[i];
+    document.getElementById("quizBox").innerHTML = `<h3>${p.q}</h3>` + 
+      p.a.map((opt, idx) => `<button class="start-btn" onclick="checkQ(${idx}, ${p.c})">${opt}</button>`).join("");
+  };
+  window.checkQ = (idx, c) => { if(idx === c) score++; i++; show(); };
+  show();
+}
+
+/* --- CACHIPUM --- */
+window.jugarRPS = (p) => {
+  const opciones = ["piedra", "papel", "tijera"];
+  const cpu = opciones[Math.floor(Math.random()*3)];
+  let res = (p === cpu) ? "Empate" : 
+            (p==="piedra" && cpu==="tijera" || p==="papel" && cpu==="piedra" || p==="tijera" && cpu==="papel") ? "Ganaste!" : "Perdiste";
+  document.getElementById("rpsResult").innerText = `Tú: ${p} | CPU: ${cpu} -> ${res}`;
+};
+
+/* --- TRES EN RAYA --- */
+let tttBoard = Array(9).fill(null);
+function reiniciarTTT() {
+  tttBoard.fill(null);
+  document.querySelectorAll('.ttt-cell').forEach(c => c.innerText = "");
+  document.getElementById("tttResult").innerText = "Tu turno (X)";
+}
+window.hacerMovimiento = (el) => {
+  let idx = el.dataset.index;
+  if(!tttBoard[idx]) {
+    tttBoard[idx] = "X"; el.innerText = "X";
+    // Turno simple de CPU
+    let empty = tttBoard.map((v,i) => v === null ? i : null).filter(v => v !== null);
+    if(empty.length > 0) {
+      let cpuIdx = empty[Math.floor(Math.random()*empty.length)];
+      tttBoard[cpuIdx] = "O";
+      document.querySelector(`[data-index='${cpuIdx}']`).innerText = "O";
+    }
+  }
+};
+
+/* --- PALABRA --- */
+let pal = "WANDERERS", prog = [];
+function modoAhorcado() {
+  prog = Array(pal.length).fill("_");
+  document.getElementById("palabraTexto").innerText = prog.join(" ");
+}
+window.intentarLetra = () => {
+  let l = document.getElementById("letraInput").value.toUpperCase();
+  for(let i=0; i<pal.length; i++) if(pal[i] === l) prog[i] = l;
+  document.getElementById("palabraTexto").innerText = prog.join(" ");
+  document.getElementById("letraInput").value = "";
+};
+
+</script>
 </body>
 </html>
