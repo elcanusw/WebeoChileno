@@ -154,12 +154,13 @@ input, textarea {
   <button onclick="irEncuestas()">ENCUESTAS</button>
   <button onclick="irContacto()">CONTACTO</button>
   <button onclick="irAportar()">APORTAR</button>
+
 </nav>
 
 <div class="screen" id="inicio">
   <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
   <div class="card">
-    <p>Hola este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
+    <p>Hola WATON QLO SE VE MEJOR ASI??, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
     <p><i>"Cualquier error es parte del aprendizaje, disfruta el webeo."</i></p>
     <button class="start-btn" onclick="irJuegos()">¡VAMOS A JUGAR!</button>
   </div>
@@ -173,6 +174,7 @@ input, textarea {
     <button class="start-btn" onclick="irJuego('rps')">⚔️ Cachipum</button>
     <button class="start-btn" onclick="irJuego('palabra')">🔤 Palabra</button>
     <button class="start-btn" onclick="irJuego('tresEnRaya')">❌⭕ Tres en Raya</button>
+<button class="start-btn" onclick="irJuego('candy')">🍬 Candy Canu</button>
   </div>
 </div>
 
@@ -235,16 +237,52 @@ input, textarea {
   </div>
 </div>
 
-<div class="screen hidden" id="encuestas">
-  <div class="card" id="quizBox"></div>
-  <button class="start-btn vol-btn" onclick="volver()">VOLVER</button>
-</div>
+<div class="screen hidden" id="candy">
+  <style>
+    #candyBoard .candy-cell {
+      font-size: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1/1;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+    }
+    
+    /* Animación cuando explotan */
+    .match-boom {
+      animation: boom 0.4s forwards;
+      z-index: 10;
+    }
 
-<div class="screen hidden" id="contacto">
-  <div class="logo-banner">
-    <img src="logowc.png" class="main-logo" alt="Logo">
+    @keyframes boom {
+      0% { transform: scale(1); background: white; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* Clase para cuando seleccionas uno */
+    .selected-candy {
+      outline: 3px solid #00ff88;
+      background: rgba(0, 255, 136, 0.2) !important;
+      transform: scale(1.1);
+    }
+  </style>
+
+  <div class="card" style="max-width: 450px; border: 2px solid #00ff88;">
+    <h2 style="margin-top:0;">🍬 CANDY CANU: ULTRA</h2>
+    <div style="display:flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom:10px;">
+      <span id="candyScore" style="color:#00ff88; font-weight:bold;">Puntos: 0</span>
+      <span id="comboText" style="color:#00ccff;">Combo: 1x</span>
+    </div>
+    
+    <div id="candyBoard" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; background: #111; padding: 10px; border-radius: 15px;">
+      </div>
+    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
   </div>
-  
+</div>
   <div class="card">
     <h2>📩 Hablemos de Negocios</h2>
     <p style="font-size: 14px; color: #aaa; margin-bottom: 20px;">Diseño Gráfico | Electricidad Domiciliaria | Proyectos Web</p>
@@ -460,6 +498,152 @@ function copiarDatos() {
   const datos = "Christian Núñez - RUT: 18.302.521-K - Cuenta Vista Banco Estado - el.canu@gmail.com";
   navigator.clipboard.writeText(datos);
   alert("Datos copiados al portapapeles. ¡Gracias por el apoyo!");
+}
+/* --- LÓGICA CANDY CANU PRO (CON GRAVEDAD) --- */
+/* --- CANDY CANU ULTRA EDITION --- */
+const candyBoard = document.getElementById('candyBoard');
+const width = 6;
+const candies = ['🍎', '💎', '🍀', '🔥', '⭐'];
+let boardData = [];
+let boardDOM = [];
+let scoreCandy = 0;
+let multiplier = 1;
+let isProcessing = false;
+
+function crearTableroUltra() {
+    candyBoard.innerHTML = '';
+    boardData = [];
+    boardDOM = [];
+    for (let i = 0; i < width * width; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'candy-cell';
+        cell.onclick = () => seleccionarCelda(i);
+        candyBoard.appendChild(cell);
+        boardDOM.push(cell);
+        let randomCandy = candies[Math.floor(Math.random() * candies.length)];
+        boardData.push(randomCandy);
+        cell.innerText = randomCandy;
+    }
+    // Revisar si hay matches iniciales para limpiar el tablero al empezar
+    silentlyCheck();
+}
+
+let primera = null;
+async function seleccionarCelda(id) {
+    if (isProcessing) return;
+    if (primera === null) {
+        primera = id;
+        boardDOM[id].classList.add('selected-candy');
+    } else {
+        let segunda = id;
+        boardDOM[primera].classList.remove('selected-candy');
+        
+        const movValido = [primera - 1, primera + 1, primera - width, primera + width];
+        if (movValido.includes(segunda)) {
+            isProcessing = true;
+            multiplier = 1;
+            // Intercambio visual
+            swap(primera, segunda);
+            await processMatches();
+            isProcessing = false;
+        }
+        primera = null;
+    }
+}
+
+function swap(id1, id2) {
+    [boardData[id1], boardData[id2]] = [boardData[id2], boardData[id1]];
+    actualizarDOM();
+}
+
+async function processMatches() {
+    let matched = findMatches();
+    if (matched.size > 0) {
+        // Efecto visual de explosión
+        matched.forEach(idx => boardDOM[idx].classList.add('match-boom'));
+        
+        scoreCandy += (matched.size * 15) * multiplier;
+        document.getElementById('candyScore').innerText = "Puntos: " + scoreCandy;
+        document.getElementById('comboText').innerText = `Combo: ${multiplier}x`;
+        
+        await new Promise(r => setTimeout(r, 400));
+        
+        // Eliminar y Caer
+        matched.forEach(idx => {
+            boardDOM[idx].classList.remove('match-boom');
+            boardData[idx] = '';
+        });
+        
+        aplicarGravedad();
+        actualizarDOM();
+        
+        multiplier++;
+        await new Promise(r => setTimeout(r, 200));
+        await processMatches(); // Recursivo para combos
+    }
+}
+
+function aplicarGravedad() {
+    for (let c = 0; c < width; c++) {
+        let emptySpot = -1;
+        for (let r = width - 1; r >= 0; r--) {
+            let i = r * width + c;
+            if (boardData[i] === '' && emptySpot === -1) emptySpot = i;
+            else if (boardData[i] !== '' && emptySpot !== -1) {
+                boardData[emptySpot] = boardData[i];
+                boardData[i] = '';
+                r = width; // Reset para esa columna
+                emptySpot = -1;
+            }
+        }
+    }
+    // Rellenar nuevos
+    for (let i = 0; i < width * width; i++) {
+        if (boardData[i] === '') boardData[i] = candies[Math.floor(Math.random() * candies.length)];
+    }
+}
+
+function findMatches() {
+    let matched = new Set();
+    // Filas
+    for (let r = 0; r < width; r++) {
+        for (let c = 0; c < width - 2; c++) {
+            let i = r * width + c;
+            if (boardData[i] && boardData[i] === boardData[i+1] && boardData[i] === boardData[i+2]) {
+                matched.add(i); matched.add(i+1); matched.add(i+2);
+            }
+        }
+    }
+    // Columnas
+    for (let c = 0; c < width; c++) {
+        for (let r = 0; r < width - 2; r++) {
+            let i = r * width + c;
+            if (boardData[i] && boardData[i] === boardData[i+width] && boardData[i] === boardData[i+(width*2)]) {
+                matched.add(i); matched.add(i+width); matched.add(i+(width*2));
+            }
+        }
+    }
+    return matched;
+}
+
+function actualizarDOM() {
+    boardData.forEach((emoji, i) => boardDOM[i].innerText = emoji);
+}
+
+function silentlyCheck() {
+    let m = findMatches();
+    if (m.size > 0) {
+        m.forEach(i => boardData[i] = candies[Math.floor(Math.random() * candies.length)]);
+        silentlyCheck();
+    }
+    actualizarDOM();
+}
+
+// Integración
+const originalIrJuego = irJuego;
+irJuego = function(id) {
+  originalIrJuego(id);
+  if(id === 'candy') { scoreCandy = 0; multiplier = 1; crearTableroUltra(); }
 }
 </script>
 </body>
