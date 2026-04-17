@@ -17,20 +17,32 @@ body {
 }
 
 /* FONDO ANIMADO */
+/* FONDO PROLIGIO Y PROFESIONAL */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
-              url('https://i.ibb.co/4ny4T5Qg/1774621658204-2.jpg');
-  background-size: cover;
-  background-position: center;
+  /* Mezcla de los colores del logo: Verde, Azul y Fucsia */
+  background-color: #000000;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 255, 136, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 204, 255, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(255, 0, 204, 0.15) 0px, transparent 50%);
   z-index: -1;
-  animation: zoom 20s infinite alternate;
 }
 
-@keyframes zoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+/* Agregamos un sutil brillo de movimiento */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  opacity: 0.3;
+  z-index: -1;
+  pointer-events: none;
+}
 
 /* NAVBAR */
 .navbar {
@@ -147,7 +159,7 @@ input, textarea {
 <div class="screen" id="inicio">
   <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
   <div class="card">
-    <p>Hola, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
+    <p>Hola WATON QLO SE VE MEJOR ASI??, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
     <p><i>"Cualquier error es parte del aprendizaje, disfruta el webeo."</i></p>
     <button class="start-btn" onclick="irJuegos()">¡VAMOS A JUGAR!</button>
   </div>
