@@ -241,12 +241,30 @@ input, textarea {
 </div>
 
 <div class="screen hidden" id="contacto">
+  <div class="logo-banner">
+    <img src="logowc.png" class="main-logo" alt="Logo">
+  </div>
+  
   <div class="card">
-    <h2>📩 Contáctame</h2>
-    <input type="text" placeholder="Tu Nombre">
-    <input type="email" placeholder="Tu Correo">
-    <textarea rows="4" placeholder="¿En qué puedo ayudarte?"></textarea>
-    <button class="start-btn">Enviar Mensaje</button>
+    <h2>📩 Hablemos de Negocios</h2>
+    <p style="font-size: 14px; color: #aaa; margin-bottom: 20px;">Diseño Gráfico | Electricidad Domiciliaria | Proyectos Web</p>
+    
+    <form id="contactForm">
+      <input type="text" id="nombre" placeholder="Tu Nombre" required>
+      <input type="email" id="correo" placeholder="Tu Correo" required>
+      
+      <select id="servicio" style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: rgba(255,255,255,0.1); color: white;">
+        <option value="diseno" style="color: black;">🎨 Diseño Gráfico (Logos/Flyers)</option>
+        <option value="electricidad" style="color: black;">⚡ Electricidad (Instalaciones/Reparaciones)</option>
+        <option value="web" style="color: black;">💻 Desarrollo Web / ACode</option>
+        <option value="otro" style="color: black;">🤔 Otros / Saludos</option>
+      </select>
+      
+      <textarea id="mensaje" rows="4" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
+      
+      <button type="button" class="start-btn" onclick="enviarMensaje()">Enviar a WhatsApp</button>
+      <button type="button" class="start-btn vol-btn" onclick="volver()">VOLVER</button>
+    </form>
   </div>
 </div>
 
@@ -401,6 +419,24 @@ window.intentarLetra = () => {
   document.getElementById("letraInput").value = "";
   if(!prog.includes("_")) alert("¡Ganaste!");
 };
+
+function enviarMensaje() {
+  const nombre = document.getElementById('nombre').value;
+  const servicio = document.getElementById('servicio').value;
+  const mensaje = document.getElementById('mensaje').value;
+  
+  if(!nombre || !mensaje) {
+    alert("Porfa, llena los campos básicos.");
+    return;
+  }
+
+  // Aquí pones tu número de teléfono (ejemplo: 56912345678)
+  const fono = "+56974598279"; 
+  const texto = `Hola Canu! Mi nombre es ${nombre}. Te contacto por: ${servicio}. Detalle: ${mensaje}`;
+  const url = `https://api.whatsapp.com/send?phone=${+56974598279}&text=${encodeURIComponent(texto)}`;
+  
+  window.open(url, '_blank');
+}
 </script>
 </body>
 </html>
