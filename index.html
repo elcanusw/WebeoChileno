@@ -1,519 +1,431 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> -WebeoChileno- </title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> -WebeoChileno- </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  color: white;
-  background-color: #111;
-  overflow-y: auto; 
-  overflow-x: hidden;
-}
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            background-color: #111;
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
 
-/* FONDO ANIMADO */
-/* FONDO PROLIGIO Y PROFESIONAL */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  /* Mezcla de los colores del logo: Verde, Azul y Fucsia */
-  background-color: #000000;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(0, 255, 136, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(0, 204, 255, 0.15) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(255, 0, 204, 0.15) 0px, transparent 50%);
-  z-index: -1;
-}
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000000;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 255, 136, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(0, 204, 255, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(255, 0, 204, 0.15) 0px, transparent 50%);
+            z-index: -1;
+        }
 
-/* Agregamos un sutil brillo de movimiento */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png');
-  opacity: 0.3;
-  z-index: -1;
-  pointer-events: none;
-}
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
 
-/* NAVBAR */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  background: rgba(0,0,0,0.95);
-  padding: 10px 0;
-  z-index: 1000;
-  border-bottom: 2px solid #00ff88;
-}
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.95);
+            padding: 10px 0;
+            z-index: 1000;
+            border-bottom: 2px solid #00ff88;
+        }
 
-.navbar button {
-  background: none;
-  border: none;
-  color: #aaa;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 10px 15px;
-  font-size: 14px;
-}
+        .navbar button {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
 
-.navbar button:hover { color: #00ff88; }
+        .navbar button:hover { color: #00ff88; }
 
-.screen {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 100px 20px 40px 20px;
-  box-sizing: border-box;
-}
+        .screen {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 100px 20px 40px 20px;
+            box-sizing: border-box;
+        }
 
-.hidden { display: none !important; }
+        .hidden { display: none !important; }
 
-/* ESTILO DEL LOGO NUEVO */
-.main-logo {
-  width: 100%;
-  max-width: 350px;
-  height: auto;
-  margin-bottom: 20px;
-  display: block;
-  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
-}
+        .main-logo {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+        }
 
-.card {
-  background: rgba(0,0,0,0.7);
-  padding: 30px;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 450px;
-  text-align: center;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.1);
-}
+        .card {
+            background: rgba(0,0,0,0.7);
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
 
-button.start-btn {
-  width: 100%;
-  margin: 10px 0;
-  padding: 15px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  background: linear-gradient(90deg, #00ff88, #00ccff);
-  color: black;
-  font-weight: bold;
-}
+        button.start-btn {
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            color: black;
+            font-weight: bold;
+        }
 
-button.start-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,255,136,0.4); }
+        button.start-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,255,136,0.4); }
 
-.vol-btn { background: #444 !important; color: white !important; margin-top: 20px !important; }
+        .vol-btn { background: #444 !important; color: white !important; margin-top: 20px !important; }
 
-canvas { background: #000; border-radius: 10px; max-width: 100%; height: auto; }
-.ttt-cell {
-  background: rgba(255,255,255,0.1);
-  font-size: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  cursor: pointer;
-  aspect-ratio: 1/1;
-}
+        canvas { background: #000; border-radius: 10px; max-width: 100%; height: auto; }
+        
+        .ttt-cell {
+            background: rgba(255,255,255,0.1);
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+            aspect-ratio: 1/1;
+        }
 
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #444;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  box-sizing: border-box;
-}
-</style>
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            box-sizing: border-box;
+        }
+
+        #candyBoard .candy-cell {
+            font-size: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        .selected-candy {
+            outline: 3px solid #00ff88;
+            background: rgba(0, 255, 136, 0.2) !important;
+            transform: scale(1.1);
+        }
+
+        .match-boom { animation: boom 0.4s forwards; }
+        @keyframes boom {
+            0% { transform: scale(1); background: white; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
 </head>
 
 <body>
 
 <nav class="navbar">
-  <button onclick="irInicio()">INICIO</button>
-  <button onclick="irJuegos()">JUEGOS</button>
-  <button onclick="irEncuestas()">ENCUESTAS</button>
-  <button onclick="irContacto()">CONTACTO</button>
-  <button onclick="irAportar()">APORTAR</button>
-
+    <button onclick="navegar('inicio')">INICIO</button>
+    <button onclick="navegar('menuJuegos')">JUEGOS</button>
+    <button onclick="navegar('contacto')">CONTACTO</button>
+    <button onclick="navegar('aportar')">APORTAR</button>
 </nav>
 
 <div class="screen" id="inicio">
-  <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
-  <div class="card">
-    <p>Hola WATON QLO SE VE MEJOR ASI??, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
-    <p><i>"Cualquier error es parte del aprendizaje, disfruta el webeo."</i></p>
-    <button class="start-btn" onclick="irJuegos()">¡VAMOS A JUGAR!</button>
-  </div>
+    <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
+    <div class="card">
+        <p>Hola, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
+        <p><i>"Cualquier error es parte del aprendizaje, disfruta el webeo."</i></p>
+        <button class="start-btn" onclick="navegar('menuJuegos')">¡VAMOS A JUGAR!</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="menuJuegos">
-  <img src="logowc.png" class="main-logo" alt="Logo">
-  <div class="card">
-    <button class="start-btn" onclick="irJuego('runner')">🏃 Runner</button>
-    <button class="start-btn" onclick="irJuego('breakout')">🧱 Breakout</button>
-    <button class="start-btn" onclick="irJuego('rps')">⚔️ Cachipum</button>
-    <button class="start-btn" onclick="irJuego('palabra')">🔤 Palabra</button>
-    <button class="start-btn" onclick="irJuego('tresEnRaya')">❌⭕ Tres en Raya</button>
-<button class="start-btn" onclick="irJuego('candy')">🍬 Candy Canu</button>
-  </div>
+    <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
+    <div class="card">
+        <button class="start-btn" onclick="irJuego('runner')">🏃 Runner</button>
+        <button class="start-btn" onclick="irJuego('breakout')">🧱 Breakout</button>
+        <button class="start-btn" onclick="irJuego('rps')">⚔️ Cachipum</button>
+        <button class="start-btn" onclick="irJuego('palabra')">🔤 Palabra</button>
+        <button class="start-btn" onclick="irJuego('tresEnRaya')">❌⭕ Tres en Raya</button>
+        <button class="start-btn" onclick="irJuego('candy')">🍬 Candy Canu</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="runner">
-  <div class="card">
-    <h2>Endless Runner</h2>
-    <p id="runnerScore">Puntaje: 0</p>
-    <canvas id="runnerCanvas" width="400" height="400"></canvas>
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
-  </div>
+    <div class="card">
+        <h2>Endless Runner</h2>
+        <p id="runnerScore">Puntaje: 0</p>
+        <canvas id="runnerCanvas" width="400" height="400"></canvas>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="breakout">
-  <div class="card">
-    <h2>Breakout</h2>
-    <p id="breakScore">Puntaje: 0</p>
-    <canvas id="breakCanvas" width="400" height="400"></canvas>
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
-  </div>
+    <div class="card">
+        <h2>Breakout</h2>
+        <p id="breakScore">Puntaje: 0</p>
+        <canvas id="breakCanvas" width="400" height="400"></canvas>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="rps">
-  <div class="card">
-    <h2>Cachipum</h2>
-    <p id="rpsResult">¡Elige una opción!</p>
-    <button class="start-btn" onclick="jugarRPS('piedra')">Piedra</button>
-    <button class="start-btn" onclick="jugarRPS('papel')">Papel</button>
-    <button class="start-btn" onclick="jugarRPS('tijera')">Tijera</button>
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
-  </div>
+    <div class="card">
+        <h2>Cachipum</h2>
+        <p id="rpsResult">¡Elige una opción!</p>
+        <div style="display: flex; gap: 5px;">
+            <button class="start-btn" onclick="jugarRPS('piedra')">Piedra</button>
+            <button class="start-btn" onclick="jugarRPS('papel')">Papel</button>
+            <button class="start-btn" onclick="jugarRPS('tijera')">Tijera</button>
+        </div>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="palabra">
-  <div class="card">
-    <h2>Ahorcado</h2>
-    <p id="palabraTexto">_ _ _ _</p>
-    <input id="letraInput" maxlength="1" placeholder="Letra">
-    <button class="start-btn" onclick="intentarLetra()">Intentar</button>
-    <p id="estadoA">Intentos: 6</p>
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
-  </div>
+    <div class="card">
+        <h2>Ahorcado</h2>
+        <p id="palabraTexto" style="font-size: 24px; letter-spacing: 5px;">_ _ _ _</p>
+        <input id="letraInput" maxlength="1" placeholder="Letra">
+        <button class="start-btn" onclick="intentarLetra()">Intentar</button>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="tresEnRaya">
-  <div class="card">
-    <h2>Tres en Raya</h2>
-    <p id="tttResult"></p>
-    <div id="board" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:15px;">
-      <div class="ttt-cell" data-index="0" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="1" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="2" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="3" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="4" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="5" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="6" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="7" onclick="hacerMovimiento(this)"></div>
-      <div class="ttt-cell" data-index="8" onclick="hacerMovimiento(this)"></div>
+    <div class="card">
+        <h2>Tres en Raya</h2>
+        <p id="tttResult"></p>
+        <div id="board" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:15px;">
+            <div class="ttt-cell" data-index="0" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="1" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="2" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="3" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="4" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="5" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="6" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="7" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="8" onclick="hacerMovimiento(this)"></div>
+        </div>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
     </div>
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
-  </div>
 </div>
 
 <div class="screen hidden" id="candy">
-  <style>
-    #candyBoard .candy-cell {
-      font-size: 32px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      aspect-ratio: 1/1;
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      user-select: none;
-    }
-    
-    /* Animación cuando explotan */
-    .match-boom {
-      animation: boom 0.4s forwards;
-      z-index: 10;
-    }
-
-    @keyframes boom {
-      0% { transform: scale(1); background: white; }
-      100% { transform: scale(1.5); opacity: 0; }
-    }
-
-    /* Clase para cuando seleccionas uno */
-    .selected-candy {
-      outline: 3px solid #00ff88;
-      background: rgba(0, 255, 136, 0.2) !important;
-      transform: scale(1.1);
-    }
-  </style>
-
-  <div class="card" style="max-width: 450px; border: 2px solid #00ff88;">
-    <h2 style="margin-top:0;">🍬 CANDY CANU: ULTRA</h2>
-    <div style="display:flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom:10px;">
-      <span id="candyScore" style="color:#00ff88; font-weight:bold;">Puntos: 0</span>
-      <span id="comboText" style="color:#00ccff;">Combo: 1x</span>
+    <div class="card" style="border: 2px solid #00ff88;">
+        <h2>🍬 CANDY CANU</h2>
+        <div style="display:flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom:10px;">
+            <span id="candyScore" style="color:#00ff88; font-weight:bold;">Puntos: 0</span>
+            <span id="comboText" style="color:#00ccff;">Combo: 1x</span>
+        </div>
+        <div id="candyBoard" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; background: #111; padding: 10px; border-radius: 15px;"></div>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
     </div>
-    
-    <div id="candyBoard" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; background: #111; padding: 10px; border-radius: 15px;">
-      </div>
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER AL MENÚ</button>
-  </div>
-</div>
-  <div class="card">
-    <h2>📩 Hablemos de Negocios</h2>
-    <p style="font-size: 14px; color: #aaa; margin-bottom: 20px;">Diseño Gráfico | Electricidad Domiciliaria | Proyectos Web</p>
-    
-    <form id="contactForm">
-      <input type="text" id="nombre" placeholder="Tu Nombre" required>
-      <input type="email" id="correo" placeholder="Tu Correo" required>
-      
-      <select id="servicio" style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: rgba(255,255,255,0.1); color: white;">
-        <option value="diseno" style="color: black;">🎨 Diseño Gráfico (Logos/Flyers)</option>
-        <option value="electricidad" style="color: black;">⚡ Electricidad (Instalaciones/Reparaciones)</option>
-        <option value="web" style="color: black;">💻 Desarrollo Web / ACode</option>
-        <option value="otro" style="color: black;">🤔 Otros / Saludos</option>
-      </select>
-      
-      <textarea id="mensaje" rows="4" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
-      
-      <button type="button" class="start-btn" onclick="enviarMensaje()">Enviar a WhatsApp</button>
-      <button type="button" class="start-btn vol-btn" onclick="volver()">VOLVER</button>
-    </form>
-  </div>
 </div>
 
-  <div class="card">
-    <h2>💰 Apoya el Proyecto</h2>
-    <p style="font-size: 14px; color: #aaa; margin-bottom: 20px;">
-      Si te gusta el contenido y quieres apoyar para mantener el servidor y las nuevas actualizaciones, puedes aportar aquí:
-    </p>
-
-    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px dashed #00ff88; text-align: left; margin-bottom: 20px;">
-      <p style="margin: 5px 0;"><strong>Banco:</strong> Banco Estado (Cuenta RUT)</p>
-      <p style="margin: 5px 0;"><strong>Tipo:</strong> Cuenta Vista</p>
-      <p style="margin: 5px 0;"><strong>Titular:</strong> Christian Núñez</p>
-      <p style="margin: 5px 0;"><strong>RUT:</strong> 18.302.521-K</p>
-      <p style="margin: 5px 0;"><strong>Correo:</strong> el.canu@gmail.com</p>
+<div class="screen hidden" id="contacto">
+    <div class="card">
+        <h2>📩 Contacto</h2>
+        <p style="font-size: 14px; color: #aaa;">Diseño Gráfico | Electricidad | Proyectos Web</p>
+        <form id="contactForm">
+            <input type="text" id="nombre" placeholder="Tu Nombre" required>
+            <select id="servicio">
+                <option value="Diseño">🎨 Diseño Gráfico</option>
+                <option value="Electricidad">⚡ Electricidad</option>
+                <option value="Web">💻 Desarrollo Web</option>
+            </select>
+            <textarea id="mensaje" rows="4" placeholder="Cuéntame tu idea..." required></textarea>
+            <button type="button" class="start-btn" onclick="enviarMensaje()">Enviar a WhatsApp</button>
+            <button type="button" class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER</button>
+        </form>
     </div>
+</div>
 
-    <button class="start-btn" onclick="copiarDatos()">📋 COPIAR DATOS DE TRANSFERENCIA</button>
-    
-    <p style="font-size: 12px; color: #666; margin: 15px 0;">O también puedes usar Mercado Pago:</p>
-    
-    <button class="start-btn" style="background: #009ee3; color: white;" onclick="window.open('https://link.mercadopago.cl/pack69', '_blank')">
-      💙 Donar por Mercado Pago
-    </button>
-
-    <button class="start-btn vol-btn" onclick="volver()">VOLVER</button>
-  </div>
+<div class="screen hidden" id="aportar">
+    <div class="card">
+        <h2>💰 Apoya el Proyecto</h2>
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px dashed #00ff88; text-align: left; margin-bottom: 20px; font-size: 14px;">
+            <p><strong>Titular:</strong> Christian Núñez</p>
+            <p><strong>RUT:</strong> 18.302.521-K</p>
+            <p><strong>Banco:</strong> Banco Estado (Cuenta RUT)</p>
+            <p><strong>Correo:</strong> el.canu@gmail.com</p>
+        </div>
+        <button class="start-btn" onclick="copiarDatos()">📋 COPIAR DATOS</button>
+        <button class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER</button>
+    </div>
 </div>
 
 <script>
 let currentInterval = null;
 
-function ocultarTodas() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  if(currentInterval) clearInterval(currentInterval);
+function navegar(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    if(currentInterval) clearInterval(currentInterval);
 }
 
-function irInicio() { ocultarTodas(); document.getElementById('inicio').classList.remove('hidden'); }
-function irJuegos() { ocultarTodas(); document.getElementById('menuJuegos').classList.remove('hidden'); }
-function irEncuestas() { ocultarTodas(); document.getElementById('encuestas').classList.remove('hidden'); iniciarQuiz(); }
-function irContacto() { ocultarTodas(); document.getElementById('contacto').classList.remove('hidden'); }
-function irAportar() { ocultarTodas(); document.getElementById('aportar').classList.remove('hidden'); }
-function volver() { irJuegos(); }
-
 function irJuego(id) {
-  ocultarTodas();
-  document.getElementById(id).classList.remove('hidden');
-  if(id === 'runner') iniciarRunner();
-  if(id === 'breakout') loopBreakout();
-  if(id === 'palabra') modoAhorcado();
-  if(id === 'tresEnRaya') reiniciarTTT();
+    navegar(id);
+    if(id === 'runner') iniciarRunner();
+    if(id === 'breakout') loopBreakout();
+    if(id === 'palabra') modoAhorcado();
+    if(id === 'tresEnRaya') reiniciarTTT();
+    if(id === 'candy') { scoreCandy = 0; multiplier = 1; crearTableroUltra(); }
 }
 
 /* --- LOGICA RUNNER --- */
 function iniciarRunner() {
-  const canvas = document.getElementById("runnerCanvas");
-  const ctx = canvas.getContext("2d");
-  let py = 300, vy = 0, score = 0, obs = [];
-  currentInterval = setInterval(() => {
-    vy += 0.8; py += vy;
-    if(py > 300) { py = 300; vy = 0; }
-    if(Math.random() < 0.02) obs.push({x:400, y:300, w:20, h:20});
-    obs.forEach(o => o.x -= 5);
-    obs.forEach(o => {
-      if(50 < o.x + 20 && 70 > o.x && py < o.y + 20 && py + 20 > o.y) {
-        clearInterval(currentInterval); alert("Perdiste! Score: " + score); irJuego('runner');
-      }
-    });
-    obs = obs.filter(o => o.x > -20);
-    score++;
-    document.getElementById("runnerScore").innerText = "Puntaje: " + score;
-    ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
-    ctx.fillStyle = "#00ff88"; ctx.fillRect(50, py, 20, 20);
-    ctx.fillStyle = "#ff00cc"; obs.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
-  }, 20);
-  canvas.onclick = () => { if(py === 300) vy = -12; };
+    const canvas = document.getElementById("runnerCanvas");
+    const ctx = canvas.getContext("2d");
+    let py = 300, vy = 0, score = 0, obs = [];
+    currentInterval = setInterval(() => {
+        vy += 0.8; py += vy;
+        if(py > 300) { py = 300; vy = 0; }
+        if(Math.random() < 0.02) obs.push({x:400, y:300, w:20, h:20});
+        obs.forEach(o => o.x -= 5);
+        obs.forEach(o => {
+            if(50 < o.x + 20 && 70 > o.x && py < o.y + 20 && py + 20 > o.y) {
+                clearInterval(currentInterval); alert("Perdiste! Score: " + score); irJuego('runner');
+            }
+        });
+        obs = obs.filter(o => o.x > -20);
+        score++;
+        document.getElementById("runnerScore").innerText = "Puntaje: " + score;
+        ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle = "#00ff88"; ctx.fillRect(50, py, 20, 20);
+        ctx.fillStyle = "#ff00cc"; obs.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+    }, 20);
+    canvas.onclick = () => { if(py === 300) vy = -12; };
 }
 
 /* --- LOGICA BREAKOUT --- */
 function loopBreakout() {
-  const c = document.getElementById("breakCanvas"), ctx = c.getContext("2d");
-  let x=200, y=300, dx=3, dy=-3, px=160, score=0;
-  let bricks = []; 
-  for(let r=0; r<3; r++) for(let col=0; col<6; col++) bricks.push({x: col*65+10, y: r*25+30, v:true});
-  currentInterval = setInterval(() => {
-    x+=dx; y+=dy; 
-    if(x<10 || x>390) dx*=-1; 
-    if(y<10) dy*=-1;
-    if(y>365 && x>px && x<px+80) { dy = -Math.abs(dy); }
-    if(y>400) { clearInterval(currentInterval); alert("¡Casi!"); volver(); }
-    bricks.forEach(b => { if(b.v && x>b.x && x<b.x+60 && y>b.y && y<b.y+20) { b.v=false; dy*=-1; score++; }});
-    ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
-    ctx.fillStyle="#00ff88"; ctx.fillRect(px,370,80,10);
-    ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(x,y,8,0,7); ctx.fill();
-    ctx.fillStyle="#ff00cc"; bricks.forEach(b=>{ if(b.v) ctx.fillRect(b.x,b.y,60,20); });
-    document.getElementById("breakScore").innerText = "Puntaje: " + score;
-    if(score === 18) { clearInterval(currentInterval); alert("¡Ganaste!"); volver(); }
-  }, 20);
-  const mover = (e) => {
-    let r = c.getBoundingClientRect();
-    px = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - r.left - 40;
-    if(px < 0) px = 0; if(px > 320) px = 320;
-  };
-  c.onmousemove = mover; c.ontouchmove = (e) => { e.preventDefault(); mover(e); };
-}
-
-/* --- LOGICA QUIZ --- */
-const preguntas = [
-  { q: "¿Dónde nací?", a: ["Valparaíso, Chile", "Trondheim, Noruega", "Noje"], c: 1 },
-  { q: "Llegando a Chile... ¿A qué cerro llegué?", a: ["Barón", "Lecheros", "Cárcel"], c: 1 },
-  { q: "¿Cuántos hijos tengo actualmente (2026)?", a: ["4", "2", "3"], c: 2 }
-];
-
-function iniciarQuiz() {
-  let i = 0, score = 0;
-  const show = () => {
-    const box = document.getElementById("quizBox");
-    if(i >= preguntas.length) { 
-      box.innerHTML = `<h2>Fin! Score: ${score}/${preguntas.length}</h2><button class="start-btn" onclick="iniciarQuiz()">Reintentar</button>`;
-      return;
-    }
-    let p = preguntas[i];
-    box.innerHTML = `<h3>${p.q}</h3>` + p.a.map((opt, idx) => `<button class="start-btn" onclick="checkQ(${idx}, ${p.c})">${opt}</button>`).join("");
-  };
-  window.checkQ = (idx, c) => { if(idx === c) score++; i++; show(); };
-  show();
+    const c = document.getElementById("breakCanvas"), ctx = c.getContext("2d");
+    let x=200, y=300, dx=3, dy=-3, px=160, score=0;
+    let bricks = []; 
+    for(let r=0; r<3; r++) for(let col=0; col<6; col++) bricks.push({x: col*65+10, y: r*25+30, v:true});
+    currentInterval = setInterval(() => {
+        x+=dx; y+=dy; 
+        if(x<10 || x>390) dx*=-1; 
+        if(y<10) dy*=-1;
+        if(y>365 && x>px && x<px+80) { dy = -Math.abs(dy); }
+        if(y>400) { clearInterval(currentInterval); alert("¡Casi!"); navegar('menuJuegos'); }
+        bricks.forEach(b => { if(b.v && x>b.x && x<b.x+60 && y>b.y && y<b.y+20) { b.v=false; dy*=-1; score++; }});
+        ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle="#00ff88"; ctx.fillRect(px,370,80,10);
+        ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(x,y,8,0,7); ctx.fill();
+        ctx.fillStyle="#ff00cc"; bricks.forEach(b=>{ if(b.v) ctx.fillRect(b.x,b.y,60,20); });
+        document.getElementById("breakScore").innerText = "Puntaje: " + score;
+        if(score === 18) { clearInterval(currentInterval); alert("¡Ganaste!"); navegar('menuJuegos'); }
+    }, 20);
+    const mover = (e) => {
+        let r = c.getBoundingClientRect();
+        px = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - r.left - 40;
+        if(px < 0) px = 0; if(px > 320) px = 320;
+    };
+    c.onmousemove = mover; c.ontouchmove = (e) => { e.preventDefault(); mover(e); };
 }
 
 /* --- CACHIPUM --- */
-window.jugarRPS = (p) => {
-  const ops = ["piedra", "papel", "tijera"], cpu = ops[Math.floor(Math.random()*3)];
-  let res = (p === cpu) ? "Empate" : (p==="piedra" && cpu==="tijera" || p==="papel" && cpu==="piedra" || p==="tijera" && cpu==="papel") ? "Ganaste!" : "Perdiste";
-  document.getElementById("rpsResult").innerText = `Tú: ${p} | CPU: ${cpu} -> ${res}`;
-};
+function jugarRPS(p) {
+    const ops = ["piedra", "papel", "tijera"], cpu = ops[Math.floor(Math.random()*3)];
+    let res = (p === cpu) ? "Empate" : (p==="piedra" && cpu==="tijera" || p==="papel" && cpu==="piedra" || p==="tijera" && cpu==="papel") ? "Ganaste!" : "Perdiste";
+    document.getElementById("rpsResult").innerText = `Tú: ${p} | CPU: ${cpu} -> ${res}`;
+}
 
 /* --- TRES EN RAYA --- */
 let ttt = Array(9).fill(null), tttActivo = true;
 function reiniciarTTT() {
-  ttt = Array(9).fill(null); tttActivo = true;
-  document.getElementById("tttResult").innerText = "Tu turno (X)";
-  document.querySelectorAll('.ttt-cell').forEach(c => c.innerText = "");
+    ttt = Array(9).fill(null); tttActivo = true;
+    document.getElementById("tttResult").innerText = "Tu turno (X)";
+    document.querySelectorAll('.ttt-cell').forEach(c => c.innerText = "");
 }
-window.hacerMovimiento = (el) => {
-  let i = el.dataset.index;
-  if(!tttActivo || ttt[i]) return;
-  ttt[i] = "X"; el.innerText = "X";
-  if(checkWin("X")) { document.getElementById("tttResult").innerText = "¡GANASTE!"; tttActivo = false; return; }
-  let empty = ttt.map((v,idx) => v === null ? idx : null).filter(v => v !== null);
-  if(empty.length > 0) {
-    let r = empty[Math.floor(Math.random()*empty.length)];
-    ttt[r] = "O"; document.querySelector(`[data-index='${r}']`).innerText = "O";
-    if(checkWin("O")) { document.getElementById("tttResult").innerText = "Ganó la CPU"; tttActivo = false; }
-  } else if(!ttt.includes(null)) { document.getElementById("tttResult").innerText = "Empate"; tttActivo = false; }
-};
+function hacerMovimiento(el) {
+    let i = el.dataset.index;
+    if(!tttActivo || ttt[i]) return;
+    ttt[i] = "X"; el.innerText = "X";
+    if(checkWin("X")) { document.getElementById("tttResult").innerText = "¡GANASTE!"; tttActivo = false; return; }
+    let empty = ttt.map((v,idx) => v === null ? idx : null).filter(v => v !== null);
+    if(empty.length > 0) {
+        let r = empty[Math.floor(Math.random()*empty.length)];
+        ttt[r] = "O"; document.querySelector(`[data-index='${r}']`).innerText = "O";
+        if(checkWin("O")) { document.getElementById("tttResult").innerText = "Ganó la CPU"; tttActivo = false; }
+    } else if(!ttt.includes(null)) { document.getElementById("tttResult").innerText = "Empate"; tttActivo = false; }
+}
 function checkWin(p) {
-  const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  return win.some(comb => comb.every(idx => ttt[idx] === p));
+    const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    return win.some(comb => comb.every(idx => ttt[idx] === p));
 }
 
 /* --- PALABRA --- */
 let pal = "WANDERERS", prog = [];
 function modoAhorcado() {
-  prog = Array(pal.length).fill("_");
-  document.getElementById("palabraTexto").innerText = prog.join(" ");
+    prog = Array(pal.length).fill("_");
+    document.getElementById("palabraTexto").innerText = prog.join(" ");
 }
-window.intentarLetra = () => {
-  let l = document.getElementById("letraInput").value.toUpperCase();
-  if(!l) return;
-  for(let i=0; i<pal.length; i++) if(pal[i] === l) prog[i] = l;
-  document.getElementById("palabraTexto").innerText = prog.join(" ");
-  document.getElementById("letraInput").value = "";
-  if(!prog.includes("_")) alert("¡Ganaste!");
-};
+function intentarLetra() {
+    let l = document.getElementById("letraInput").value.toUpperCase();
+    if(!l) return;
+    for(let i=0; i<pal.length; i++) if(pal[i] === l) prog[i] = l;
+    document.getElementById("palabraTexto").innerText = prog.join(" ");
+    document.getElementById("letraInput").value = "";
+    if(!prog.includes("_")) alert("¡Ganaste!");
+}
 
-function enviarMensaje() {
-  const nombre = document.getElementById('nombre').value;
-  const servicio = document.getElementById('servicio').value;
-  const mensaje = document.getElementById('mensaje').value;
-  
-  if(!nombre || !mensaje) {
-    alert("Porfa, llena los campos básicos.");
-    return;
-  }
-
-  // Aquí pones tu número de teléfono (ejemplo: 56912345678)
-  const fono = "+56974598279"; 
-  const texto = `Hola Canu! Mi nombre es ${nombre}. Te contacto por: ${servicio}. Detalle: ${mensaje}`;
-  const url = `https://api.whatsapp.com/send?phone=${+56974598279}&text=${encodeURIComponent(texto)}`;
-  
-  window.open(url, '_blank');
-}
-function copiarDatos() {
-  const datos = "Christian Núñez - RUT: 18.302.521-K - Cuenta Vista Banco Estado - el.canu@gmail.com";
-  navigator.clipboard.writeText(datos);
-  alert("Datos copiados al portapapeles. ¡Gracias por el apoyo!");
-}
-/* --- LÓGICA CANDY CANU PRO (CON GRAVEDAD) --- */
-/* --- CANDY CANU ULTRA EDITION --- */
+/* --- CANDY CANU --- */
 const candyBoard = document.getElementById('candyBoard');
 const width = 6;
 const candies = ['🍎', '💎', '🍀', '🔥', '⭐'];
-let boardData = [];
-let boardDOM = [];
-let scoreCandy = 0;
-let multiplier = 1;
-let isProcessing = false;
+let boardData = [], boardDOM = [], scoreCandy = 0, multiplier = 1, isProcessing = false, primera = null;
 
 function crearTableroUltra() {
-    candyBoard.innerHTML = '';
-    boardData = [];
-    boardDOM = [];
+    candyBoard.innerHTML = ''; boardData = []; boardDOM = [];
     for (let i = 0; i < width * width; i++) {
         const cell = document.createElement('div');
         cell.className = 'candy-cell';
@@ -524,26 +436,21 @@ function crearTableroUltra() {
         boardData.push(randomCandy);
         cell.innerText = randomCandy;
     }
-    // Revisar si hay matches iniciales para limpiar el tablero al empezar
     silentlyCheck();
 }
 
-let primera = null;
 async function seleccionarCelda(id) {
     if (isProcessing) return;
     if (primera === null) {
-        primera = id;
-        boardDOM[id].classList.add('selected-candy');
+        primera = id; boardDOM[id].classList.add('selected-candy');
     } else {
         let segunda = id;
         boardDOM[primera].classList.remove('selected-candy');
-        
         const movValido = [primera - 1, primera + 1, primera - width, primera + width];
         if (movValido.includes(segunda)) {
-            isProcessing = true;
-            multiplier = 1;
-            // Intercambio visual
-            swap(primera, segunda);
+            isProcessing = true; multiplier = 1;
+            [boardData[primera], boardData[segunda]] = [boardData[segunda], boardData[primera]];
+            actualizarDOM();
             await processMatches();
             isProcessing = false;
         }
@@ -551,61 +458,43 @@ async function seleccionarCelda(id) {
     }
 }
 
-function swap(id1, id2) {
-    [boardData[id1], boardData[id2]] = [boardData[id2], boardData[id1]];
-    actualizarDOM();
-}
-
 async function processMatches() {
     let matched = findMatches();
     if (matched.size > 0) {
-        // Efecto visual de explosión
         matched.forEach(idx => boardDOM[idx].classList.add('match-boom'));
-        
         scoreCandy += (matched.size * 15) * multiplier;
         document.getElementById('candyScore').innerText = "Puntos: " + scoreCandy;
         document.getElementById('comboText').innerText = `Combo: ${multiplier}x`;
-        
         await new Promise(r => setTimeout(r, 400));
-        
-        // Eliminar y Caer
-        matched.forEach(idx => {
-            boardDOM[idx].classList.remove('match-boom');
-            boardData[idx] = '';
-        });
-        
+        matched.forEach(idx => { boardDOM[idx].classList.remove('match-boom'); boardData[idx] = ''; });
         aplicarGravedad();
         actualizarDOM();
-        
         multiplier++;
         await new Promise(r => setTimeout(r, 200));
-        await processMatches(); // Recursivo para combos
+        await processMatches();
     }
 }
 
 function aplicarGravedad() {
     for (let c = 0; c < width; c++) {
-        let emptySpot = -1;
         for (let r = width - 1; r >= 0; r--) {
             let i = r * width + c;
-            if (boardData[i] === '' && emptySpot === -1) emptySpot = i;
-            else if (boardData[i] !== '' && emptySpot !== -1) {
-                boardData[emptySpot] = boardData[i];
-                boardData[i] = '';
-                r = width; // Reset para esa columna
-                emptySpot = -1;
+            if (boardData[i] === '') {
+                for(let k = r-1; k >= 0; k--) {
+                    if(boardData[k*width+c] !== '') {
+                        boardData[i] = boardData[k*width+c];
+                        boardData[k*width+c] = '';
+                        break;
+                    }
+                }
             }
         }
     }
-    // Rellenar nuevos
-    for (let i = 0; i < width * width; i++) {
-        if (boardData[i] === '') boardData[i] = candies[Math.floor(Math.random() * candies.length)];
-    }
+    for (let i = 0; i < width * width; i++) if (boardData[i] === '') boardData[i] = candies[Math.floor(Math.random() * candies.length)];
 }
 
 function findMatches() {
     let matched = new Set();
-    // Filas
     for (let r = 0; r < width; r++) {
         for (let c = 0; c < width - 2; c++) {
             let i = r * width + c;
@@ -614,7 +503,6 @@ function findMatches() {
             }
         }
     }
-    // Columnas
     for (let c = 0; c < width; c++) {
         for (let r = 0; r < width - 2; r++) {
             let i = r * width + c;
@@ -626,9 +514,7 @@ function findMatches() {
     return matched;
 }
 
-function actualizarDOM() {
-    boardData.forEach((emoji, i) => boardDOM[i].innerText = emoji);
-}
+function actualizarDOM() { boardData.forEach((emoji, i) => boardDOM[i].innerText = emoji); }
 
 function silentlyCheck() {
     let m = findMatches();
@@ -639,11 +525,17 @@ function silentlyCheck() {
     actualizarDOM();
 }
 
-// Integración
-const originalIrJuego = irJuego;
-irJuego = function(id) {
-  originalIrJuego(id);
-  if(id === 'candy') { scoreCandy = 0; multiplier = 1; crearTableroUltra(); }
+function enviarMensaje() {
+    const n = document.getElementById('nombre').value, s = document.getElementById('servicio').value, m = document.getElementById('mensaje').value;
+    if(!n || !m) return alert("Llena los campos.");
+    const fono = "56974598279";
+    const texto = `Hola Canu! Soy ${n}. Contacto por: ${s}. Mensaje: ${m}`;
+    window.open(`https://api.whatsapp.com/send?phone=${fono}&text=${encodeURIComponent(texto)}`, '_blank');
+}
+
+function copiarDatos() {
+    navigator.clipboard.writeText("Christian Núñez - 18.302.521-K - Banco Estado - el.canu@gmail.com");
+    alert("Copiado!");
 }
 </script>
 </body>
