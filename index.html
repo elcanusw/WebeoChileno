@@ -279,45 +279,73 @@
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
     </div>
 </div>
-<div class="screen hidden" id="zoduco">
-    <div class="card">
-        <h2 style="font-family: 'Cloister Black', serif; color: #00ff88; font-size: 2em;">Zoduco Family</h2>
-        <p><i>"Pa' los que le pegan al mate"</i></p>
-        
-        <div style="margin-bottom: 15px;">
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="iniciarZoduco('facil')">PIOLA</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="iniciarZoduco('medio')">MEDIO</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="iniciarZoduco('dificil')">BRÍGIDO</button>
+<section id="juegos">
+    <div class="mermedoku-wrapper">
+        <h2 class="title-merme">MERMEDOKU</h2>
+        <div id="mermedoku-grid" class="merme-board"></div>
+        <div class="merme-actions">
+            <button onclick="verificarMerme()" class="btn-merme-primary">Check</button>
+            <button onclick="cargarMermedoku()" class="btn-merme-sec">Reset</button>
         </div>
-        
-        <div id="tablero-zoduco" style="display: grid; grid-template-columns: repeat(9, 1fr); gap: 1px; background: #00ff88; border: 2px solid #00ff88; margin: 0 auto 20px; max-width: 320px;">
-            </div>
-
-        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER A JUEGOS</button>
-    </div>
-</div>
-
 <style>
-    .celda-z {
-        width: 100%;
-        aspect-ratio: 1;
-        background: #111;
-        color: #fff;
-        text-align: center;
-        border: none;
-        font-size: 16px;
-        font-family: Arial, sans-serif;
-    }
-    .celda-z:focus { background: #222; color: #00ff88; outline: none; }
-    .fija { background: #1a1a1a; color: #00ff88; font-weight: bold; }
-    
-    /* Separadores de bloques 3x3 */
-    .celda-z:nth-child(3n) { border-right: 1.5px solid #00ff88; }
-    .celda-z:nth-child(9n) { border-right: none; }
-    #tablero-zoduco > :nth-child(n+19):nth-child(-n+27),
-    #tablero-zoduco > :nth-child(n+46):nth-child(-n+54) {
-        border-bottom: 1.5px solid #00ff88;
-    }
+#mermedoku-section {
+    text-align: center;
+    background: #0d1117; /* Fondo tipo GitHub Dark */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.merme-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    max-width: 400px;
+    margin: 0 auto;
+    border: 2px solid #58a6ff;
+}
+
+.merme-cell {
+    aspect-ratio: 1;
+    border: 0.5px solid #30363d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Bordes gruesos de la imagen */
+.merme-cell:nth-child(3n) { border-right: 2px solid #58a6ff; }
+.merme-cell:nth-child(9n) { border-right: 0.5px solid #30363d; }
+.merme-cell:nth-child(n+19):nth-child(-n+27),
+.merme-cell:nth-child(n+46):nth-child(-n+54) {
+    border-bottom: 2px solid #58a6ff;
+}
+
+.merme-cell input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    text-align: center;
+    color: #58a6ff;
+    font-size: 1.2rem;
+    outline: none;
+}
+
+.merme-cell input:disabled {
+    background: rgba(88, 166, 255, 0.05);
+    font-weight: bold;
+}
+
+.btn-merme {
+    margin-top: 15px;
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-reset { background: #30363d; }
 </style>
 <div class="screen hidden" id="candy">
     <div class="card" style="border: 2px solid #00ff88;">
@@ -723,17 +751,64 @@ function playMusic(url, nombre) {
     audio.play();
     trackText.innerText = "🎵 Sonando: " + nombre;
 }
-    function iniciarZoduco(dificultad) {
-    const cont = document.getElementById('tablero-zoduco');
-    cont.innerHTML = '';
-    
-    // Tablero base para que siempre tenga solución
-    let base = [
-        [5,3,4,6,7,8,9,1,2],[6,7,2,1,9,5,3,4,8],[1,9,8,3,4,2,5,6,7],
-        [8,5,9,7,6,1,4,2,3],[4,2,6,8,5,3,7,9,1],[7,1,3,9,2,4,8,5,6],
-        [9,6,1,5,3,7,2,8,4],[2,8,7,4,1,9,6,3,5],[3,4,5,2,8,6,1,7,9]
-    ];
+    #mermedoku-section {
+    text-align: center;
+    background: #0d1117; /* Fondo tipo GitHub Dark */
+    padding: 20px;
+    border-radius: 10px;
+}
 
+.merme-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    max-width: 400px;
+    margin: 0 auto;
+    border: 2px solid #58a6ff;
+}
+
+.merme-cell {
+    aspect-ratio: 1;
+    border: 0.5px solid #30363d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Bordes gruesos de la imagen */
+.merme-cell:nth-child(3n) { border-right: 2px solid #58a6ff; }
+.merme-cell:nth-child(9n) { border-right: 0.5px solid #30363d; }
+.merme-cell:nth-child(n+19):nth-child(-n+27),
+.merme-cell:nth-child(n+46):nth-child(-n+54) {
+    border-bottom: 2px solid #58a6ff;
+}
+
+.merme-cell input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    text-align: center;
+    color: #58a6ff;
+    font-size: 1.2rem;
+    outline: none;
+}
+
+.merme-cell input:disabled {
+    background: rgba(88, 166, 255, 0.05);
+    font-weight: bold;
+}
+
+.btn-merme {
+    margin-top: 15px;
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-reset { background: #30363d; }
     // Desordenar un poco (opcional, pero ayuda)
     base.sort(() => Math.random() - 0.5);
 
