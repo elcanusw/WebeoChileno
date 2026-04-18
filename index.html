@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> _-`WebeoChileno`-_ </title>
+    <title> _-`NoWeyChileno`-_ </title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
 
@@ -299,13 +299,34 @@
 </div>
 
 <div class="screen hidden" id="consolaARCADE">
-    <div class="card" style="max-width: 90%; width: 90%; height: 80vh;">
-        <h2 style="color: #00ff88;">🕹️ consolaARCADE</h2>
-        <iframe src="arcade.html" style="width: 100%; height: 100%; border: 2px solid #00ff88; border-radius: 10px; background: #000;"></iframe>
-        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    <div class="card" style="max-width: 90%; width: 95%; height: 85vh; display: flex; flex-direction: column;">
+        <h2 style="color: #00ff88; margin-top: 0;">🕹️ consolaARCADE & Music</h2>
+        
+        <div style="background: rgba(0,255,136,0.1); padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #00ff88;">
+            <p id="trackName" style="font-size: 12px; margin: 5px 0; color: #00ff88; font-weight: bold;">🎵 Selecciona una canción...</p>
+            <audio id="mainAudio" controls style="width: 100%; height: 35px; filter: invert(100%) hue-rotate(90deg);"></audio>
+            
+            <div style="display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
+                <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
+                        onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Track 01 - Estilo Canu')">
+                    Pista 01
+                </button>
+                <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
+                        onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', 'Track 02 - Remix Calle')">
+                    Pista 02
+                </button>
+                <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
+                        onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', 'Track 03 - Beats Pro')">
+                    Pista 03
+                </button>
+            </div>
+        </div>
+
+        <iframe src="arcade.html" style="flex-grow: 1; width: 100%; border: 2px solid #00ff88; border-radius: 10px; background: #000;"></iframe>
+        
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
     </div>
 </div>
-
 <script>
 let currentInterval = null;
 
@@ -627,6 +648,15 @@ function enviarMensaje() {
 function copiarDatos() {
     navigator.clipboard.writeText("Christian Núñez - 18.302.521-K - Banco Estado - el.canu@gmail.com");
     alert("Copiado!");
+}
+    /* --- LOGICA REPRODUCTOR --- */
+function playMusic(url, nombre) {
+    const audio = document.getElementById('mainAudio');
+    const trackText = document.getElementById('trackName');
+    
+    audio.src = url;
+    audio.play();
+    trackText.innerText = "🎵 Sonando: " + nombre;
 }
 </script>
 </body>
