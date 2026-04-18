@@ -164,6 +164,15 @@
             0% { transform: scale(1); background: white; }
             100% { transform: scale(1.5); opacity: 0; }
         }
+
+        .visitor-counter {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0,255,136,0.1);
+            border-radius: 10px;
+            font-size: 12px;
+            border: 1px solid rgba(0,255,136,0.3);
+        }
     </style>
 </head>
 
@@ -172,6 +181,7 @@
 <nav class="navbar">
     <button onclick="navegar('inicio')">#INICIO</button>
     <button onclick="navegar('menuJuegos')">#JUEGOS</button>
+    <button onclick="navegar('encuestas')">#ENCUESTAS</button>
     <button onclick="navegar('consolaARCADE')">#MUSICA</button>
     <button onclick="navegar('contacto')">#CONTACTO</button>
     <button onclick="navegar('aportar')">#APORTAR</button>
@@ -183,6 +193,11 @@
         <p>HEY!!! este sitio es <b>100% CHILENO y hecho a <b>MANO</b></b>. Aquí puedes encontrar diversos minijuegos, realizar encuestas, escuchar musica mientras juegas y contactarme para proyectos de diseño o electricidad.</p>
         <p><i>"Cualquier error es parte de mi aprendizaje, disfruta y <b>#NoWey.</b>"</i></p>
         <button class="start-btn" onclick="navegar('menuJuegos')">¡VAMOS A JUGAR!</button>
+        
+        <div class="visitor-counter">
+            <p style="margin: 0 0 5px 0;">Visitas al Puerto:</p>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Felcanusw.github.io%2FWebeoChileno&count_bg=%2300FF88&title_bg=%23222222&icon=&icon_color=%23E7E7E7&title=WEBEO&edge_flat=false" alt="Contador">
+        </div>
     </div>
 </div>
 
@@ -202,6 +217,16 @@
         <button class="start-btn" onclick="irJuego('candy')">🍬 Candy Canu</button>
         <button class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER AL INICIO</button>
   </div>
+</div>
+
+<div class="screen hidden" id="encuestas">
+    <div class="card">
+        <h2>📊 Encuestas Family</h2>
+        <p>Selecciona una encuesta para participar:</p>
+        <button class="start-btn" onclick="window.open('https://forms.gle/TU_FORM_LINK', '_blank')">📋 Encuesta de Satisfacción</button>
+        <button class="start-btn" onclick="window.open('https://forms.gle/OTRO_LINK', '_blank')">🤔 ¿Qué juego falta?</button>
+        <button class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER</button>
+    </div>
 </div>
 
 <div class="screen hidden" id="runner"><div class="card"><h2>Runner</h2><p id="runnerScore">Puntaje: 0</p><canvas id="runnerCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
@@ -654,7 +679,6 @@ function copiarDatos() {
 function playMusic(url, nombre) {
     const audio = document.getElementById('mainAudio');
     const trackText = document.getElementById('trackName');
-    
     audio.src = url;
     audio.play();
     trackText.innerText = "🎵 Sonando: " + nombre;
