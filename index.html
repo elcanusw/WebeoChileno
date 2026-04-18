@@ -170,7 +170,7 @@
 <body>
 
 <nav class="navbar">
-    <button onclick="navegar('inicio')" #INICIO</button>
+    <button onclick="navegar('inicio')">#INICIO</button>
     <button onclick="navegar('menuJuegos')">#JUEGOS</button>
     <button onclick="navegar('consolaARCADE')">#MUSICA</button>
     <button onclick="navegar('contacto')">#CONTACTO</button>
@@ -180,8 +180,8 @@
 <div class="screen" id="inicio">
     <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
     <div class="card">
-        <p>Hola, este es mi sitio personal de entretenimiento. Aquí puedes encontrar diversos minijuegos desarrollados para pasar el rato, realizar encuestas y contactarme para proyectos de diseño o electricidad.</p>
-        <p><i>"Cualquier error es parte del aprendizaje, disfruta el y <b>#NoWey.</b>"</i></p>
+        <p>HEY!!! este sitio es <b>100% CHILENO y hecho a <b>MANO</b></b>. Aquí puedes encontrar diversos minijuegos, realizar encuestas, escuchar musica mientras juegas y contactarme para proyectos de diseño o electricidad.</p>
+        <p><i>"Cualquier error es parte de mi aprendizaje, disfruta y <b>#NoWey.</b>"</i></p>
         <button class="start-btn" onclick="navegar('menuJuegos')">¡VAMOS A JUGAR!</button>
     </div>
 </div>
@@ -308,7 +308,7 @@
             
             <div style="display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
                 <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
-                        onclick="playMusic('https://elcanusw.github.io/WebeoChileno/ShikoLalo.mp3', 'Track 01 - Estilo Canu')">
+                        onclick="playMusic('https://elcanusw.github.io/WebeoChileno/ShikoLalo.mp3', 'Track 01 - ShikoLalo')">
                 ShikoLalo
                 </button>
                 <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
@@ -323,16 +323,10 @@
         </div>
 
         <iframe src="arcade.html" style="flex-grow: 1; width: 100%; border: 2px solid #00ff88; border-radius: 10px; background: #000;"></iframe>
-        
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
     </div>
 </div>
 
-        <iframe src="arcade.html" style="flex-grow: 1; width: 100%; border: 2px solid #00ff88; border-radius: 10px; background: #000;"></iframe>
-        
-        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
-    </div>
-</div>
 <script>
 let currentInterval = null;
 
@@ -655,7 +649,8 @@ function copiarDatos() {
     navigator.clipboard.writeText("Christian Núñez - 18.302.521-K - Banco Estado - el.canu@gmail.com");
     alert("Copiado!");
 }
-    /* --- LOGICA REPRODUCTOR --- */
+
+/* --- LOGICA REPRODUCTOR --- */
 function playMusic(url, nombre) {
     const audio = document.getElementById('mainAudio');
     const trackText = document.getElementById('trackName');
