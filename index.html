@@ -328,7 +328,7 @@
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
     </div>
 </div>
-<div class="screen hidden" id="zoduco">
+<div class="screen hidden" id="mermedoku">
     <div class="card">
         <h2 style="color: #00ff88;">Zoduco Family</h2>
         <p><i>"Pa' que se quemen las pestañas"</i></p>
@@ -409,9 +409,10 @@ function irJuego(id) {
     if(id === 'tetris') iniciarTetris();
     if(id === 'racing') iniciarRacing();
     if(id === 'frogger') iniciarFrogger();
+    if(id === 'mermedoku') jugarMermedoku(); 
 }
 
-/* --- LOGICA RUNNER --- */
+    /* --- LOGICA RUNNER --- */
 function iniciarRunner() {
     const canvas = document.getElementById("runnerCanvas");
     const ctx = canvas.getContext("2d");
@@ -721,57 +722,32 @@ function playMusic(url, nombre) {
     trackText.innerText = "🎵 Sonando: " + nombre;
 }
     /* --- ZODUCO FAMILY EXACTO --- */
-function jugarZoduco(dificultad) {
-    const container = document.getElementById('tablero-container');
-    container.innerHTML = ''; // Limpiar el tablero si ya había uno
+function jugarMermedoku() {
+    const container = document.getElementById('tablero-merme');
+    container.innerHTML = ''; 
 
-    // Esta es la Solución Completa que corresponde a la imagen para verificar
-    const solucionMaster = [
-        [5,2,3,6,7,9,1,8,4], [6,8,2,1,9,4,3,5,7], [1,3,5,8,4,2,9,6,7],
-        [3,4,1,2,6,8,5,7,9], [7,1,6,9,3,5,8,2,4], [4,5,7,4,3,1,2,9,6],
-        [8,2,1,3,9,7,6,4,5], [7,5,4,6,1,2,9,8,3], [2,6,7,4,2,3,5,1,9]
-    ];
-
-    // Esta es la plantilla que define qué números son fijos según tu imagen (los que son -1 son huecos)
-    const plantillaExacta = [
-        [-1,-1,-1, -1,-1,-1, 8,-1,-1],
-        [-1, 8, 2,  1,-1,-1, 4, 5, 3],
+    const plantilla = [
+        [-1,-1,-1, -1,-1,-1,  8,-1,-1],
+        [-1, 8, 2,  1,-1,-1,  4, 5, 3],
         [-1, 3, 5, -1,-1,-1, -1, 6, 7],
-        [-1, 4,-1, -1,-1, 8, 5,-1,-1],
+        [-1, 4,-1, -1,-1, 8,  5,-1,-1],
         [-1,-1,-1, -1, 9,-1, -1,-1, 4],
-        [-1,-1,-1,  4,-1, 1, 2,-1,-1],
+        [-1,-1,-1,  4,-1, 1,  2,-1,-1],
         [ 8, 2,-1,  3,-1, 7, -1,-1,-1],
         [-1, 5, 4, -1,-1,-1, -1, 8,-1],
         [-1, 6, 7, -1, 2,-1, -1,-1,-1]
     ];
 
-    // Ahora creamos el tablero en HTML
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
             const input = document.createElement('input');
             input.type = 'number';
-            input.className = 'celda-canu';
-            
-            let numFijo = plantillaExacta[r][c];
-            
-            if (numFijo !== -1) {
-                input.value = numFijo;
+            input.className = 'celda-canu'; // Usa el estilo que ya definiste en el CSS
+            if (plantilla[r][c] !== -1) {
+                input.value = plantilla[r][c];
                 input.readOnly = true;
                 input.classList.add('canu-fija');
-            } else {
-                // Si la celda es editable, le añadimos un listener para verificar
-                input.addEventListener('input', (e) => {
-                    let val = parseInt(e.target.value);
-                    if (val === solucionMaster[r][c]) {
-                        e.target.classList.remove('canu-incorrecta');
-                    } else if (!isNaN(val)) {
-                        e.target.classList.add('canu-incorrecta');
-                    } else {
-                        e.target.classList.remove('canu-incorrecta');
-                    }
-                });
             }
-            
             container.appendChild(input);
         }
     }
