@@ -328,15 +328,15 @@
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
     </div>
 </div>
-<div class="screen hidden" id="zoduco">
+<div class="screen hidden" id="mermeduco">
     <div class="card">
-        <h2 style="color: #00ff88;">Zoduco Family</h2>
+        <h2 style="color: #00ff88;">mermeduco Family</h2>
         <p><i>"Pa' que se quemen las pestañas"</i></p>
         
         <div class="opciones-dificultad" style="margin-bottom: 15px;">
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarZoduco('piola')">PIOLA</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarZoduco('medio')">MEDIO</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarZoduco('brigido')">BRÍGIDO</button>
+            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugardumermeduco('piola')">PIOLA</button>
+            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarmermeduco('medio')">MEDIO</button>
+            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarmermeduco('brigido')">BRÍGIDO</button>
         </div>
         
         <div id="tablero-container" class="tablero-canu"></div>
@@ -722,7 +722,7 @@ function playMusic(url, nombre) {
     trackText.innerText = "🎵 Sonando: " + nombre;
 }
    /* --- MOTOR DE SUDOKU REAL --- */
-function jugarZoduco(dificultad) {
+function jugarmerduco(dificultad) {
     const container = document.getElementById('tablero-container');
     container.innerHTML = '';
 
