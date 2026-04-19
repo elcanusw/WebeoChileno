@@ -1,93 +1,664 @@
-<div class="screen hidden" id="menuJuegos">
-<img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
-<div class="card">
-        <button class="start-btn" onclick="navegar('zoduco')">🧩 ZODUCO</button>
-<button class="start-btn" onclick="irJuego('runner')">🏃Runner</button>
-<button class="start-btn" onclick="irJuego('breakout')">🧱 Breakout</button>
-<button class="start-btn" onclick="irJuego('snake')">🐍 Snake</button>
-@@ -278,7 +279,46 @@ <h2>Tres en Raya</h2>
-<button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
-</div>
-</div>
-<div class="screen hidden" id="zoduco">
-    <div class="card">
-        <h2 style="font-family: 'Cloister Black', serif; color: #00ff88; font-size: 2em;">Zoduco Family</h2>
-        <p><i>"Pa' los que le pegan al mate"</i></p>
-        
-        <div style="margin-bottom: 15px;">
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="iniciarZoduco('facil')">PIOLA</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="iniciarZoduco('medio')">MEDIO</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="iniciarZoduco('dificil')">BRÍGIDO</button>
-        </div>
-        
-        <div id="tablero-zoduco" style="display: grid; grid-template-columns: repeat(9, 1fr); gap: 1px; background: #00ff88; border: 2px solid #00ff88; margin: 0 auto 20px; max-width: 320px;">
-            </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> _-`NoWeyChileno`-_ </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;500&display=swap');
 
-        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER A JUEGOS</button>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            background-color: #111;
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000000;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 255, 136, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(0, 204, 255, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(255, 0, 204, 0.15) 0px, transparent 50%);
+            z-index: -1;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.95);
+            padding: 10px 0;
+            z-index: 1000;
+            border-bottom: 2px solid #00ff88;
+        }
+
+        .navbar button {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .navbar button:hover { color: #00ff88; }
+
+        .screen {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 100px 20px 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .hidden { display: none !important; }
+
+        .main-logo {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+        }
+
+        .card {
+            background: rgba(0,0,0,0.7);
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        button.start-btn {
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            color: black;
+            font-weight: bold;
+        }
+
+        button.start-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,255,136,0.4); }
+
+        .vol-btn { background: #444 !important; color: white !important; margin-top: 20px !important; }
+
+        canvas { background: #000; border-radius: 10px; max-width: 100%; height: auto; }
+        
+        .ttt-cell {
+            background: rgba(255,255,255,0.1);
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+            aspect-ratio: 1/1;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            box-sizing: border-box;
+        }
+
+        #candyBoard .candy-cell {
+            font-size: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        .selected-candy {
+            outline: 3px solid #00ff88;
+            background: rgba(0, 255, 136, 0.2) !important;
+            transform: scale(1.1);
+        }
+
+        .match-boom { animation: boom 0.4s forwards; }
+        @keyframes boom {
+            0% { transform: scale(1); background: white; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <button onclick="navegar('inicio')">#INICIO</button>
+    <button onclick="navegar('menuJuegos')">#JUEGOS</button>
+    <button onclick="navegar('consolaARCADE')">#MUSICA</button>
+    <button onclick="navegar('contacto')">#CONTACTO</button>
+    <button onclick="navegar('aportar')">#APORTAR</button>
+</nav>
+
+<div class="screen" id="inicio">
+    <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
+    <div class="card">
+        <p>HEY!!! este sitio es <b>100% CHILENO y hecho a <b>MANO</b></b>. Aquí puedes encontrar diversos minijuegos, realizar encuestas, escuchar musica mientras juegas y contactarme para proyectos de diseño o electricidad.</p>
+        <p><i>"Cualquier error es parte de mi aprendizaje, disfruta y <b>#NoWey.</b>"</i></p>
+        <button class="start-btn" onclick="navegar('menuJuegos')">¡VAMOS A JUGAR!</button>
     </div>
 </div>
 
-<style>
-    .celda-z {
-        width: 100%;
-        aspect-ratio: 1;
-        background: #111;
-        color: #fff;
-        text-align: center;
-        border: none;
-        font-size: 16px;
-        font-family: Arial, sans-serif;
-    }
-    .celda-z:focus { background: #222; color: #00ff88; outline: none; }
-    .fija { background: #1a1a1a; color: #00ff88; font-weight: bold; }
-    
-    /* Separadores de bloques 3x3 */
-    .celda-z:nth-child(3n) { border-right: 1.5px solid #00ff88; }
-    .celda-z:nth-child(9n) { border-right: none; }
-    #tablero-zoduco > :nth-child(n+19):nth-child(-n+27),
-    #tablero-zoduco > :nth-child(n+46):nth-child(-n+54) {
-        border-bottom: 1.5px solid #00ff88;
-    }
-</style>
+<div class="screen hidden" id="menuJuegos">
+    <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
+    <div class="card">
+        <button class="start-btn" onclick="irJuego('runner')">🏃Runner</button>
+        <button class="start-btn" onclick="irJuego('breakout')">🧱 Breakout</button>
+        <button class="start-btn" onclick="irJuego('snake')">🐍 Snake</button>
+        <button class="start-btn" onclick="irJuego('flappy')">🐦 Flappy</button>
+        <button class="start-btn" onclick="irJuego('tetris')">🧩 Tetris</button>
+        <button class="start-btn" onclick="irJuego('racing')">🏎️ Racing</button>
+        <button class="start-btn" onclick="irJuego('frogger')">🐸 Frogger</button>
+        <button class="start-btn" onclick="irJuego('rps')">⚔️ Cachipum</button>
+        <button class="start-btn" onclick="irJuego('palabra')">🔤 Palabra</button>
+        <button class="start-btn" onclick="irJuego('tresEnRaya')">❌⭕ Tres en Raya</button>
+        <button class="start-btn" onclick="irJuego('candy')">🍬 Candy Canu</button>
+        <button class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER AL INICIO</button>
+  </div>
+</div>
+
+<div class="screen hidden" id="runner"><div class="card"><h2>Runner</h2><p id="runnerScore">Puntaje: 0</p><canvas id="runnerCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+<div class="screen hidden" id="breakout"><div class="card"><h2>Breakout</h2><p id="breakScore">Puntaje: 0</p><canvas id="breakCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+<div class="screen hidden" id="snake"><div class="card"><h2>Snake</h2><p id="snakeScore">Puntos: 0</p><canvas id="snakeCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+<div class="screen hidden" id="flappy"><div class="card"><h2>Flappy</h2><canvas id="flappyCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+<div class="screen hidden" id="tetris"><div class="card"><h2>Tetris</h2><p id="tetrisScore">Líneas: 0</p><canvas id="tetrisCanvas" width="200" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+<div class="screen hidden" id="racing"><div class="card"><h2>Racing</h2><canvas id="racingCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+<div class="screen hidden" id="frogger"><div class="card"><h2>Frogger</h2><canvas id="froggerCanvas" width="400" height="400"></canvas><button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER</button></div></div>
+
+<div class="screen hidden" id="rps">
+    <div class="card">
+        <h2>Cachipum</h2>
+        <p id="rpsResult">¡Elige una opción!</p>
+        <div style="display: flex; gap: 5px;">
+            <button class="start-btn" onclick="jugarRPS('piedra')">Piedra</button>
+            <button class="start-btn" onclick="jugarRPS('papel')">Papel</button>
+            <button class="start-btn" onclick="jugarRPS('tijera')">Tijera</button>
+        </div>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
+</div>
+
+<div class="screen hidden" id="palabra">
+    <div class="card">
+        <h2>Ahorcado</h2>
+        <p id="palabraTexto" style="font-size: 24px; letter-spacing: 5px;">_ _ _ _</p>
+        <input id="letraInput" maxlength="1" placeholder="Letra">
+        <button class="start-btn" onclick="intentarLetra()">Intentar</button>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
+</div>
+
+<div class="screen hidden" id="tresEnRaya">
+    <div class="card">
+        <h2>Tres en Raya</h2>
+        <p id="tttResult"></p>
+        <div id="board" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:15px;">
+            <div class="ttt-cell" data-index="0" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="1" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="2" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="3" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="4" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="5" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="6" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="7" onclick="hacerMovimiento(this)"></div>
+            <div class="ttt-cell" data-index="8" onclick="hacerMovimiento(this)"></div>
+        </div>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
+</div>
+
 <div class="screen hidden" id="candy">
-<div class="card" style="border: 2px solid #00ff88;">
-<h2>🍬 CANDY CANU</h2>
-@@ -682,6 +722,38 @@ <h2 style="color: #00ff88; margin-top: 0;">🕹️ consolaARCADE & Music</h2>
-audio.src = url;
-audio.play();
-trackText.innerText = "🎵 Sonando: " + nombre;
+    <div class="card" style="border: 2px solid #00ff88;">
+        <h2>🍬 CANDY CANU</h2>
+        <div style="display:flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom:10px;">
+            <span id="candyScore" style="color:#00ff88; font-weight:bold;">Puntos: 0</span>
+            <span id="comboText" style="color:#00ccff;">Combo: 1x</span>
+        </div>
+        <div id="candyBoard" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; background: #111; padding: 10px; border-radius: 15px;"></div>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER AL MENÚ</button>
+    </div>
+</div>
+
+<div class="screen hidden" id="contacto">
+    <div class="card">
+        <h2>📩 Contacto</h2>
+        <p style="font-size: 14px; color: #aaa;">Diseño Gráfico | Electricidad | Proyectos Web</p>
+        <form id="contactForm">
+            <input type="text" id="nombre" placeholder="Tu Nombre" required>
+            <select id="servicio">
+                <option value="Diseño">🎨 Diseño Gráfico</option>
+                <option value="Electricidad">⚡ Electricidad</option>
+                <option value="Web">💻 Desarrollo Web</option>
+            </select>
+            <textarea id="mensaje" rows="4" placeholder="Cuéntame tu idea..." required></textarea>
+            <button type="button" class="start-btn" onclick="enviarMensaje()">Enviar a WhatsApp</button>
+            <button type="button" class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER</button>
+        </form>
+    </div>
+</div>
+
+<div class="screen hidden" id="aportar">
+    <div class="card">
+        <h2>💰 Apoya el Proyecto</h2>
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px dashed #00ff88; text-align: left; margin-bottom: 20px; font-size: 14px;">
+            <p><strong>Titular:</strong> Christian Núñez</p>
+            <p><strong>RUT:</strong> 18.302.521-K</p>
+            <p><strong>Banco:</strong> Banco Estado (Cuenta RUT)</p>
+            <p><strong>Correo:</strong> el.canu@gmail.com</p>
+        </div>
+        <button class="start-btn" onclick="copiarDatos()">📋 COPIAR DATOS</button>
+        <button class="start-btn vol-btn" onclick="navegar('inicio')">VOLVER</button>
+    </div>
+</div>
+
+<div class="screen hidden" id="consolaARCADE">
+    <div class="card" style="max-width: 90%; width: 95%; height: 85vh; display: flex; flex-direction: column;">
+        <h2 style="color: #00ff88; margin-top: 0;">🕹️ consolaARCADE & Music</h2>
+        
+        <div style="background: rgba(0,255,136,0.1); padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #00ff88;">
+            <p id="trackName" style="font-size: 12px; margin: 5px 0; color: #00ff88; font-weight: bold;">🎵 Selecciona una canción...</p>
+            <audio id="mainAudio" controls style="width: 100%; height: 35px; filter: invert(100%) hue-rotate(90deg);"></audio>
+            
+            <div style="display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
+                <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
+                        onclick="playMusic('https://elcanusw.github.io/WebeoChileno/ShikoLalo.mp3', 'Track 01 - ShikoLalo')">
+                ShikoLalo
+                </button>
+                <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
+                        onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', 'Track 02 - Remix Calle')">
+                    Pista 02
+                </button>
+                <button class="start-btn" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; width: auto;" 
+                        onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', 'Track 03 - Beats Pro')">
+                    Pista 03
+                </button>
+            </div>
+        </div>
+
+        <iframe src="arcade.html" style="flex-grow: 1; width: 100%; border: 2px solid #00ff88; border-radius: 10px; background: #000;"></iframe>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
+    </div>
+</div>
+
+<script>
+let currentInterval = null;
+
+function navegar(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    if(currentInterval) clearInterval(currentInterval);
 }
-    function iniciarZoduco(dificultad) {
-    const cont = document.getElementById('tablero-zoduco');
-    cont.innerHTML = '';
-    
-    // Tablero base para que siempre tenga solución
-    let base = [
-        [5,3,4,6,7,8,9,1,2],[6,7,2,1,9,5,3,4,8],[1,9,8,3,4,2,5,6,7],
-        [8,5,9,7,6,1,4,2,3],[4,2,6,8,5,3,7,9,1],[7,1,3,9,2,4,8,5,6],
-        [9,6,1,5,3,7,2,8,4],[2,8,7,4,1,9,6,3,5],[3,4,5,2,8,6,1,7,9]
-    ];
 
-    // Desordenar un poco (opcional, pero ayuda)
-    base.sort(() => Math.random() - 0.5);
+function irJuego(id) {
+    navegar(id);
+    if(id === 'runner') iniciarRunner();
+    if(id === 'breakout') loopBreakout();
+    if(id === 'palabra') modoAhorcado();
+    if(id === 'tresEnRaya') reiniciarTTT();
+    if(id === 'candy') { scoreCandy = 0; multiplier = 1; crearTableroUltra(); }
+    if(id === 'snake') iniciarSnake();
+    if(id === 'flappy') iniciarFlappy();
+    if(id === 'tetris') iniciarTetris();
+    if(id === 'racing') iniciarRacing();
+    if(id === 'frogger') iniciarFrogger();
+}
 
-    let vacios = dificultad === 'facil' ? 35 : dificultad === 'medio' ? 50 : 65;
-
-    for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.className = 'celda-z';
-            
-            if (Math.random() * 81 > vacios) {
-                input.value = base[r][c];
-                input.readOnly = true;
-                input.classList.add('fija');
+/* --- LOGICA RUNNER --- */
+function iniciarRunner() {
+    const canvas = document.getElementById("runnerCanvas");
+    const ctx = canvas.getContext("2d");
+    let py = 300, vy = 0, score = 0, obs = [];
+    currentInterval = setInterval(() => {
+        vy += 0.8; py += vy;
+        if(py > 300) { py = 300; vy = 0; }
+        if(Math.random() < 0.02) obs.push({x:400, y:300, w:20, h:20});
+        obs.forEach(o => o.x -= 5);
+        obs.forEach(o => {
+            if(50 < o.x + 20 && 70 > o.x && py < o.y + 20 && py + 20 > o.y) {
+                clearInterval(currentInterval); alert("Perdiste! Score: " + score); irJuego('runner');
             }
-            
-            cont.appendChild(input);
+        });
+        obs = obs.filter(o => o.x > -20);
+        score++;
+        document.getElementById("runnerScore").innerText = "Puntaje: " + score;
+        ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle = "#00ff88"; ctx.fillRect(50, py, 20, 20);
+        ctx.fillStyle = "#ff00cc"; obs.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+    }, 20);
+    canvas.onclick = () => { if(py === 300) vy = -12; };
+}
+
+/* --- LOGICA BREAKOUT --- */
+function loopBreakout() {
+    const c = document.getElementById("breakCanvas"), ctx = c.getContext("2d");
+    let x=200, y=300, dx=3, dy=-3, px=160, score=0;
+    let bricks = []; 
+    for(let r=0; r<3; r++) for(let col=0; col<6; col++) bricks.push({x: col*65+10, y: r*25+30, v:true});
+    currentInterval = setInterval(() => {
+        x+=dx; y+=dy; 
+        if(x<10 || x>390) dx*=-1; 
+        if(y<10) dy*=-1;
+        if(y>365 && x>px && x<px+80) { dy = -Math.abs(dy); }
+        if(y>400) { clearInterval(currentInterval); alert("¡Casi!"); navegar('menuJuegos'); }
+        bricks.forEach(b => { if(b.v && x>b.x && x<b.x+60 && y>b.y && y<b.y+20) { b.v=false; dy*=-1; score++; }});
+        ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle="#00ff88"; ctx.fillRect(px,370,80,10);
+        ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(x,y,8,0,7); ctx.fill();
+        ctx.fillStyle="#ff00cc"; bricks.forEach(b=>{ if(b.v) ctx.fillRect(b.x,b.y,60,20); });
+        document.getElementById("breakScore").innerText = "Puntaje: " + score;
+        if(score === 18) { clearInterval(currentInterval); alert("¡Ganaste!"); navegar('menuJuegos'); }
+    }, 20);
+    const mover = (e) => {
+        let r = c.getBoundingClientRect();
+        px = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - r.left - 40;
+        if(px < 0) px = 0; if(px > 320) px = 320;
+    };
+    c.onmousemove = mover; c.ontouchmove = (e) => { e.preventDefault(); mover(e); };
+}
+
+/* --- JUEGOS NUEVOS LOGICA --- */
+function iniciarSnake() {
+    const cvs = document.getElementById("snakeCanvas"), ctx = cvs.getContext("2d");
+    let s = [{x:10, y:10}], f = {x:15, y:15}, dx=0, dy=0, sc=0;
+    currentInterval = setInterval(() => {
+        let h = {x: s[0].x + dx, y: s[0].y + dy};
+        if(h.x===f.x && h.y===f.y) { sc++; f={x:Math.floor(Math.random()*20), y:Math.floor(Math.random()*20)}; }
+        else if(dx||dy) s.pop();
+        if(h.x<0||h.x>19||h.y<0||h.y>19||s.some(v=>v.x===h.x&&v.y===h.y)) { clearInterval(currentInterval); alert("Perdiste!"); navegar('menuJuegos'); }
+        if(dx||dy) s.unshift(h);
+        ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle="#00ff88"; s.forEach(v=>ctx.fillRect(v.x*20, v.y*20, 18, 18));
+        ctx.fillStyle="#ff00cc"; ctx.fillRect(f.x*20, f.y*20, 18, 18);
+        document.getElementById("snakeScore").innerText = "Puntos: " + sc;
+    }, 100);
+    cvs.onclick = () => { if(dx===0 && dy===0) dx=1; else if(dx===1){dx=0;dy=1} else if(dy===1){dx=-1;dy=0} else if(dx===-1){dx=0;dy=-1} else {dx=1;dy=0} };
+}
+
+function iniciarFlappy() {
+    const cvs = document.getElementById("flappyCanvas"), ctx = cvs.getContext("2d");
+    let bY=200, bV=0, pipes=[{x:400, y:150}];
+    currentInterval = setInterval(() => {
+        bV+=0.5; bY+=bV;
+        pipes.forEach(p => {
+            p.x-=3; if(p.x===150) pipes.push({x:400, y:Math.random()*200+50});
+            if((50>p.x && 50<p.x+50) && (bY<p.y || bY+20>p.y+120)) { clearInterval(currentInterval); navegar('menuJuegos'); }
+        });
+        if(bY>380||bY<0) { clearInterval(currentInterval); navegar('menuJuegos'); }
+        pipes=pipes.filter(p=>p.x>-50);
+        ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle="#00ff88"; ctx.fillRect(50, bY, 20, 20);
+        ctx.fillStyle="#ff00cc"; pipes.forEach(p=>{ ctx.fillRect(p.x,0,50,p.y); ctx.fillRect(p.x,p.y+120,50,400); });
+    }, 20);
+    cvs.onclick = () => bV=-8;
+}
+
+function iniciarTetris() {
+    const cvs = document.getElementById("tetrisCanvas"), ctx = cvs.getContext("2d");
+    let board=Array(20).fill().map(()=>Array(10).fill(0)), sc=0;
+    let p={x:4, y:0};
+    currentInterval = setInterval(() => {
+        p.y++;
+        if(p.y>19 || board[p.y][p.x]) { if(p.y>0) board[p.y-1][p.x]=1; p={x:4,y:0}; board.forEach((r,i)=>{if(r.every(v=>v)){board.splice(i,1); board.unshift(Array(10).fill(0)); sc++;}}); }
+        ctx.fillStyle="black"; ctx.fillRect(0,0,200,400);
+        ctx.fillStyle="#00ff88"; board.forEach((r,y)=>r.forEach((v,x)=>{if(v)ctx.fillRect(x*20,y*20,18,18)}));
+        ctx.fillStyle="#ff00cc"; ctx.fillRect(p.x*20, p.y*20, 18, 18);
+        document.getElementById("tetrisScore").innerText = "Líneas: " + sc;
+    }, 400);
+    cvs.onclick = () => { p.x=(p.x+1)%10; };
+}
+
+function iniciarRacing() {
+    const cvs = document.getElementById("racingCanvas"), ctx = cvs.getContext("2d");
+    let carX=180, en=[];
+    currentInterval = setInterval(() => {
+        if(Math.random()<0.05) en.push({x:Math.random()*360, y:-50});
+        en.forEach(e => {
+            e.y+=5; if(e.y>350 && e.x<carX+40 && e.x+40>carX) { clearInterval(currentInterval); navegar('menuJuegos'); }
+        });
+        en=en.filter(e=>e.y<400);
+        ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle="#00ff88"; ctx.fillRect(carX,350,40,40);
+        ctx.fillStyle="#ff00cc"; en.forEach(e=>ctx.fillRect(e.x,e.y,40,40));
+    }, 20);
+    cvs.onclick = (e) => { carX = e.offsetX - 20; };
+}
+
+function iniciarFrogger() {
+    const cvs = document.getElementById("froggerCanvas"), ctx = cvs.getContext("2d");
+    let fX=190, fY=370, cars=[];
+    for(let i=0;i<5;i++) cars.push({x:Math.random()*400, y:i*60+50, s:Math.random()*3+2});
+    currentInterval = setInterval(() => {
+        cars.forEach(c => {
+            c.x+=c.s; if(c.x>400) c.x=-50;
+            if(fX<c.x+50 && fX+25>c.x && fY<c.y+30 && fY+25>c.y) { fX=190; fY=370; }
+        });
+        if(fY<10) { alert("Ganaste!"); fY=370; }
+        ctx.fillStyle="black"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle="#00ff88"; ctx.fillRect(fX, fY, 25, 25);
+        ctx.fillStyle="#ff00cc"; cars.forEach(c=>ctx.fillRect(c.x,c.y,50,30));
+    }, 20);
+    cvs.onclick = () => fY-=30;
+}
+
+/* --- OTROS --- */
+function jugarRPS(p) {
+    const ops = ["piedra", "papel", "tijera"], cpu = ops[Math.floor(Math.random()*3)];
+    let res = (p === cpu) ? "Empate" : (p==="piedra" && cpu==="tijera" || p==="papel" && cpu==="piedra" || p==="tijera" && cpu==="papel") ? "Ganaste!" : "Perdiste";
+    document.getElementById("rpsResult").innerText = `Tú: ${p} | CPU: ${cpu} -> ${res}`;
+}
+
+let ttt = Array(9).fill(null), tttActivo = true;
+function reiniciarTTT() {
+    ttt = Array(9).fill(null); tttActivo = true;
+    document.getElementById("tttResult").innerText = "Tu turno (X)";
+    document.querySelectorAll('.ttt-cell').forEach(c => c.innerText = "");
+}
+function hacerMovimiento(el) {
+    let i = el.dataset.index;
+    if(!tttActivo || ttt[i]) return;
+    ttt[i] = "X"; el.innerText = "X";
+    if(checkWin("X")) { document.getElementById("tttResult").innerText = "¡GANASTE!"; tttActivo = false; return; }
+    let empty = ttt.map((v,idx) => v === null ? idx : null).filter(v => v !== null);
+    if(empty.length > 0) {
+        let r = empty[Math.floor(Math.random()*empty.length)];
+        ttt[r] = "O"; document.querySelector(`[data-index='${r}']`).innerText = "O";
+        if(checkWin("O")) { document.getElementById("tttResult").innerText = "Ganó la CPU"; tttActivo = false; }
+    } else if(!ttt.includes(null)) { document.getElementById("tttResult").innerText = "Empate"; tttActivo = false; }
+}
+function checkWin(p) {
+    const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    return win.some(comb => comb.every(idx => ttt[idx] === p));
+}
+
+let pal = "WANDERERS", prog = [];
+function modoAhorcado() {
+    prog = Array(pal.length).fill("_");
+    document.getElementById("palabraTexto").innerText = prog.join(" ");
+}
+function intentarLetra() {
+    let l = document.getElementById("letraInput").value.toUpperCase();
+    if(!l) return;
+    for(let i=0; i<pal.length; i++) if(pal[i] === l) prog[i] = l;
+    document.getElementById("palabraTexto").innerText = prog.join(" ");
+    document.getElementById("letraInput").value = "";
+    if(!prog.includes("_")) alert("¡Ganaste!");
+}
+
+const candyBoard = document.getElementById('candyBoard');
+const width = 6;
+const candies = ['🍎', '💎', '🍀', '🔥', '⭐'];
+let boardData = [], boardDOM = [], scoreCandy = 0, multiplier = 1, isProcessing = false, primera = null;
+
+function crearTableroUltra() {
+    candyBoard.innerHTML = ''; boardData = []; boardDOM = [];
+    for (let i = 0; i < width * width; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'candy-cell';
+        cell.onclick = () => seleccionarCelda(i);
+        candyBoard.appendChild(cell);
+        boardDOM.push(cell);
+        let randomCandy = candies[Math.floor(Math.random() * candies.length)];
+        boardData.push(randomCandy);
+        cell.innerText = randomCandy;
+    }
+    silentlyCheck();
+}
+
+async function seleccionarCelda(id) {
+    if (isProcessing) return;
+    if (primera === null) {
+        primera = id; boardDOM[id].classList.add('selected-candy');
+    } else {
+        let segunda = id;
+        boardDOM[primera].classList.remove('selected-candy');
+        const movValido = [primera - 1, primera + 1, primera - width, primera + width];
+        if (movValido.includes(segunda)) {
+            isProcessing = true; multiplier = 1;
+            [boardData[primera], boardData[segunda]] = [boardData[segunda], boardData[primera]];
+            actualizarDOM();
+            await processMatches();
+            isProcessing = false;
+        }
+        primera = null;
+    }
+}
+
+async function processMatches() {
+    let matched = findMatches();
+    if (matched.size > 0) {
+        matched.forEach(idx => boardDOM[idx].classList.add('match-boom'));
+        scoreCandy += (matched.size * 15) * multiplier;
+        document.getElementById('candyScore').innerText = "Puntos: " + scoreCandy;
+        document.getElementById('comboText').innerText = `Combo: ${multiplier}x`;
+        await new Promise(r => setTimeout(r, 400));
+        matched.forEach(idx => { boardDOM[idx].classList.remove('match-boom'); boardData[idx] = ''; });
+        aplicarGravedad();
+        actualizarDOM();
+        multiplier++;
+        await new Promise(r => setTimeout(r, 200));
+        await processMatches();
+    }
+}
+
+function aplicarGravedad() {
+    for (let c = 0; c < width; c++) {
+        for (let r = width - 1; r >= 0; r--) {
+            let i = r * width + c;
+            if (boardData[i] === '') {
+                for(let k = r-1; k >= 0; k--) {
+                    if(boardData[k*width+c] !== '') {
+                        boardData[i] = boardData[k*width+c];
+                        boardData[k*width+c] = '';
+                        break;
+                    }
+                }
+            }
         }
     }
+    for (let i = 0; i < width * width; i++) if (boardData[i] === '') boardData[i] = candies[Math.floor(Math.random() * candies.length)];
+}
+
+function findMatches() {
+    let matched = new Set();
+    for (let r = 0; r < width; r++) {
+        for (let c = 0; c < width - 2; c++) {
+            let i = r * width + c;
+            if (boardData[i] && boardData[i] === boardData[i+1] && boardData[i] === boardData[i+2]) {
+                matched.add(i); matched.add(i+1); matched.add(i+2);
+            }
+        }
+    }
+    for (let c = 0; c < width; c++) {
+        for (let r = 0; r < width - 2; r++) {
+            let i = r * width + c;
+            if (boardData[i] && boardData[i] === boardData[i+width] && boardData[i] === boardData[i+(width*2)]) {
+                matched.add(i); matched.add(i+width); matched.add(i+(width*2));
+            }
+        }
+    }
+    return matched;
+}
+
+function actualizarDOM() { boardData.forEach((emoji, i) => boardDOM[i].innerText = emoji); }
+
+function silentlyCheck() {
+    let m = findMatches();
+    if (m.size > 0) {
+        m.forEach(i => boardData[i] = candies[Math.floor(Math.random() * candies.length)]);
+        silentlyCheck();
+    }
+    actualizarDOM();
+}
+
+function enviarMensaje() {
+    const n = document.getElementById('nombre').value, s = document.getElementById('servicio').value, m = document.getElementById('mensaje').value;
+    if(!n || !m) return alert("Llena los campos.");
+    const fono = "56974598279";
+    const texto = `Hola Canu! Soy ${n}. Contacto por: ${s}. Mensaje: ${m}`;
+    window.open(`https://api.whatsapp.com/send?phone=${fono}&text=${encodeURIComponent(texto)}`, '_blank');
+}
+
+function copiarDatos() {
+    navigator.clipboard.writeText("Christian Núñez - 18.302.521-K - Banco Estado - el.canu@gmail.com");
+    alert("Copiado!");
+}
+
+/* --- LOGICA REPRODUCTOR --- */
+function playMusic(url, nombre) {
+    const audio = document.getElementById('mainAudio');
+    const trackText = document.getElementById('trackName');
+    
+    audio.src = url;
+    audio.play();
+    trackText.innerText = "🎵 Sonando: " + nombre;
 }
 </script>
 </body>
+</html>
