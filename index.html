@@ -187,9 +187,9 @@
 </div>
 
 <div class="screen hidden" id="menuJuegos">
-    <img src="https://elcanusw.github.io/WebeoChileno/logowc.png" class="main-logo" alt="Logo">
+    <img src="https://elcanusw.github.io/WebeoChileno/logotrans.png" class="main-logo" alt="Logo">
     <div class="card">
-        <button class="start-btn" onclick="navegar('mermedoku')">🧩 MERMEDOKU</button>
+        <button class="start-btn" onclick="navegar('mermedoku')">🧩 Mermeduko</button>
         <button class="start-btn" onclick="irJuego('runner')">🏃Runner</button>
         <button class="start-btn" onclick="irJuego('breakout')">🧱 Breakout</button>
         <button class="start-btn" onclick="irJuego('snake')">🐍 Snake</button>
@@ -328,66 +328,27 @@
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
     </div>
 </div>
-<div class="screen hidden" id="mermeduco">
+<div class="screen hidden" id="mermedoku">
     <div class="card">
-        <h2 style="color: #00ff88;">mermeduco Family</h2>
-        <p><i>"Pa' que se quemen las pestañas"</i></p>
+        <h2 style="color: #00ff88;">🧩 MERMEDOKU</h2>
+        <p><i>"Noruego-Chileno, #NoWey"</i></p>
         
-        <div class="opciones-dificultad" style="margin-bottom: 15px;">
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugardumermeduco('piola')">PIOLA</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarmermeduco('medio')">MEDIO</button>
-            <button class="start-btn" style="padding: 5px 10px; font-size: 12px;" onclick="jugarmermeduco('brigido')">BRÍGIDO</button>
-        </div>
-        
-        <div id="tablero-container" class="tablero-canu"></div>
+        <div id="tablero-merme" class="tablero-canu"></div>
 
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER A JUEGOS</button>
     </div>
 </div>
 
-<style>
-    .tablero-canu {
-        display: grid;
-        grid-template-columns: repeat(9, 1fr);
-        gap: 1px;
-        background: rgba(0,255,136,0.3);
-        border: 2px solid #00ff88;
-        max-width: 320px;
-        margin: 0 auto 20px;
-    }
+<div class="screen hidden" id="mermedoku">
+    <div class="card">
+        <h2 style="color: #00ff88;">🧩 MERMEDOKU</h2>
+        <p><i>"Noruego-Chileno, #NoWey"</i></p>
+        
+        <div id="tablero-merme" class="tablero-canu"></div>
 
-    .celda-canu {
-        width: 100%;
-        aspect-ratio: 1;
-        background: #000;
-        color: #fff;
-        text-align: center;
-        font-size: 16px;
-        font-family: Arial, sans-serif;
-        border: none;
-        outline: none;
-    }
-
-    /* Colores para las celdas fijas (las que yo te doy) */
-    .canu-fija {
-        color: #00ff88 !important;
-        font-weight: bold;
-        background: #0a0a0a !important;
-    }
-
-    /* Estilos para el focus y error */
-    .celda-canu:focus { background: #111; color: #00ff88; }
-    .canu-incorrecta { background: rgba(255,0,0,0.2) !important; color: #ff4444 !important; }
-
-    /* Bordes gruesos de 3x3 */
-    .tablero-canu > :nth-child(3n) { border-right: 1.5px solid #00ff88; }
-    .tablero-canu > :nth-child(9n) { border-right: none; }
-    
-    .tablero-canu > :nth-child(n+19):nth-child(-n+27),
-    .tablero-canu > :nth-child(n+46):nth-child(-n+54) {
-        border-bottom: 1.5px solid #00ff88;
-    }
-</style>
+        <button class="start-btn vol-btn" onclick="navegar('menuJuegos')">VOLVER A JUEGOS</button>
+    </div>
+</div>
 <script>
 let currentInterval = null;
 
@@ -722,7 +683,7 @@ function playMusic(url, nombre) {
     trackText.innerText = "🎵 Sonando: " + nombre;
 }
    /* --- MOTOR DE SUDOKU REAL --- */
-function jugarmerduco(dificultad) {
+function jugarmermeduco(dificultad) {
     const container = document.getElementById('tablero-container');
     container.innerHTML = '';
 
