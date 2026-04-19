@@ -328,7 +328,7 @@
         <button class="start-btn vol-btn" onclick="navegar('menuJuegos')" style="margin-top: 10px;">VOLVER AL MENÚ</button>
     </div>
 </div>
-<div class="screen hidden" id="mermedoku">
+<div class="screen hidden" id="zoduco">
     <div class="card">
         <h2 style="color: #00ff88;">Zoduco Family</h2>
         <p><i>"Pa' que se quemen las pestañas"</i></p>
@@ -721,32 +721,56 @@ function playMusic(url, nombre) {
     audio.play();
     trackText.innerText = "🎵 Sonando: " + nombre;
 }
-    /* --- ZODUCO FAMILY EXACTO --- */
-function jugarMermedoku() {
-    const container = document.getElementById('tablero-merme');
-    container.innerHTML = ''; 
+   /* --- MOTOR DE SUDOKU REAL --- */
+function jugarZoduco(dificultad) {
+    const container = document.getElementById('tablero-container');
+    container.innerHTML = '';
 
-    const plantilla = [
-        [-1,-1,-1, -1,-1,-1,  8,-1,-1],
-        [-1, 8, 2,  1,-1,-1,  4, 5, 3],
-        [-1, 3, 5, -1,-1,-1, -1, 6, 7],
-        [-1, 4,-1, -1,-1, 8,  5,-1,-1],
-        [-1,-1,-1, -1, 9,-1, -1,-1, 4],
-        [-1,-1,-1,  4,-1, 1,  2,-1,-1],
-        [ 8, 2,-1,  3,-1, 7, -1,-1,-1],
-        [-1, 5, 4, -1,-1,-1, -1, 8,-1],
-        [-1, 6, 7, -1, 2,-1, -1,-1,-1]
-    ];
+    // 1. Generar una base válida (Solución completa)
+    // Usamos un truco de rotación para que siempre sea solucionable
+    let base = [1,2,3,4,5,6,7,8,9];
+    // Desordenamos la base para que no siempre sea el mismo orden
+    base.sort(() => Math.random() - 0.5);
 
+    let solucionMaster = [];
+    for (let i = 0; i < 9; i++) {
+        let fila = [];
+        // Desplazamiento lógico para que no se repitan en filas/columnas
+        let shift = (i * 3 + Math.floor(i / 3)) % 9;
+        for (let j = 0; j < 9; j++) {
+            fila.push(base[(j + shift) % 9]);
+        }
+        solucionMaster.push(fila);
+    }
+
+    // 2. Definir cuántos números borrar según dificultad
+    let pistas;
+    if (dificultad === 'piola') pistas = 40;     // Fácil: muchos números
+    else if (dificultad === 'medio') pistas = 30; // Normal
+    else pistas = 20;                             // Brígido: casi vacío
+
+    // 3. Crear el tablero de juego borrando números de la solución
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
             const input = document.createElement('input');
             input.type = 'number';
-            input.className = 'celda-canu'; // Usa el estilo que ya definiste en el CSS
-            if (plantilla[r][c] !== -1) {
-                input.value = plantilla[r][c];
+            input.className = 'celda-canu';
+            
+            // Probabilidad de mostrar el número según las pistas
+            if (Math.random() * 81 < pistas) {
+                input.value = solucionMaster[r][c];
                 input.readOnly = true;
                 input.classList.add('canu-fija');
+            } else {
+                // Celda vacía para que el usuario juegue
+                input.addEventListener('input', (e) => {
+                    let val = parseInt(e.target.value);
+                    if (val === solucionMaster[r][c]) {
+                        e.target.classList.remove('canu-incorrecta');
+                    } else if (!isNaN(val)) {
+                        e.target.classList.add('canu-incorrecta');
+                    }
+                });
             }
             container.appendChild(input);
         }
